@@ -1,0 +1,38 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="seantis.dir.base">
+
+    <i18n:registerTranslations directory="locales" />
+
+    <!-- Include configuration for dependencies listed in setup.py -->
+    <includeDependencies package="." />
+
+    <!-- Grok the package to initialise schema interfaces and content classes -->
+    <grok:grok package="." />
+
+    <!-- Register an extension profile to make the product installable -->
+    <genericsetup:registerProfile
+        name="default"
+        title="seantis.dir.base"
+        description="Directory package for Plone using Dexterity"
+        directory="profiles/default"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- Adapters -->
+    <adapter name="categories" factory=".item.categoriesIndexer"/>
+
+    <!-- Resources -->
+    <browser:resourceDirectory
+        name="seantis.dir.base.javascripts"
+        directory="js"/>
+
+    <browser:resourceDirectory
+        name="seantis.dir.base.stylesheets"
+        directory="css"/>
+
+</configure>

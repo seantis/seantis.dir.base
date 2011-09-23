@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="seantis.dir.base">
+<body>
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+        <a tal:attributes="href python: context.absolute_url() + '?reset=true'"><h1 class="documentFirstHeading" tal:content="context/title" /></a>
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <tal:block condition="python: not view.filtered">
+          <div tal:replace="structure provider:seantis.dir.base.directory.viewletmanager"/>
+        </tal:block>
+
+        <div id="directoryInfo">
+            <div id="directoryResultList">
+              <div class="directoryResult" tal:repeat="item view/batch">
+                <div tal:define="context python: item" tal:replace="structure provider:seantis.dir.base.item.viewletmanager"/>
+              </div>
+            </div>
+        </div>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+        <tal:block define="batch view/batch">
+            <div metal:use-macro="here/batch_macros/macros/navigation" />
+        </tal:block>
+
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

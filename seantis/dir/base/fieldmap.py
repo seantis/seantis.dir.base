@@ -1,0 +1,134 @@
+from zope import component
+
+from seantis.dir.base.directory import CATEGORIES
+from seantis.dir.base.item import IDirectoryItemBase
+from seantis.dir.base.interfaces import IFieldMapExtender
+
+class FieldMap(object):
+    """ Hierarchically maps columns in a row to objects. Each Fieldmap
+    defines one object. Each child is another Fieldmap (and so on.)
+
+    """
+    def __init__(self):
+        self.keyfields = None  # Keyfields define the way the rows are grouped
+        self.typename = None   # The type of the object
+        self.fieldmap = dict() # A list with fieldnames -> indexes
+        self.indexmap = dict() # A list with indexes -> fieldnames
+        self.children = []     # A list of child Fieldmaps
+        self.wrapper = dict()  # A list of wrappers for field values
+        self.unwrapper = dict()# A list of unwrappers for field values
+        self.root = False      # True when there is no parent fieldmap
+
+        # Interface containg the fields used in the fieldmap
+        self.baseinterface = self.interface = IDirectoryItemBase 
+
+    def __len__(self):
+        return len(self.fieldmap)
+
+    def add_fields(self, fields, startindex=0):
+        """ Adds a list of fields to the field- and indexmap. """
+        for ix, field in enumerate(fields, startindex):
+            self.fieldmap[field] = ix
+            self.indexmap[ix] = field
+
+    def get_field(self, index, including_children):
+        """ Returns the fieldname of an index (optionally looking up the 
+        children as well).
+
+        """
+        if index in self.indexmap:
+            return self.indexmap[index]
+        elif including_children:
+            for child in self.children:
+                field = child.get_field(index, True)
+                if field:
+                    return field
+        
+        return None
+
+    def indexes(self):
+        """ Returns a list of all index values. """
+        return self.fieldmap.values()
+
+    def keyindexes(self, including_children):
+        """ Returns a list of all key indexes. """
+        indexes = set()
+
+        if including_children:
+            for child in self.children:
+                for index in child.keyindexes(True):
+                    indexes.add(index)
+
+        for field in self.keyfields:
+            indexes.add(self.fieldmap[field])
+
+        return indexes
+
+    def maxindex(self):
+        """ Returns the topmost index of the Fieldmap including the children."""
+        childmax = self.children and max([c.maxindex() for c in self.children]) or 0
+        selfmax = max(self.indexes())
+        return max(childmax, selfmax)
+
+    def minindex(self):
+        """ Opposite of maxindex."""
+        childmin = self.children and min([c.minindex() for c in self.children]) or 0
+        selfmin = min(self.indexes())
+        return min(childmin, selfmin)
+
+    def bind_wrapper(self, field, wrapperfn):
+        """ Binds a wrapper function to the given field. The wrapper function
+        is called when the value is read from the XLS with the value of the
+        cell. 
+
+        """
+        self.wrapper[field] = wrapperfn
+
+    def get_wrapper(self, field=None, ix=None):
+        """ Returns a bound wrapper or a function returning the value itself."""
+        assert(field or (ix or ix >= 0))
+
+        field = field or self.get_field(ix, including_children=True)
+        
+        if field and field in self.wrapper:
+            return self.wrapper[field]
+        else:
+            return lambda value: value
+
+    def bind_unwrapper(self, field, unwrapperfn):
+        """ The opposite of bind_wrapper for export. """
+        self.unwrapper[field] = unwrapperfn
+
+    def get_unwrapper(self, field=None, ix=None):
+        assert(field or (ix or ix >= 0))
+
+        field = field or self.get_field(ix, including_children=True)
+
+        if field and field in self.unwrapper:
+            return self.unwrapper[field]
+        else:
+            return lambda value: value
+
+def get_map():
+    itemfields = ('title','description','cat1','cat2','cat3','cat4')
+    
+    itemmap = FieldMap()
+    itemmap.root = True
+    itemmap.typename = 'seantis.dir.base.item'
+    itemmap.keyfields = ('title',)
+    itemmap.add_fields(itemfields)
+
+    listwrap = lambda val: ','.join(val)
+    listunwrap = lambda val: [v.strip() for v in val.split(',')]
+
+    for cat in CATEGORIES:
+        itemmap.bind_wrapper(cat, listwrap)
+        itemmap.bind_unwrapper(cat, listunwrap)
+
+    try:
+        adapter = component.getAdapter(itemmap, IFieldMapExtender)
+        adapter.extend_import()
+    except component.ComponentLookupError:
+        pass
+
+    return itemmap

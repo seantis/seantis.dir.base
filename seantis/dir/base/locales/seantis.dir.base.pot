@@ -1,0 +1,121 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-09-06 14:14+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: seantis.dir.base\n"
+
+#: ./directory.py:44
+#: ./item.py:43
+msgid "1st Category Name"
+msgstr ""
+
+#: ./directory.py:50
+#: ./item.py:51
+msgid "2nd Category Name"
+msgstr ""
+
+#: ./directory.py:56
+#: ./item.py:59
+msgid "3rd Category Name"
+msgstr ""
+
+#: ./directory.py:62
+#: ./item.py:67
+msgid "4th Category Name"
+msgstr ""
+
+#: ./directory.py:38
+#: ./item.py:36
+msgid "Description"
+msgstr ""
+
+#: ./profiles/default/types/seantis.dir.base.directory.xml
+msgid "Directory"
+msgstr ""
+
+#: ./profiles/default/types/seantis.dir.base.item.xml
+msgid "Directory Item"
+msgstr ""
+
+#: ./directory.py:74
+msgid "Enable filtering"
+msgstr ""
+
+#: ./directory.py:80
+msgid "Enable searching"
+msgstr ""
+
+#: ./templates/search.pt:32
+msgid "Filter"
+msgstr ""
+
+#: ./templates/search.pt:40
+msgid "Fulltext search"
+msgstr ""
+
+#: ./xlsimport.py:85
+msgid "Import"
+msgstr ""
+
+#: ./xlsimport.py:40
+msgid "Import directory items"
+msgstr ""
+
+#: ./xlsimport.py:37
+msgid "Import directory items using xls. The xls is expected to have the format defined in the template which you can <a href='#xlstemplate'>download here</a>"
+msgstr ""
+
+#: ./xlsimport.py:110
+msgid "Imported ${number} items"
+msgstr ""
+
+#: ./xlsimport.py:99
+msgid "Invalid XLS file"
+msgstr ""
+
+#: ./validators.py:13
+msgid "Invalid email address"
+msgstr ""
+
+#: ./directory.py:68
+msgid "Last time a DirectoryItem was modified"
+msgstr ""
+
+#: ./directory.py:34
+#: ./item.py:31
+msgid "Name"
+msgstr ""
+
+#: ./directory.py:27
+msgid "No categories were defined. Define at least one category"
+msgstr ""
+
+#: ./xlsimport.py:188
+msgid "Not all required fields have a value"
+msgstr ""
+
+#: ./templates/search.pt:42
+msgid "Search"
+msgstr ""
+
+#: ./item.py:44
+msgid "Start typing and select a category. To add a new category write the name and hit enter."
+msgstr ""
+
+#: ./xlsimport.py:35
+msgid "XLS file"
+msgstr ""
+

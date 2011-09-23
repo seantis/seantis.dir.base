@@ -1,0 +1,5 @@
+graft */*/*/js
+graft */*/*/locales
+graft */*/*/profiles
+graft */*/*/templates
+global-include *.zcml
