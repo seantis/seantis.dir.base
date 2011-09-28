@@ -234,13 +234,21 @@ def is_exact_match(item, term):
     as in category_search. 
 
     """
+
     for key in term.keys():
-        attribute = getattr(item, key)
-        itemvalue = "".join(attribute != None and attribute or u'')
-        termvalue = "".join(term[key])
-        if termvalue == '' and termvalue != itemvalue:
-            return False
-        if not termvalue in itemvalue:
+        # categories can be lists or strings, but we want a list in any case
+        attrlist = getattr(item, key) or (u'', )
+        if not hasattr(attrlist, '__iter__'):
+            attrlist = (attrlist, )
+
+        # same goes for terms
+        termlist = term[key]
+        if not hasattr(termlist, '__iter__'):
+            termlist = (termlist, )
+
+        # if there is any term which is not matching, it's not an exact match
+        matching_term = lambda term: term in attrlist
+        if any([True for t in termlist if not matching_term(t)]):
             return False
 
     return True
