@@ -213,6 +213,8 @@ def get_item_path(directorypath, descendantpath):
 
     The descendant may also be the path to a directory item.
 
+    To see how the function works exactly have a look at test_get_item_path.
+
     """
     if not directorypath in descendantpath:
         return None
@@ -220,11 +222,15 @@ def get_item_path(directorypath, descendantpath):
     directory = directorypath.split('/')
     descendant = descendantpath.split('/')
 
-    directorydepth = len(directory)
-    assert(directorydepth +1 <= len(descendant))
+    # the paths may not share the same root, so they need to be aligned
+    root = directory[-1:][0]
+    assert (root in descendant)
+
+    itemindex = descendant.index(root) + 1
+    assert(itemindex <= len(descendant))
 
     child = []
-    for i in range(0, directorydepth+1):
+    for i in range(0, itemindex + 1):
         child.append(descendant[i])
     
     return u'/'.join(child)

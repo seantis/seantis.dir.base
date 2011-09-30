@@ -134,3 +134,34 @@ class TestCatalog(IntegrationTestCase):
         items = catalog._items(directory)
         self.assertTrue(hasattr(items, '_cache_time'))
         self.assertEqual(len(items.values()), 0)
+
+    def test_get_item_path(self):
+        directory = '/site/directory'
+        descendant = '/site/directory/item/contact/test'
+
+        item = catalog.get_item_path(directory, descendant)
+        self.assertEqual(item, '/site/directory/item')
+
+        directory = '/directory'
+        descendant = '/directory/item'
+
+        item = catalog.get_item_path(directory, descendant)
+        self.assertEqual(item, '/directory/item')
+
+        directory = '/directory'
+        descendant = '/site/directory/item'
+
+        item = catalog.get_item_path(directory, descendant)
+        self.assertEqual(item, '/site/directory/item')
+
+        directory = '/directory'
+        descendant = '/site/directory/item/subitem/subsubitem/'
+
+        item = catalog.get_item_path(directory, descendant)
+        self.assertEqual(item, '/site/directory/item')
+
+        directory = '/site/directory'
+        descendant = '/directory/item/subitem'
+
+        item = catalog.get_item_path(directory, descendant)
+        self.assertEqual(item, None)
