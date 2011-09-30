@@ -69,7 +69,11 @@ def add_count(text, count):
 
 def remove_count(text):
     """Removes the count from with_count from a text."""
-    return text[:text.rfind(' (')]
+    pos = text.rfind(' (')
+    if pos == -1:
+        return text
+    else:
+        return text[:pos]
 
 def translate(context, request, text):
     lang = get_current_language(context, request)

@@ -17,7 +17,6 @@ class View(grok.View):
 
     def get_filter_terms(self):
         """Unpacks the filter terms from a request."""
-
         terms = {}
         request = self.request
 
