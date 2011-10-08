@@ -4,6 +4,7 @@ from Acquisition import aq_inner
 from zope.component import getMultiAdapter
 from zope.schema import getFieldsInOrder
 from Products.CMFCore.utils import getToolByName
+from zope import i18n
 
 def flatten(l):
     """Generator for flattening irregularly nested lists. 'Borrowed' from here:
@@ -68,7 +69,15 @@ def add_count(text, count):
 
 def remove_count(text):
     """Removes the count from with_count from a text."""
-    return text[:text.rfind(' (')]
+    pos = text.rfind(' (')
+    if pos == -1:
+        return text
+    else:
+        return text[:pos]
+
+def translate(context, request, text):
+    lang = get_current_language(context, request)
+    return i18n.translate(text, target_language=lang)
 
 def din5007(input):
     """ This function implements sort keys for the german language according to 

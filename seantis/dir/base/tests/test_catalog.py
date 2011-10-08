@@ -48,7 +48,7 @@ class TestCatalog(IntegrationTestCase):
         self.assertEqual(len(found), 3)
 
         found = category_filter(directory, dict(cat3='Lego'))
-        self.assertEqual(len(found), 3)
+        self.assertEqual(len(found), 2)
 
         found = category_filter(directory, dict(
                 cat1='For Kids', 
@@ -63,13 +63,10 @@ class TestCatalog(IntegrationTestCase):
         found = category_filter(directory, dict(cat2=''))
         self.assertEqual(len(found), 1)
 
-        # The order of multiple items matters. To change this have a look at
-        # the is_exact_item funciton in catalog.py
-
         found = category_filter(directory, dict(cat1=['For Kids', 'For Adults']))
         self.assertEqual(len(found), 1)
         found = category_filter(directory, dict(cat1=['For Adults', 'For Kids']))
-        self.assertEqual(len(found), 0)
+        self.assertEqual(len(found), 1)
 
     def test_possible_values(self):
 
@@ -111,6 +108,20 @@ class TestCatalog(IntegrationTestCase):
         self.assertEqual(possible['cat3']['Lego'], 2)
         self.assertEqual(len(possible['cat4'].keys()), 0)
 
+    def test_exact_match(self):
+        values = (
+            ['far'],
+            ['faraway'],
+            [('far', 'faraway')]
+        )
+
+        items = self.add_item_bulk(self.add_directory(), values)
+        term = dict(cat1='far')
+
+        self.assertTrue(catalog.is_exact_match(items[0], term))
+        self.assertFalse(catalog.is_exact_match(items[1], term))
+        self.assertTrue(catalog.is_exact_match(items[2], term))
+
     def test_cache(self):
         directory = self.toy_data()
 
@@ -123,3 +134,34 @@ class TestCatalog(IntegrationTestCase):
         items = catalog._items(directory)
         self.assertTrue(hasattr(items, '_cache_time'))
         self.assertEqual(len(items.values()), 0)
+
+    def test_get_item_path(self):
+        directory = '/site/directory'
+        descendant = '/site/directory/item/contact/test'
+
+        item = catalog.get_item_path(directory, descendant)
+        self.assertEqual(item, '/site/directory/item')
+
+        directory = '/directory'
+        descendant = '/directory/item'
+
+        item = catalog.get_item_path(directory, descendant)
+        self.assertEqual(item, '/directory/item')
+
+        directory = '/directory'
+        descendant = '/site/directory/item'
+
+        item = catalog.get_item_path(directory, descendant)
+        self.assertEqual(item, '/site/directory/item')
+
+        directory = '/directory'
+        descendant = '/site/directory/item/subitem/subsubitem/'
+
+        item = catalog.get_item_path(directory, descendant)
+        self.assertEqual(item, '/site/directory/item')
+
+        directory = '/site/directory'
+        descendant = '/directory/item/subitem'
+
+        item = catalog.get_item_path(directory, descendant)
+        self.assertEqual(item, None)

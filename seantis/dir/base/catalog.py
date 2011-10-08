@@ -170,7 +170,7 @@ def category_filter(directory, term):
     """
     term = dict([(k,v) for k, v in term.items() if not u'!empty' in v])
     assert(all([v != None for v in term.values()]))
-    
+
     results = fuzzy_filter(directory, term.values())
     return [r for r in results if is_exact_match(r, term)]
 
@@ -213,18 +213,24 @@ def get_item_path(directorypath, descendantpath):
 
     The descendant may also be the path to a directory item.
 
+    To see how the function works exactly have a look at test_get_item_path.
+
     """
     if not directorypath in descendantpath:
         return None
-    
+
     directory = directorypath.split('/')
     descendant = descendantpath.split('/')
 
-    directorydepth = len(directory)
-    assert(directorydepth +1 <= len(descendant))
+    # the paths may not share the same root, so they need to be aligned
+    root = directory[-1:][0]
+    assert (root in descendant)
+
+    itemindex = descendant.index(root) + 1
+    assert(itemindex <= len(descendant))
 
     child = []
-    for i in range(0, directorydepth+1):
+    for i in range(0, itemindex + 1):
         child.append(descendant[i])
     
     return u'/'.join(child)
@@ -234,13 +240,25 @@ def is_exact_match(item, term):
     as in category_search. 
 
     """
+    
     for key in term.keys():
-        attribute = getattr(item, key)
-        itemvalue = "".join(attribute != None and attribute or u'')
-        termvalue = "".join(term[key])
-        if termvalue == '' and termvalue != itemvalue:
-            return False
-        if not termvalue in itemvalue:
+        # categories can be lists or strings, but we want a list in any case
+        attrlist = getattr(item, key) or (u'', )
+        if not hasattr(attrlist, '__iter__'):
+            attrlist = (attrlist, )
+
+        # also use a stripped attribute list as some users will end up adding
+        # unused spaces
+        striplist = [attr.strip() for attr in attrlist]
+
+        # same goes for terms
+        termlist = term[key]
+        if not hasattr(termlist, '__iter__'):
+            termlist = (termlist, )
+
+        # if there is any term which is not matching, it's not an exact match
+        matching_term = lambda term: term in attrlist or term in striplist
+        if any([True for t in termlist if not matching_term(t)]):
             return False
 
     return True
