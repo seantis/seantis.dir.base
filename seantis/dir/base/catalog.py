@@ -3,6 +3,7 @@ from itertools import groupby
 from Products.CMFCore.utils import getToolByName
 from plone.memoize import ram
 
+from seantis.dir.base.item import IDirectoryItemBase
 from seantis.dir.base import utils
 
 class WrappedDict(dict):
@@ -44,7 +45,8 @@ def _uncached_items(directory):
     path = '/'.join(directory.getPhysicalPath())
 
     results = catalog(
-        path={'query': path, 'depth':1}
+        path={'query': path, 'depth':1},
+        object_provides=IDirectoryItemBase.__identifier__
     )
 
     items = WrappedDict()
@@ -141,7 +143,8 @@ def fuzzy_filter(directory, categories):
     
     results = catalog(
         path={'query': path, 'depth':1}, 
-        categories={'query':categories, 'operator':'and'}
+        categories={'query':categories, 'operator':'and'},
+        object_provides=IDirectoryItemBase.__identifier__
     )
 
     return getObjects(directory, results)
@@ -202,7 +205,10 @@ def fulltext_search(directory, text):
     # at ZCatalog internals and using that knowledge to avoid these roundtrips
     results = []
     for path in items:
-        result = catalog(path={'query': path, 'depth':0})
+        result = catalog(
+                path={'query': path, 'depth':0},
+                object_provides=IDirectoryItemBase.__identifier__
+            )
         results.extend(result)
 
     return getObjects(directory, results)
