@@ -146,7 +146,7 @@ class DirectoryItem(Container):
 
     def html_description(self):
         """Returns the description with newlines replaced by <br/> tags"""
-        return self.description.replace('\n', '<br />')
+        return self.description and self.description.replace('\n', '<br />') or ''
 
     @property
     def is_izug_portal(self):
