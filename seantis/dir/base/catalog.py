@@ -55,9 +55,13 @@ def _uncached_items(directory):
     
     return items
 
+def sortkey():
+    """Returns the default sortkey."""
+    return lambda i: i.title
+
 def items(directory):
     """Returns all items of the given directory."""
-    return _items(directory).values()
+    return sorted(_items(directory).values(), key=sortkey())
 
 def getObjects(directory, results):
     """Returns a list of objects from a ZCatalog resultset either by loading
@@ -175,7 +179,7 @@ def category_filter(directory, term):
     assert(all([v != None for v in term.values()]))
 
     results = fuzzy_filter(directory, term.values())
-    return [r for r in results if is_exact_match(r, term)]
+    return sorted([r for r in results if is_exact_match(r, term)], key=sortkey())
 
 def fulltext_search(directory, text):
     """Search for a text in the descendants of a directory. Although this
