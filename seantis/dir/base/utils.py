@@ -1,10 +1,18 @@
 import collections
+from os import path
 
 from Acquisition import aq_inner
 from zope.component import getMultiAdapter
 from zope.schema import getFieldsInOrder
 from Products.CMFCore.utils import getToolByName
 from zope import i18n
+
+import pyuca
+
+allkeys = path.join('/'.join(path.split(pyuca.__file__)[:-1]), 'allkeys.txt')
+collator = pyuca.Collator(allkeys)
+
+print 'loaded collator'
 
 def flatten(l):
     """Generator for flattening irregularly nested lists. 'Borrowed' from here:
@@ -79,22 +87,20 @@ def translate(context, request, text):
     lang = get_current_language(context, request)
     return i18n.translate(text, target_language=lang)
 
-def din5007(input):
-    """ This function implements sort keys for the german language according to 
-    DIN 5007.
+def unicode_collate_sortkey():
+    """ Returns a sort function to sanely sort unicode values.
+    
+    A more exact solution would be to use pyUCA but that relies on an external
+    C Library and is more complicated
+
+    See:
+    http://stackoverflow.com/questions/1097908/how-do-i-sort-unicode-strings-alphabetically-in-python
+    http://en.wikipedia.org/wiki/ISO_14651
+    http://unicode.org/reports/tr10/
+    http://pypi.python.org/pypi/PyICU
+    http://jtauber.com/blog/2006/01/27/python_unicode_collation_algorithm/
+    https://github.com/href/Python-Unicode-Collation-Algorithm
 
     """
-    
-    # key1: compare words lowercase and replace umlauts according to DIN 5007
-    key1=input.lower()
-    key1=key1.replace(u"\xe4", u"a")
-    key1=key1.replace(u"\xf6", u"o")
-    key1=key1.replace(u"\xfc", u"u")
-    
-    # key2: sort the lowercase word before the uppercase word and sort
-    # the word with umlaut after the word without umlaut
-    key2=input.swapcase()
-    
-    # in case two words are the same according to key1, sort the words
-    # according to key2. 
-    return (key1, key2)
+
+    return collator.sort_key

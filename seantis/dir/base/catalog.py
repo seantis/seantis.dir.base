@@ -57,7 +57,8 @@ def _uncached_items(directory):
 
 def sortkey():
     """Returns the default sortkey."""
-    return lambda i: i.title
+    uca_sortkey = utils.unicode_collate_sortkey()
+    return lambda i: uca_sortkey(i.title)
 
 def items(directory):
     """Returns all items of the given directory."""
@@ -124,7 +125,7 @@ def grouped_possible_values_counted(directory, items):
         for text, count in values.items():
             counted.append(utils.add_count(text, count))
         
-        result[category] = sorted(counted, key=utils.din5007)
+        result[category] = sorted(counted, key=utils.unicode_collate_sortkey())
 
     return result
 
