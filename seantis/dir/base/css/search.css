@@ -1,0 +1,23 @@
+#directorySearch legend {
+    display: none;
+}
+
+#directorySearch fieldset {
+    margin: 20px 0;
+    padding: 10px 0 15px 0;
+}
+
+.directorySearchFormSelection, 
+.visualMarginRight, 
+.directorySearchFormButtons, 
+.directorySearchFormButtons div {
+    width: 200px;
+    display: inline;
+}
+
+.seantis-directory-category,
+#searchtext {
+    width: 180px;
+    margin: 2px 0 8px 0;
+    display: block;
+}

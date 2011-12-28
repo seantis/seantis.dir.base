@@ -1,9 +1,18 @@
-#directorySearch legend {
-    display: none;
+#landingPageImage {
+    float:left;
+    display:inline;
+    margin-right: 15px;
 }
 
-#directorySearch fieldset {
-    margin: 0;
-    padding: 0;
-    border: none;
+#landingPageText h2 {
+    padding-left: 20px;
+}
+
+#landingPageIntro {
+    margin: 20px 0;
+    width: 50%;
+}
+
+.directoryResult {
+    margin: 20px 0;
 }
