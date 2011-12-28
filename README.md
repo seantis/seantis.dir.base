@@ -35,7 +35,16 @@ seantis.dir.base relies on Plone 4.0+ with the following modules:
             ...
             seantis.dir.base
 
-3. Install dexterity and seantis.dir.base using portal_quickinstaller
+
+3. Ensure that the i18n files are compiled by adding
+
+        [instance]
+        ...
+        environment-vars = 
+            ...
+            zope_i18n_compile_mo_files true
+
+4. Install dexterity and seantis.dir.base using portal_quickinstaller
 
 # License
 

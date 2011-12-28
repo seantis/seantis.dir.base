@@ -5,7 +5,7 @@ version = '1.0'
 
 setup(name='seantis.dir.base',
       version=version,
-      description="Directory mpackage for Plone using Dexterity",
+      description="Directory module for Plone using Dexterity",
       long_description=open("README.md").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from
