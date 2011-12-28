@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.3'
+version = '1.0'
 
 setup(name='seantis.dir.base',
       version=version,
       description="Directory mpackage for Plone using Dexterity",
-      long_description=open("README.txt").read() + "\n" +
+      long_description=open("README.md").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from
       # http://pypi.python.org/pypi?:action=list_classifiers
@@ -18,7 +18,7 @@ setup(name='seantis.dir.base',
       author='Seantis GmbH',
       author_email='info@seantis.ch',
       url='http://svn.plone.org/svn/collective/',
-      license='GPL',
+      license='GPL v2',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['seantis', 'seantis.dir'],
       include_package_data=True,
