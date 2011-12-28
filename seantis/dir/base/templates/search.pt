@@ -29,7 +29,7 @@
                 <div class="directorySearchFormSelection" tal:repeat="category python: viewlet.labels.keys()">
                     <div tal:attributes="class python: 'visualMarginRight ' + category">
                         <label tal:attributes="for category" tal:content="python: viewlet.labels[category]"/>
-                        <select class="seantis-directory-category" tal:attributes="name category; id category" style="width: 100%;">
+                        <select class="seantis-directory-category" tal:attributes="name category; id category">
                             
                             <!-- Preselected values -->
                             <tal:block condition="python: viewlet.select[category] == '!empty'">
