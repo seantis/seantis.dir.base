@@ -388,14 +388,7 @@ $.TokenList = function (input, url_or_data_or_function, settings) {
     }
     
     // hides original input box
-    try {
-        input.type = 'hidden';
-    } catch (e) {
-        // Opera 11 fails to modify input.type, but it does not seem to have an
-        // impact on the rest of the code
-        if (e.code != DOMException.NO_MODIFICATION_ALLOWED_ERR)
-            throw e;
-    }
+    $(input).hide();
     
     // Keep a reference to the original input box
     var hidden_input = $(input)
