@@ -390,6 +390,13 @@ $.TokenList = function (input, url_or_data_or_function, settings) {
     // hides original input box
     $(input).hide();
     
+    // disables the unload protection in Plone completely,
+    // but it's better than the alternative which is an annoying
+    // protection dialog always popping up because Plone's unload protection
+    // doesn't really play ball with the tokeninput
+    $(input).addClass('noUnloadProtection');
+
+    
     // Keep a reference to the original input box
     var hidden_input = $(input)
                            .hide()
