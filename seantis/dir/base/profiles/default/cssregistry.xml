@@ -4,4 +4,5 @@
     <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="python: object.portal_type == 'seantis.dir.base.directory'" id="++resource++seantis.dir.base.stylesheets/directory.css" media="screen" rel="stylesheet" rendering="import" insert-before="base.css"/>
     <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="python: object.portal_type == 'seantis.dir.base.item'" id="++resource++seantis.dir.base.stylesheets/item.css" media="screen" rel="stylesheet" rendering="import" insert-before="base.css"/>
     <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="python: object.portal_type == 'seantis.dir.base.item' or object.portal_type == 'seantis.dir.base.directory'" id="++resource++seantis.dir.base.stylesheets/search.css" media="screen" rel="stylesheet" rendering="import" insert-before="base.css"/>
+    <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="" id="++resource++seantis.dir.base.stylesheets/print.css" media="print" rel="stylesheet" rendering="link"/>
 </object>
