@@ -216,6 +216,11 @@
                 $.each(values, function(index, value) {
                     category.append('<option>' + value + '</option>');
                 });   
+
+                // IE7 you so silly, why you resize on insert?
+                if ($.browser.msie && $.browser.version=="7.0") {
+                    category.find('option').parent().css('width', '155px');
+                }
             }
         };
 
