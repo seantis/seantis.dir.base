@@ -194,58 +194,12 @@ def fulltext_search(directory, text):
     # Perform fulltext search
     results = catalog(
         path={'query': path, 'depth':3},
-        SearchableText=text
+        SearchableText=text,
+        object_provides=IDirectoryItemBase.__identifier__
     )
-
-    # Go through the results which may include descendents of DirectoryItem
-    # and get the unique paths of the the DirectoryItem parents
-    items = set()
-    directorypath = directory.absolute_url_path()
-    for result in results:
-        item = get_item_path(directorypath, result.getPath())
-        items.add(item)
-
-    # Use the unique paths to get the directory items. Though a path lookup
-    # is very fast this whole thing could possibly done smarter by looking
-    # at ZCatalog internals and using that knowledge to avoid these roundtrips
-    results = []
-    for path in items:
-        result = catalog(
-                path={'query': path, 'depth':0},
-                object_provides=IDirectoryItemBase.__identifier__
-            )
-        results.extend(result)
 
     return getObjects(directory, results)
 
-def get_item_path(directorypath, descendantpath):
-    """Given a directory path and the path of any subpath of the directory,
-    return the path of the directory item which contains the descendant.
-
-    The descendant may also be the path to a directory item.
-
-    To see how the function works exactly have a look at test_get_item_path.
-
-    """
-    if not directorypath in descendantpath:
-        return None
-
-    directory = directorypath.split('/')
-    descendant = descendantpath.split('/')
-
-    # the paths may not share the same root, so they need to be aligned
-    root = directory[-1:][0]
-    assert (root in descendant)
-
-    itemindex = descendant.index(root) + 1
-    assert(itemindex <= len(descendant))
-
-    child = []
-    for i in range(0, itemindex + 1):
-        child.append(descendant[i])
-    
-    return u'/'.join(child)
-    
 def is_exact_match(item, term):
     """Returns true if a given item is an exact match of term. Term is the same
     as in category_search. 
