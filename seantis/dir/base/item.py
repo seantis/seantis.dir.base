@@ -38,7 +38,8 @@ class IDirectoryItemBase(form.Schema):
     description = Text(
             title=_(u'Description'),
             required=False,
-            default=u''
+            default=u'',
+            missing_value=u''
         )
 
     searchable('cat1')
@@ -109,6 +110,15 @@ class DirectoryItem(Container):
     """Represents objects created using IDirectoryItem."""
 
     implements(IAttributeAnnotatable, IGeoreferenceable)
+
+    @property
+    def description(self):
+        # ensure that the description is never None (which is handled by the
+        # interface definition really, but older items were created without
+        # the missing_value option and might be different)
+        # => yes a migration would be much better, but I lack the nerve
+        # of dealing with GenericSetup right now.
+        return self.__dict__['description'] or u''
 
     def parent(self):
         #I tried to use @property here, but this screws with the acquisition
