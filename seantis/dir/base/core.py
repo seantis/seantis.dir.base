@@ -4,6 +4,8 @@ from zope.component import adapts
 from plone.dexterity.interfaces import IDexterityContent
 
 from plone.app.dexterity.behaviors.metadata import DCFieldProperty
+from collective.geo.mapwidget.browser.widget import MapWidget
+from collective.geo.kml.browser.maplayers import KMLMapLayer
 
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
@@ -28,6 +30,13 @@ class View(grok.View):
             terms[key] = remove_count(text)
 
         return terms
+
+    @property
+    def mapfields(self):
+        mapwidget = MapWidget(self, self.request, self.context)
+        mapwidget._layers = [KMLMapLayer(context=self.context)]
+        
+        return (mapwidget, )
 
 def ExtendedDirectory(directory):
     interface = directory.interface
