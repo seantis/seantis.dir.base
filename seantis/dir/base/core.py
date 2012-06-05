@@ -5,16 +5,11 @@ from plone.dexterity.interfaces import IDexterityContent
 
 from plone.app.dexterity.behaviors.metadata import DCFieldProperty
 
-from seantis.dir.base.utils import is_izug_portal
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
 
 class View(grok.View):
     grok.baseclass()
-
-    @property
-    def is_izug_portal(self):
-        return is_izug_portal(self)
 
     @property
     def current_language(self):

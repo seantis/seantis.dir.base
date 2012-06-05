@@ -63,14 +63,6 @@ def get_current_language(context, request):
     portal_state = getMultiAdapter((context, request), name=u'plone_portal_state')
     return portal_state.language()
 
-def is_izug_portal(obj):
-    """Returns true if the dictionary is running on the izug portal. 
-    This function should not exist and will be removed as soon as possible.
-
-    """
-    skins = getToolByName(obj, 'portal_skins')
-    return 'iZug' in skins.getDefaultSkin()
-
 def add_count(text, count):
     """Adds a count to a text."""
     return '%s (%i)' % (text, count)
