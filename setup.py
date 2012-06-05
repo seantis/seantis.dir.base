@@ -39,7 +39,8 @@ setup(name='seantis.dir.base',
           'collective.geo.settings',
           'collective.geo.mapwidget',
           'collective.geo.openlayers',
-          'collective.geo.settings'
+          'collective.geo.settings',
+          'collective.geo.kml',
       ],
       entry_points="""
       [z3c.autoinclude.plugin]
