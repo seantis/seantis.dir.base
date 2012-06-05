@@ -34,7 +34,12 @@ setup(name='seantis.dir.base',
           'collective.dexteritytextindexer',
           'xlrd',
           'xlwt',
-          'collective.geo.geographer'
+          'collective.geo.geographer',
+          'collective.geo.contentlocations',
+          'collective.geo.settings',
+          'collective.geo.mapwidget',
+          'collective.geo.openlayers',
+          'collective.geo.settings'
       ],
       entry_points="""
       [z3c.autoinclude.plugin]
