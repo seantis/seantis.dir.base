@@ -10,9 +10,21 @@
 
 #landingPageIntro {
     margin: 20px 0;
-    width: 50%;
+    width: 100%;
 }
 
 .directoryResult {
     margin: 20px 0;
+}
+
+div#landingPageText {
+    width: 45%;
+    float: left;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+#directoryResultMap {
+    width: 50%;
+    float: right;
 }

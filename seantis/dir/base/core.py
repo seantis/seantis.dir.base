@@ -34,8 +34,9 @@ class View(grok.View):
     @property
     def mapfields(self):
         mapwidget = MapWidget(self, self.request, self.context)
-        mapwidget._layers = [KMLMapLayer(context=self.context)]
-        
+        if not hasattr(self, 'items'):
+            mapwidget._layers = [KMLMapLayer(context=self.context)]
+
         return (mapwidget, )
 
 def ExtendedDirectory(directory):

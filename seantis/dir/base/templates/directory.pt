@@ -7,6 +7,10 @@
       i18n:domain="seantis.dir.base">
 <body>
 
+<metal:block fill-slot="head_slot">
+    <metal:use use-macro="context/@@collectivegeo-macros/openlayers" />
+</metal:block>
+
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main">
 
