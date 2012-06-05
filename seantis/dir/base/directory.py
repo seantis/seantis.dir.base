@@ -129,11 +129,6 @@ class Directory(Container):
         """Returns the description with newlines replaced by <br/> tags"""
         return self.description and self.description.replace('\n', '<br />') or ''
 
-    @property
-    def is_izug_portal(self):
-        """Added to use in the cssregistry as expression."""
-        return utils.is_izug_portal(self.context)
-
 
 class DirectorySearchViewlet(grok.Viewlet):
 
@@ -164,6 +159,7 @@ class DirectorySearchViewlet(grok.Viewlet):
         
         if self.context: 
             self.items = catalog.items(self.context)
+
             self.values = catalog.grouped_possible_values_counted(
                           self.context, self.items)
             self.labels = self.context.labels()

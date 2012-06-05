@@ -6,6 +6,7 @@ from zope.schema import Text
 from zope.schema import TextLine
 from zope.schema import List
 from zope.interface import Interface
+from zope.interface import implements
 from zope.app.container.interfaces import IObjectMovedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from plone.directives import form
@@ -16,9 +17,11 @@ from plone.app.dexterity import browser
 from Products.CMFCore.interfaces import IActionSucceededEvent 
 from collective.dexteritytextindexer import searchable
 
+from zope.annotation.interfaces import IAttributeAnnotatable
+from collective.geo.geographer.interfaces import IGeoreferenceable
+
 from seantis.dir.base import _
 from seantis.dir.base.utils import flatten
-from seantis.dir.base.utils import is_izug_portal
 
 class IDirectoryItemBase(form.Schema):
     """Single entry of a directory. Usually you would not want to directly
@@ -105,6 +108,8 @@ def onChangedWorkflowState(item, event):
 class DirectoryItem(Container):
     """Represents objects created using IDirectoryItem."""
 
+    implements(IAttributeAnnotatable, IGeoreferenceable)
+
     def parent(self):
         #I tried to use @property here, but this screws with the acquisition
         #context, which apparently is a known sideffect in this case
@@ -148,10 +153,6 @@ class DirectoryItem(Container):
         """Returns the description with newlines replaced by <br/> tags"""
         return self.description and self.description.replace('\n', '<br />') or ''
 
-    @property
-    def is_izug_portal(self):
-        """Added to use in the cssregistry as expression."""
-        return is_izug_portal(self.context)
 
 def label_widgets(directory, widgets):
     """Takes a list of widgets and substitutes the labels of those representing

@@ -33,7 +33,8 @@ setup(name='seantis.dir.base',
           'plone.directives.form',
           'collective.dexteritytextindexer',
           'xlrd',
-          'xlwt'
+          'xlwt',
+          'collective.geo.geographer'
       ],
       entry_points="""
       [z3c.autoinclude.plugin]
