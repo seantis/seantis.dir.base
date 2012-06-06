@@ -9,8 +9,7 @@
 
 <metal:block fill-slot="head_slot">
     <metal:use use-macro="context/@@collectivegeo-macros/openlayers" />
-            <script type="text/javascript"
-                src="++resource++geo.kml.javascripts/kml_openlayers.js"></script>
+            <script type="text/javascript" src="++resource++geo.kml.javascripts/kml_openlayers.js"></script>
 </metal:block>
 
 <metal:main fill-slot="main">

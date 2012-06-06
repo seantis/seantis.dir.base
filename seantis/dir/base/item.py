@@ -111,14 +111,18 @@ class DirectoryItem(Container):
 
     implements(IAttributeAnnotatable, IGeoreferenceable)
 
-    @property
-    def description(self):
+    def get_description(self):
         # ensure that the description is never None (which is handled by the
         # interface definition really, but older items were created without
         # the missing_value option and might be different)
         # => yes a migration would be much better, but I lack the nerve
         # of dealing with GenericSetup right now.
         return self.__dict__['description'] or u''
+
+    def set_description(self, value):
+        self.__dict__['description'] = value
+
+    description = property(get_description, set_description)
 
     def parent(self):
         #I tried to use @property here, but this screws with the acquisition
