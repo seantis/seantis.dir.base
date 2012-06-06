@@ -36,6 +36,11 @@ class View(grok.View):
         mapwidget = MapWidget(self, self.request, self.context)
         if not hasattr(self, 'items'):
             mapwidget._layers = [KMLMapLayer(context=self.context)]
+        else:
+            assert hasattr(self, 'batch')
+            
+            layer = lambda i: KMLMapLayer(context=i)
+            mapwidget._layers = map(layer, self.batch)
 
         return (mapwidget, )
 
