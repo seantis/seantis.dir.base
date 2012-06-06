@@ -5,10 +5,42 @@ from plone.dexterity.interfaces import IDexterityContent
 
 from plone.app.dexterity.behaviors.metadata import DCFieldProperty
 from collective.geo.mapwidget.browser.widget import MapWidget
+from collective.geo.mapwidget.maplayers import MapLayer
 from collective.geo.kml.browser.maplayers import KMLMapLayer
+from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
+from plone.memoize.instance import memoizedproperty
+from ZPublisher.interfaces import UseTraversalDefault
+
+from five.customerize import zpt
+
+class DirectoryMapLayer(MapLayer):
+    @memoizedproperty
+    def jsfactory(self):
+        title = self.context.Title().replace("'", "\\'")
+        if isinstance(title, str):
+            title = title.decode('utf-8')
+        
+        context_url = self.context.absolute_url()
+        if not context_url.endswith('/'):
+            context_url += '/'
+        
+        js = """
+            function() {
+                var layer=new OpenLayers.Layer.GML('%s','%s'+'@@kml-document',{
+                    format:OpenLayers.Format.KML,
+                    projection:cgmap.createDefaultOptions().displayProjection,
+                    formatOptions:{
+                        extractStyles:true,
+                        extractAttributes:true
+                    }
+                });
+                
+                return layer
+            }"""
+        return js % (title, context_url)
 
 class View(grok.View):
     grok.baseclass()
@@ -39,10 +71,12 @@ class View(grok.View):
         else:
             assert hasattr(self, 'batch')
             
-            layer = lambda i: KMLMapLayer(context=i)
-            mapwidget._layers = map(layer, self.batch)
+            mapwidget._layers = list()
+            for item in self.batch:
+                mapwidget._layers.append(DirectoryMapLayer(context=item))
 
         return (mapwidget, )
+
 
 def ExtendedDirectory(directory):
     interface = directory.interface
