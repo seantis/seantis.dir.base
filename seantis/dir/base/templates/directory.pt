@@ -9,6 +9,8 @@
 
 <metal:block fill-slot="head_slot">
     <metal:use use-macro="context/@@collectivegeo-macros/openlayers" />
+            <script type="text/javascript"
+                src="++resource++geo.kml.javascripts/kml_openlayers.js"></script>
 </metal:block>
 
 <metal:main fill-slot="main">
@@ -23,6 +25,13 @@
         <tal:block condition="python: not view.filtered">
           <div tal:replace="structure provider:seantis.dir.base.directory.viewletmanager"/>
         </tal:block>
+
+        <div id="directoryResultMap">
+          <tal:omit tal:repeat="cgmap view/@@collectivegeo-maps/mapwidgets" tal:omit-tag="">
+              <metal:use use-macro="context/@@collectivegeo-macros/map-widget" />
+          </tal:omit>
+        </div>
+        <div style="clear: both;"></div>
 
         <div id="directoryInfo">
             <div id="directoryResultList">

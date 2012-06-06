@@ -26,5 +26,10 @@ div#landingPageText {
 
 #directoryResultMap {
     width: 50%;
-    float: right;
+    position: absolute;
+    right: 0;
+}
+
+div#directoryResultList, div#directoryInfo {
+    padding-top: 0;
 }
