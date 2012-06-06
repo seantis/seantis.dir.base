@@ -251,7 +251,6 @@ class View(core.View):
         start = int(self.request.get('b_start') or 0)
         return Batch(self.items, ITEMSPERPAGE, start, orphan=1)
 
-
 class JsonFilterView(core.View):
     """View to filter the catalog with ajax."""
 
