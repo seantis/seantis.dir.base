@@ -173,15 +173,24 @@ class DirectoryItem(Container):
         return IGeoreferenced(self).type != None
 
 class DirectoryItemGeoStyleAdapter(grok.Adapter):
+    """ Defines the style of the mapwidget used for directory items. """
 
     grok.context(IDirectoryItemBase)
     grok.provides(IGeoCustomFeatureStyle)
 
     use_custom_styles = True
-    map_viewlet_position = u"fake-manager"
-    linewidth = 2.0
-    polygoncolor = u"ff0003c"
-    marker_image_size = 0.71875 #23px (image size) / 32px
+
+    # don't show in viewlets
+    map_viewlet_position = u"fake-manager" 
+    
+    linewidth = 1.0
+    linecolor = u"006fba"
+    polygoncolor = u"006fba"
+
+    # 23px (image size) / 32px
+    marker_image_size = 0.71875
+
+    # properties shown when clicking a marker
     display_properties = []
 
     def __init__(self, context):
@@ -191,6 +200,16 @@ class DirectoryItemGeoStyleAdapter(grok.Adapter):
     def marker_image(self):
         imageurl = utils.get_marker(self.context)
         return 'string:' + imageurl
+
+    # the style cannot be overwritten for now
+    def setStyles(self, *args):
+        pass
+
+    # collective.geo is somewhat weird when it comes to the adapter handling
+    # sometimes get/set is used, sometimes __getitem__ is required and other
+    # times the style is read using geostyles.
+
+    # the following functions make sure all these ways work
 
     def get(self, attribute, default):
         if not hasattr(self, attribute):
@@ -202,9 +221,6 @@ class DirectoryItemGeoStyleAdapter(grok.Adapter):
 
     def __getitem__(self, attribute):
         return getattr(self, attribute)
-
-    def setStyles(self, *args):
-        pass
 
     @property
     def geostyles(self):

@@ -1,23 +1,26 @@
 from five import grok
 
 from zope.component import adapts
-from plone.dexterity.interfaces import IDexterityContent
 
+from plone.dexterity.interfaces import IDexterityContent
 from plone.app.dexterity.behaviors.metadata import DCFieldProperty
+from plone.memoize.instance import memoizedproperty
+
 from collective.geo.mapwidget.browser.widget import MapWidget
 from collective.geo.mapwidget.maplayers import MapLayer
 from collective.geo.kml.browser.maplayers import KMLMapLayer
-from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 
 from seantis.dir.base import session
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
-from plone.memoize.instance import memoizedproperty
-from ZPublisher.interfaces import UseTraversalDefault
-
-from five.customerize import zpt
 
 class DirectoryMapLayer(MapLayer):
+    """ Defines the map layer for markers shown in the directory view. Pretty
+    much equal to the KMLMapLayer, but without any zooming function (i.e the
+    center and zoom of collective.geo.settings is used).
+
+    """
+
     @memoizedproperty
     def jsfactory(self):
         title = self.context.Title().replace("'", "\\'")
@@ -68,22 +71,36 @@ class View(grok.View):
 
     @property
     def mapfields(self):
+        """ Returns the mapwidgets to be shown on in the directory and item view."""
+        
         mapwidget = MapWidget(self, self.request, self.context)
+
+        # if no items are found it must be a single item view
         if not hasattr(self, 'items'):
             if self.context.has_mapdata():
                 mapwidget._layers = [KMLMapLayer(context=self.context)]
 
+            # clear the possibly existing lettermap
             session.set_lettermap(self.context, dict())
+
+        # otherwise it must be a directory view and we can expect a batch
+        # (only items in the shown batch are painted on the map as performance
+        # is going to be a problem otherwise)
         else:
             assert hasattr(self, 'batch')
 
             index = 0
             maxindex = len(letters) - 1
-            lettermap = dict()
 
+            lettermap = dict()
             mapwidget._layers = list()
+
             for item in sorted(self.batch, key=lambda i: i.title):
                 if item.has_mapdata():
+
+                    # create a lettermap and store it in the session
+                    # the current request won't suffice as the map layers are
+                    # later loaded using ajax
                     if index <= maxindex:
                         lettermap[item.id] = letters[index]
                         index += 1
