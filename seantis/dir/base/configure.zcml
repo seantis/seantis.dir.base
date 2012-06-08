@@ -35,4 +35,8 @@
         name="seantis.dir.base.stylesheets"
         directory="css"/>
 
+    <browser:resourceDirectory
+        name="seantis.dir.base.images"
+        directory="images"/>
+
 </configure>
