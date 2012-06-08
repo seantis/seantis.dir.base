@@ -67,13 +67,15 @@ class View(grok.View):
     def mapfields(self):
         mapwidget = MapWidget(self, self.request, self.context)
         if not hasattr(self, 'items'):
-            mapwidget._layers = [KMLMapLayer(context=self.context)]
+            if self.context.has_mapdata():
+                mapwidget._layers = [KMLMapLayer(context=self.context)]
         else:
             assert hasattr(self, 'batch')
             
             mapwidget._layers = list()
             for item in self.batch:
-                mapwidget._layers.append(DirectoryMapLayer(context=item))
+                if item.has_mapdata():
+                    mapwidget._layers.append(DirectoryMapLayer(context=item))
 
         return (mapwidget, )
 

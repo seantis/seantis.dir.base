@@ -18,7 +18,8 @@ from Products.CMFCore.interfaces import IActionSucceededEvent
 from collective.dexteritytextindexer import searchable
 
 from zope.annotation.interfaces import IAttributeAnnotatable
-from collective.geo.geographer.interfaces import IGeoreferenceable
+from collective.geo.geographer.interfaces import IGeoreferenceable, IGeoreferenced
+from collective.geo.settings.interfaces import IGeoCustomFeatureStyle
 
 from seantis.dir.base import _
 from seantis.dir.base.utils import flatten
@@ -167,6 +168,48 @@ class DirectoryItem(Container):
         """Returns the description with newlines replaced by <br/> tags"""
         return self.description and self.description.replace('\n', '<br />') or ''
 
+    def has_mapdata(self):
+        return IGeoreferenced(self).type != None
+
+class DirectoryItemGeoStyleAdapter(grok.Adapter):
+
+    grok.context(IDirectoryItemBase)
+    grok.provides(IGeoCustomFeatureStyle)
+
+    use_custom_styles = True
+    map_viewlet_position = u"fake-manager"
+    linewidth = 2.0
+    polygoncolor = u"ff0003c"
+    marker_image_size = 0.71875 #23px (image size) / 32px
+    display_properties = ['Title']
+
+    @property
+    def marker_image(self):
+        baseurl = self.context.absolute_url()
+        imagedir = "/++resource++seantis.dir.base.images"
+
+        if not hasattr(self.context, '_v_letter'):
+            image = "/singlemarker"
+        else:
+            image = "/markers/marker-" + self.context._v_letter
+
+        imageurl = baseurl + imagedir + image + '.png'
+        return 'string:' + imageurl
+
+    def get(self, attribute, default):
+        if not hasattr(self, attribute):
+            return default
+        return getattr(self, attribute)
+
+    def set(self, attribute, value):
+        return setattr(self, attribute, value)
+
+    def __getitem__(self, attribute):
+        return getattr(self, attribute)
+
+    @property
+    def geostyles(self):
+        return self
 
 def label_widgets(directory, widgets):
     """Takes a list of widgets and substitutes the labels of those representing
