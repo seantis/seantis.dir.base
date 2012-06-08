@@ -46,3 +46,9 @@ def set_last_filter(directory, terms):
 def reset_search_filter(directory):
     set_session(directory, directory.id + 'filterterms', None)
     set_session(directory, directory.id + 'searchtext', None)
+
+def get_lettermap(directory):
+    return get_session(directory, 'lettermap') or dict()
+
+def set_lettermap(directory, map):
+    set_session(directory, 'lettermap', map)

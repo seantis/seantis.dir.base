@@ -8,6 +8,7 @@ from Products.CMFCore.utils import getToolByName
 from zope import i18n
 
 import pyuca
+from seantis.dir.base import session
 
 allkeys = path.join('/'.join(path.split(pyuca.__file__)[:-1]), 'allkeys.txt')
 collator = pyuca.Collator(allkeys)
@@ -96,3 +97,15 @@ def unicode_collate_sortkey():
     """
 
     return collator.sort_key
+
+def get_marker(item):
+    baseurl = item.absolute_url()
+    imagedir = "/++resource++seantis.dir.base.images"
+    lettermap = session.get_lettermap(item.parent())
+    
+    if item.id in lettermap:
+        image = "/markers/marker-" + lettermap[item.id]
+    else:
+        image = "/singlemarker"
+
+    return baseurl + imagedir + image + '.png'

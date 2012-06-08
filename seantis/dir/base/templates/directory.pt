@@ -35,6 +35,9 @@
         <div id="directoryInfo">
             <div id="directoryResultList">
               <div class="directoryResult" tal:repeat="item view/batch">
+                <div class="directoryMarker">
+                  <img tal:condition="python: item.has_mapdata()" tal:attributes="src python: view.marker_image(item)" width="23" height="23"/>
+                </div>
                 <div tal:define="context python: item" tal:replace="structure provider:seantis.dir.base.item.viewletmanager"/>
               </div>
             </div>

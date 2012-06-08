@@ -33,3 +33,13 @@ div#landingPageText {
 div#directoryResultList, div#directoryInfo {
     padding-top: 0;
 }
+
+.directoryMarker {
+    position: absolute;   
+}
+
+.directoryMarker img {
+    position: relative;
+    top: -2px;
+    left: -2px;   
+}
