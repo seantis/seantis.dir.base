@@ -22,7 +22,8 @@ from collective.geo.geographer.interfaces import IGeoreferenceable, IGeoreferenc
 from collective.geo.settings.interfaces import IGeoCustomFeatureStyle
 
 from seantis.dir.base import _
-from seantis.dir.base.utils import flatten
+from seantis.dir.base import session
+from seantis.dir.base import utils
 
 class IDirectoryItemBase(form.Schema):
     """Single entry of a directory. Usually you would not want to directly
@@ -162,7 +163,7 @@ class DirectoryItem(Container):
         for cat in categories:
             values.append(getattr(self, cat))
 
-        return list(flatten(values))
+        return list(utils.flatten(values))
 
     def html_description(self):
         """Returns the description with newlines replaced by <br/> tags"""
@@ -181,19 +182,14 @@ class DirectoryItemGeoStyleAdapter(grok.Adapter):
     linewidth = 2.0
     polygoncolor = u"ff0003c"
     marker_image_size = 0.71875 #23px (image size) / 32px
-    display_properties = ['Title']
+    display_properties = []
+
+    def __init__(self, context):
+        self.context = context
 
     @property
     def marker_image(self):
-        baseurl = self.context.absolute_url()
-        imagedir = "/++resource++seantis.dir.base.images"
-
-        if not hasattr(self.context, '_v_letter'):
-            image = "/singlemarker"
-        else:
-            image = "/markers/marker-" + self.context._v_letter
-
-        imageurl = baseurl + imagedir + image + '.png'
+        imageurl = utils.get_marker(self.context)
         return 'string:' + imageurl
 
     def get(self, attribute, default):
@@ -206,6 +202,9 @@ class DirectoryItemGeoStyleAdapter(grok.Adapter):
 
     def __getitem__(self, attribute):
         return getattr(self, attribute)
+
+    def setStyles(self, *args):
+        pass
 
     @property
     def geostyles(self):

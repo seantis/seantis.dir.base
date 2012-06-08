@@ -9,6 +9,7 @@ from collective.geo.mapwidget.maplayers import MapLayer
 from collective.geo.kml.browser.maplayers import KMLMapLayer
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 
+from seantis.dir.base import session
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
 from plone.memoize.instance import memoizedproperty
@@ -42,6 +43,8 @@ class DirectoryMapLayer(MapLayer):
             }"""
         return js % (title, context_url)
 
+letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
 class View(grok.View):
     grok.baseclass()
 
@@ -69,13 +72,25 @@ class View(grok.View):
         if not hasattr(self, 'items'):
             if self.context.has_mapdata():
                 mapwidget._layers = [KMLMapLayer(context=self.context)]
+
+            session.set_lettermap(self.context, dict())
         else:
             assert hasattr(self, 'batch')
-            
+
+            index = 0
+            maxindex = len(letters) - 1
+            lettermap = dict()
+
             mapwidget._layers = list()
-            for item in self.batch:
+            for item in sorted(self.batch, key=lambda i: i.title):
                 if item.has_mapdata():
+                    if index <= maxindex:
+                        lettermap[item.id] = letters[index]
+                        index += 1
+
                     mapwidget._layers.append(DirectoryMapLayer(context=item))
+
+            session.set_lettermap(self.context, lettermap)
 
         return (mapwidget, )
 

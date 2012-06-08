@@ -193,6 +193,10 @@ class View(core.View):
     
     categories, items, values = None, None, None
 
+    @property
+    def lettermap(self):
+        return session.get_lettermap(self.context)
+
     def filter(self, terms):
         if terms:
             self.items = catalog.category_filter(self.context, terms)
@@ -250,6 +254,9 @@ class View(core.View):
     def batch(self):
         start = int(self.request.get('b_start') or 0)
         return Batch(self.items, ITEMSPERPAGE, start, orphan=1)
+
+    def marker_image(self, item):
+        return utils.get_marker(item)
 
 class JsonFilterView(core.View):
     """View to filter the catalog with ajax."""
