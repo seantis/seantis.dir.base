@@ -4,6 +4,7 @@ from five import grok
 
 import xlwt
 import codecs
+import os
 
 from zope.i18n import translate
 
@@ -34,12 +35,14 @@ class XlsExportView(core.View):
             export_xls(self.context, xlsfile, language, as_template)
             output = xlsfile.getvalue()
         finally:
+            xlsfile.seek(0, os.SEEK_END)
+            filesize = xlsfile.tell()
             xlsfile.close()
 
         RESPONSE = self.request.RESPONSE
         RESPONSE.setHeader("Content-disposition", filename)
         RESPONSE.setHeader("Content-Type", "application/xls")
-        RESPONSE.setHeader("Content-Length", 0)
+        RESPONSE.setHeader("Content-Length", filesize)
 
         return output
 
