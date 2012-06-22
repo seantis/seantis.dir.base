@@ -168,7 +168,8 @@ def generate_object(folder, fieldmap, key, objvalues, error):
     # The key does not exist, create a new object
     attributes = dict()
     for attr, ix in fieldmap.fieldmap.items():
-        attributes[attr] = objvalues[ix]
+        if not attr in fieldmap.readonly:
+            attributes[attr] = objvalues[ix]
 
     # Unmapped fields are filled with defaults
     add_defaults(attributes, fieldmap)
@@ -178,8 +179,6 @@ def generate_object(folder, fieldmap, key, objvalues, error):
 
     # If the verification doesn't check it will grigger a rollback later
     return verify(obj, fieldmap, error) and obj or None
-    
-    
 
 def verify(obj, fieldmap, error):
     msgs = []

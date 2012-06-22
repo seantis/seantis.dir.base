@@ -18,6 +18,8 @@ class FieldMap(object):
         self.wrapper = dict()  # A list of wrappers for field values
         self.unwrapper = dict()# A list of unwrappers for field values
         self.root = False      # True when there is no parent fieldmap
+        self.titles = dict()   # A list of custom titles
+        self.readonly = set()  # A list of readonly fieldnames
 
         # Interface containg the fields used in the fieldmap
         self.baseinterface = self.interface = IDirectoryItemBase 
@@ -30,6 +32,12 @@ class FieldMap(object):
         for ix, field in enumerate(fields, startindex):
             self.fieldmap[field] = ix
             self.indexmap[ix] = field
+
+    def add_title(self, fieldname, title):
+        self.titles[fieldname] = title
+
+    def mark_readonly(self, fieldname):
+        self.readonly.add(fieldname)
 
     def get_field(self, index, including_children):
         """ Returns the fieldname of an index (optionally looking up the 
@@ -49,6 +57,19 @@ class FieldMap(object):
     def indexes(self):
         """ Returns a list of all index values. """
         return self.fieldmap.values()
+
+    def readonlyindexes(self, including_children):
+        """ Returns a list of all readonly indexes. """
+        indexes = set()
+        if including_children:
+            for child in self.children:
+                for index in child.readonlyindexes(True):
+                    indexes.add(index)
+
+        for field in self.readonly:
+            indexes.add(self.fieldmap[field])
+
+        return indexes
 
     def keyindexes(self, including_children):
         """ Returns a list of all key indexes. """
@@ -110,13 +131,15 @@ class FieldMap(object):
             return lambda value: value
 
 def get_map():
-    itemfields = ('title','description','cat1','cat2','cat3','cat4')
+    itemfields = ('title','description','cat1','cat2','cat3','cat4', 'absolute_url')
     
     itemmap = FieldMap()
     itemmap.root = True
     itemmap.typename = 'seantis.dir.base.item'
     itemmap.keyfields = ('title',)
     itemmap.add_fields(itemfields)
+    itemmap.add_title('absolute_url', 'Url')
+    itemmap.mark_readonly('absolute_url')
 
     listwrap = lambda val: ','.join(val)
     listunwrap = lambda val: [v.strip() for v in val.split(',')]

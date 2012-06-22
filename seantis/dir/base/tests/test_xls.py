@@ -93,15 +93,15 @@ class TestXLS(IntegrationTestCase):
 
         # These should end up grouped into one
         self.write_row(sheet, 1, 
-            ['First', 'Description', 'Cat1', 'Cat2', 'Cat3', 'Cat4']
+            ['First', 'Description', 'Cat1', 'Cat2', 'Cat3', 'Cat4', 'Url']
         )
         self.write_row(sheet, 2, 
-            ['First', 'Description', 'Cat1', 'Cat2', 'Cat3', 'Cat4']
+            ['First', 'Description', 'Cat1', 'Cat2', 'Cat3', 'Cat4', 'Url']
         )
 
         # Another one
         self.write_row(sheet, 3,
-            ['Second', 'Description', 'Cat1', 'Cat2', 'Cat3', 'Cat4']
+            ['Second', 'Description', 'Cat1', 'Cat2', 'Cat3', 'Cat4', 'Url']
         )
 
         directory = self.add_directory()
@@ -125,6 +125,7 @@ class TestXLS(IntegrationTestCase):
             self.assertEqual(result.cat2, [u'Cat2'])
             self.assertEqual(result.cat3, [u'Cat3'])
             self.assertEqual(result.cat4, [u'Cat4'])
+            self.assertTrue(callable(result.absolute_url))
 
     def test_invalid_import(self):
         wb = Workbook()

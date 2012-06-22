@@ -48,23 +48,34 @@ def export_xls(directory, filehandle, language, as_template):
     ws = wb.add_sheet(directory.title[:30])
 
     fieldmap = get_map()
-    
+
     write_title(fieldmap, ws, language, directory)
 
     if not as_template:
         items = catalog.children(directory, fieldmap.typename)
         write_objects(items, fieldmap, ws, 1)
-        
-    if as_template:
-        color_required(fieldmap, ws)
 
     wb.save(filehandle)
+
+def colstyle(fieldmap, col):
+    if col in fieldmap.keyindexes(True):
+        return xlwt.easyxf('pattern: fore_color light_yellow, pattern solid;')
+    elif col in fieldmap.readonlyindexes(True):
+        return xlwt.easyxf('pattern: fore_color gray25, pattern solid;')
+
+    return xlwt.easyxf('')
 
 def color_required(fieldmap, worksheet):
     style = xlwt.easyxf('pattern: fore_color light_yellow, pattern solid;')
     indexes = fieldmap.keyindexes(including_children=True)
     for ix in indexes:
         worksheet.col(ix).set_style(style)
+
+def color_readonly(fieldmap, worksheet):
+    style = xlwt.easyxf('pattern: fore_color gray25, pattern solid;')
+    indexes = fieldmap.readonlyindexes(including_children=True)
+    for ix in indexes:
+        worksheet.cell(1, ix).set_style(style)
 
 def write_title(fieldmap, worksheet, language, directory=None):
     fields = get_interface_fields(fieldmap.interface)
@@ -74,13 +85,10 @@ def write_title(fieldmap, worksheet, language, directory=None):
     minix = min(indexes)
     maxix = max(indexes)
 
-    write = lambda col, value: worksheet.write(0, col, value)
+    write = lambda col, value: worksheet.write(0, col, value, colstyle(fieldmap, col))
     
     for ix in xrange(minix, maxix+1):
         name = fieldmap.indexmap[ix]
-
-        # Fields in the map should be in the interface
-        assert(name in fields or name in basefields)
 
         typ = fieldmap.typename
         title = None
@@ -91,8 +99,12 @@ def write_title(fieldmap, worksheet, language, directory=None):
         if not title:
             if name in fields:
                 title = fields[name].title
-            else:
+            elif name in basefields:
                 title = basefields[name].title
+            elif name in fieldmap.titles:
+                title = fieldmap.titles[name]
+            else:
+                title = name
 
         write(ix, translate(title, target_language=language))
 
@@ -126,7 +138,7 @@ def write_object(obj, fieldmap, worksheet, row, writeparent=None):
         writeparent(row)
 
     for field, ix in fieldmap.fieldmap.items():
-        write = lambda col, value: worksheet.write(row, col, value.encode('utf-8'))
+        write = lambda col, value: worksheet.write(row, col, value.encode('utf-8'), colstyle(fieldmap, col))
         
         if not hasattr(obj, field):
             continue
@@ -134,4 +146,11 @@ def write_object(obj, fieldmap, worksheet, row, writeparent=None):
         value = getattr(obj, field)
         if value:
             wrapper = fieldmap.get_wrapper(field)
-            write(ix, wrapper(getattr(obj, field)))
+            attr = getattr(obj, field)
+
+            # A field in the map may be a function in which case it is 
+            # called here and ignored on import
+            if callable(attr):
+                write(ix, wrapper(attr()))
+            else:
+                write(ix, wrapper(attr))
