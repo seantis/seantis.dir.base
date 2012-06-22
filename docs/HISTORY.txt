@@ -1,12 +1,19 @@
 
 # Changelog
 
+1.2 (alpha)
+---
+
+- Adds maps to items using collective.geo
+
 1.1
 ---
+
 - Adds absolute url to xls export as a read only field
 
 1.0.1
 -----
+
 - Makes fulltext search work independently of folder structure
 - Fixes an IE7 bug resulting in shrinking input boxes
 
