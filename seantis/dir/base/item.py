@@ -16,13 +16,13 @@ from plone.indexer import indexer
 from plone.app.dexterity import browser
 from Products.CMFCore.interfaces import IActionSucceededEvent 
 from collective.dexteritytextindexer import searchable
+from collective.geo.contentlocations.geostylemanager import GeoStyleManager
 
 from zope.annotation.interfaces import IAttributeAnnotatable
 from collective.geo.geographer.interfaces import IGeoreferenceable, IGeoreferenced
 from collective.geo.settings.interfaces import IGeoCustomFeatureStyle
 
 from seantis.dir.base import _
-from seantis.dir.base import session
 from seantis.dir.base import utils
 
 class IDirectoryItemBase(form.Schema):
@@ -172,59 +172,22 @@ class DirectoryItem(Container):
     def has_mapdata(self):
         return IGeoreferenced(self).type != None
 
-class DirectoryItemGeoStyleAdapter(grok.Adapter):
-    """ Defines the style of the mapwidget used for directory items. """
+class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
 
     grok.context(IDirectoryItemBase)
-    grok.provides(IGeoCustomFeatureStyle)
-
-    use_custom_styles = True
-
-    # don't show in viewlets
-    map_viewlet_position = u"fake-manager" 
-    
-    linewidth = 1.0
-    linecolor = u"006fba"
-    polygoncolor = u"006fba"
-
-    # 23px (image size) / 32px
-    marker_image_size = 0.71875
-
-    # properties shown when clicking a marker
-    display_properties = []
+    grok.provides(IGeoCustomFeatureStyle) 
 
     def __init__(self, context):
-        self.context = context
+        super(DirectoryItemGeoStyleAdapter, self).__init__(context)
 
-    @property
-    def marker_image(self):
+        # permanently override certain style settings
         imageurl = utils.get_marker(self.context)
-        return 'string:' + imageurl
+        imageurl = 'string:' + imageurl
 
-    # the style cannot be overwritten for now
-    def setStyles(self, *args):
-        pass
-
-    # collective.geo is somewhat weird when it comes to the adapter handling
-    # sometimes get/set is used, sometimes __getitem__ is required and other
-    # times the style is read using geostyles.
-
-    # the following functions make sure all these ways work
-
-    def get(self, attribute, default):
-        if not hasattr(self, attribute):
-            return default
-        return getattr(self, attribute)
-
-    def set(self, attribute, value):
-        return setattr(self, attribute, value)
-
-    def __getitem__(self, attribute):
-        return getattr(self, attribute)
-
-    @property
-    def geostyles(self):
-        return self
+        self.geostyles['map_viewlet_position'] = u'fake-manager'
+        self.geostyles['marker_image_size'] = 0.71875
+        self.geostyles['use_custom_styles'] = True
+        self.geostyles['marker_image'] = imageurl
 
 def label_widgets(directory, widgets):
     """Takes a list of widgets and substitutes the labels of those representing
