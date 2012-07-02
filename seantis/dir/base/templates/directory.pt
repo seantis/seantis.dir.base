@@ -7,7 +7,7 @@
       i18n:domain="seantis.dir.base">
 <body>
 
-<metal:block fill-slot="head_slot" tal:condition="view/show_map">>
+<metal:block fill-slot="head_slot" tal:condition="view/show_map">
     <metal:use use-macro="context/@@collectivegeo-macros/openlayers" />
             <script type="text/javascript" src="++resource++geo.kml.javascripts/kml_openlayers.js"></script>
 </metal:block>
