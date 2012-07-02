@@ -1,11 +1,14 @@
 from five import grok
 
-from zope.component import adapts
+from zope.component import adapts, getUtility
 
+from plone.registry.interfaces import IRegistry
 from plone.dexterity.interfaces import IDexterityContent
 from plone.app.dexterity.behaviors.metadata import DCFieldProperty
 from plone.memoize.instance import memoizedproperty
+from plone.memoize import view
 
+from collective.geo.settings.interfaces import IGeoSettings
 from collective.geo.mapwidget.browser.widget import MapWidget
 from collective.geo.mapwidget.maplayers import MapLayer
 from collective.geo.kml.browser.maplayers import KMLMapLayer
@@ -55,6 +58,21 @@ class View(grok.View):
     def current_language(self):
         return get_current_language(self.context, self.request)
 
+    @property
+    @view.memoize
+    def show_map(self):
+        """ The map is shown if the interface is defined in the 
+        collective.geo.settings. Said module usually sets or removes the
+        interfaces. But since we define our own adapter which is always
+        present we simply hide the mapwidget if the seantis.dir.base types
+        are not in the content_types list. """
+
+        settings = getUtility(IRegistry).forInterface(IGeoSettings)
+        if self.is_itemview:
+            return 'seantis.dir.base.item'  in settings.geo_content_types
+        else:
+            return 'seantis.dir.base.directory' in settings.geo_content_types
+
     def get_filter_terms(self):
         """Unpacks the filter terms from a request."""
         terms = {}
@@ -70,23 +88,33 @@ class View(grok.View):
         return terms
 
     @property
+    def is_itemview(self):
+        # if no items are found it must be a single item view
+        return not hasattr(self, 'items')
+
+    @property
+    @view.memoize
     def mapfields(self):
         """ Returns the mapwidgets to be shown on in the directory and item view."""
         
+        if not self.show_map:
+            return tuple()
+
         mapwidget = MapWidget(self, self.request, self.context)
 
-        # if no items are found it must be a single item view
-        if not hasattr(self, 'items'):
+        
+        if self.is_itemview:
             if self.context.has_mapdata():
                 mapwidget._layers = [KMLMapLayer(context=self.context)]
 
             # clear the possibly existing lettermap
             session.set_lettermap(self.context, dict())
 
-        # otherwise it must be a directory view and we can expect a batch
-        # (only items in the shown batch are painted on the map as performance
-        # is going to be a problem otherwise)
         else:
+
+            # in a directory view we can expect a batch
+            # (only items in the shown batch are painted on the map as performance
+            # is going to be a problem otherwise)
             assert hasattr(self, 'batch')
 
             index = 0
