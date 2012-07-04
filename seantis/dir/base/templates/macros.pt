@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="seantis.dir.base"
+      tal:omit-tag="">
+  <head>
+  </head>
+
+  <body>
+
+    <tal:comment replace="nothing">
+    A macro to include all necessary javascript files for the directory's map view
+    </tal:comment>
+
+    <metal:define define-macro="openlayers">
+      <tal:block tal:condition="view/show_map">
+        <metal:use use-macro="context/@@collectivegeo-macros/openlayers" />
+        <script type="text/javascript" src="++resource++geo.kml.javascripts/kml_openlayers.js"></script>
+        <script type="text/javascript" tal:attributes="src string:$portal_url/deprecated.js"></script>
+      </tal:block>
+    </metal:define>
+
+    <metal:define define-macro="map">
+      <tal:block tal:condition="view/show_map">
+        <div id="directoryResultMap">
+          <tal:omit tal:repeat="cgmap view/@@collectivegeo-maps/mapwidgets" tal:omit-tag="">
+            <metal:use use-macro="context/@@collectivegeo-macros/map-widget" />
+          </tal:omit>
+        </div>
+        <div style="clear:both;"></div>
+      </tal:block>
+    </metal:define>
+
+    <metal:define define-macro="map-item">
+      <div class="directoryMarker" tal:condition="view/show_map">
+        <img tal:condition="python: item.has_mapdata()" tal:attributes="src python: view.marker_image(item)" width="23" height="23"/>
+      </div>
+    </metal:define>
+
+  </body>
+</html>

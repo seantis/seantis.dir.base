@@ -7,10 +7,8 @@
       i18n:domain="seantis.dir.base">
 <body>
 
-<metal:block fill-slot="head_slot" tal:condition="view/show_map">
-    <metal:use use-macro="context/@@collectivegeo-macros/openlayers" />
-    <script type="text/javascript" src="++resource++geo.kml.javascripts/kml_openlayers.js"></script>
-    <script type="text/javascript" tal:attributes="src string:$portal_url/deprecated.js"></script>
+<metal:block fill-slot="head_slot">
+  <metal:use use-macro="context/@@seantis-dir-macros/macros/openlayers"></metal:use>
 </metal:block>
 
 <metal:main fill-slot="main">
@@ -26,19 +24,14 @@
           <div tal:replace="structure provider:seantis.dir.base.directory.viewletmanager"/>
         </tal:block>
 
-        <div id="directoryResultMap" tal:condition="view/show_map">
-          <tal:omit tal:repeat="cgmap view/@@collectivegeo-maps/mapwidgets" tal:omit-tag="">
-              <metal:use use-macro="context/@@collectivegeo-macros/map-widget" />
-          </tal:omit>
-        </div>
-        <div style="clear: both;"></div>
+        <metal:use use-macro="context/@@seantis-dir-macros/macros/map"></metal:use>
 
         <div id="directoryInfo">
             <div id="directoryResultList">
               <div class="directoryResult" tal:repeat="item view/batch">
-                <div class="directoryMarker" tal:condition="view/show_map">
-                  <img tal:condition="python: item.has_mapdata()" tal:attributes="src python: view.marker_image(item)" width="23" height="23"/>
-                </div>
+
+                <metal:use use-macro="context/@@seantis-dir-macros/macros/map-item"></metal:use>
+
                 <div tal:define="context python: item" tal:replace="structure provider:seantis.dir.base.item.viewletmanager"/>
               </div>
             </div>
