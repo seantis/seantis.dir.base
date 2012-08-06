@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger('seantis.dir.base')
+
 from five import grok
 
 from zope.component import adapts, getUtility
@@ -67,11 +70,15 @@ class View(grok.View):
         present we simply hide the mapwidget if the seantis.dir.base types
         are not in the content_types list. """
 
-        settings = getUtility(IRegistry).forInterface(IGeoSettings)
-        if self.is_itemview:
-            return 'seantis.dir.base.item'  in settings.geo_content_types
-        else:
-            return 'seantis.dir.base.directory' in settings.geo_content_types
+        try:
+            settings = getUtility(IRegistry).forInterface(IGeoSettings)
+            if self.is_itemview:
+                return 'seantis.dir.base.item'  in settings.geo_content_types
+            else:
+                return 'seantis.dir.base.directory' in settings.geo_content_types
+        except:
+            logger.warn('collective.geo could not be loaded', exc_info=True)
+            return False
 
     def get_filter_terms(self):
         """Unpacks the filter terms from a request."""
