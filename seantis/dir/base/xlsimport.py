@@ -111,7 +111,7 @@ class Import(form.Form):
 
 def import_xls(directory, workbook, error=lambda e: None):
     # Get the fieldmap defining hierarchies and the cell/field mapping
-    fieldmap = get_map()
+    fieldmap = get_map(directory)
 
     # Load the sorted values from the workbook
     try:

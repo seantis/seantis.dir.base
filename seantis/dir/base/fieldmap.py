@@ -130,12 +130,11 @@ class FieldMap(object):
         else:
             return lambda value: value
 
-def get_map():
+def get_map(context):
     itemfields = ('title','description','cat1','cat2','cat3','cat4', 'absolute_url')
     
     itemmap = FieldMap()
     itemmap.root = True
-    itemmap.typename = 'seantis.dir.base.item'
     itemmap.keyfields = ('title',)
     itemmap.add_fields(itemfields)
     itemmap.add_title('absolute_url', 'Url')
@@ -147,10 +146,9 @@ def get_map():
     for cat in CATEGORIES:
         itemmap.bind_wrapper(cat, listwrap)
         itemmap.bind_unwrapper(cat, listunwrap)
-
     try:
-        adapter = component.getAdapter(itemmap, IFieldMapExtender)
-        adapter.extend_import()
+        adapter = component.getAdapter(context, IFieldMapExtender)
+        adapter.extend_import(itemmap)
     except component.ComponentLookupError:
         pass
 

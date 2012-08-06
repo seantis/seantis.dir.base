@@ -50,7 +50,7 @@ def export_xls(directory, filehandle, language, as_template):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet(directory.title[:30])
 
-    fieldmap = get_map()
+    fieldmap = get_map(directory)
 
     write_title(fieldmap, ws, language, directory)
 
