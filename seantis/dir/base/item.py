@@ -12,7 +12,6 @@ from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from plone.directives import form
 from plone.directives import dexterity
 from plone.dexterity.content import Container
-from plone.indexer import indexer
 from plone.app.dexterity import browser
 from Products.CMFCore.interfaces import IActionSucceededEvent 
 from collective.dexteritytextindexer import searchable
@@ -85,25 +84,19 @@ class IDirectoryItem(IDirectoryItemBase):
 
     """
 
-
-@indexer(IDirectoryItem)
-def categoriesIndexer(obj):
-    return obj.keywords()
-
-
 # Subscribe to every event that potentially has an impact on the
 # caching in order to trigger a cache invalidation.
 
-@grok.subscribe(IDirectoryItem, IObjectMovedEvent)
+@grok.subscribe(IDirectoryItemBase, IObjectMovedEvent)
 def onMovedItem(item, event):
     item.changed(event.oldParent)
     item.changed(event.newParent)
 
-@grok.subscribe(IDirectoryItem, IObjectModifiedEvent)
+@grok.subscribe(IDirectoryItemBase, IObjectModifiedEvent)
 def onModifiedItem(item, event):
     item.changed(item.parent())
 
-@grok.subscribe(IDirectoryItem, IActionSucceededEvent)
+@grok.subscribe(IDirectoryItemBase, IActionSucceededEvent)
 def onChangedWorkflowState(item, event):
     item.changed(item.parent())
 

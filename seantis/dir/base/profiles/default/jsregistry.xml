@@ -7,11 +7,11 @@
         <javascript
                 id="++resource++seantis.dir.base.javascripts/itemurl.js"
                 cacheable="True" compression="safe" cookable="True"
-                enabled="True" expression="python:object.portal_type == 'seantis.dir.base.item'" inline="False" insert-after="utils.js"/>
+                enabled="True" expression="python:'seantis.dir' in object.portal_type" inline="False" insert-after="utils.js"/>
         <javascript
                 id="++resource++seantis.dir.base.javascripts/dirurl.js"
                 cacheable="True" compression="safe" cookable="True"
-                enabled="True" expression="python:object.portal_type == 'seantis.dir.base.directory'" inline="False" insert-after="utils.js"/>
+                enabled="True" expression="python:'seantis.dir' in object.portal_type" inline="False" insert-after="utils.js"/>
         <javascript
                 id="++resource++seantis.dir.base.javascripts/filter.js"
                 cacheable="True" compression="safe" cookable="True"
@@ -19,9 +19,9 @@
         <javascript
                 id="++resource++seantis.dir.base.javascripts/jquery.tokeninput.js"
                 cacheable="True" compression="safe" cookable="True"
-                enabled="True" expression="python:'seantis.dir.base' in object.portal_type" inline="False" insert-after="utils.js"/>
+                enabled="True" expression="python:'seantis.dir' in object.portal_type" inline="False" insert-after="utils.js"/>
         <javascript
                 id="++resource++seantis.dir.base.javascripts/categories.js"
                 cacheable="True" compression="safe" cookable="True"
-                enabled="True" expression="python:'seantis.dir.base' in object.portal_type" inline="False" insert-after="jquery.tokeninput.js"/>
+                enabled="True" expression="python:'seantis.dir' in object.portal_type" inline="False" insert-after="jquery.tokeninput.js"/>
 </object>

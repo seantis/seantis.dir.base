@@ -23,9 +23,6 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
-    <!-- Adapters -->
-    <adapter name="categories" factory=".item.categoriesIndexer"/>
-
     <!-- Resources -->
     <browser:resourceDirectory
         name="seantis.dir.base.javascripts"
