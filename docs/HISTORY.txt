@@ -5,6 +5,7 @@
 ---
 
 - Adds maps to items using collective.geo
+- Refactors design. Base does no longer hold it's own type.
 
 1.1
 ---
