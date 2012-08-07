@@ -32,7 +32,7 @@
       </tal:block>
     </metal:define>
 
-    <metal:define define-macro="map-item">
+    <metal:define define-macro="map-marker">
       <div class="directoryMarker" tal:condition="view/show_map">
         <img tal:condition="python: item.has_mapdata()" tal:attributes="src python: view.marker_image(item)" width="23" height="23"/>
       </div>

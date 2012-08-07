@@ -1,6 +1,6 @@
 <div xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="seantis.dir.base" id="directorySearch">
     <div style="display: none;" tal:condition="python: hasattr(view, 'filtered') and view.filtered or False" id="seantis-dir-base-filtered"></div>
-    <div id="directorySearchForm">
+    <div id="directorySearchForm" class="directorySearchForm">
         
         <tal:block condition="context/enable_search">
             <form tal:attributes="action viewlet/url" method="POST" class="seantis-directory-search">

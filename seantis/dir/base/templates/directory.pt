@@ -24,17 +24,20 @@
           <div tal:replace="structure provider:seantis.dir.base.directory.viewletmanager"/>
         </tal:block>
 
-        <metal:use use-macro="context/@@seantis-dir-macros/macros/map"></metal:use>
-
         <div id="directoryInfo">
             <div id="directoryResultList">
               <div class="directoryResult" tal:repeat="item view/batch">
 
-                <metal:use use-macro="context/@@seantis-dir-macros/macros/map-item"></metal:use>
+                <metal:use use-macro="context/@@seantis-dir-macros/macros/map-marker"></metal:use>
 
                 <div tal:define="context python: item" tal:replace="structure provider:seantis.dir.base.item.viewletmanager"/>
               </div>
             </div>
+
+            <metal:use use-macro="context/@@seantis-dir-macros/macros/map">
+            </metal:use>
+
+            <div class="visualClear"></div>
         </div>
 
         <div tal:replace="structure provider:plone.belowcontentbody" />

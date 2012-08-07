@@ -71,11 +71,8 @@ class View(grok.View):
         are not in the content_types list. """
 
         try:
-            settings = getUtility(IRegistry).forInterface(IGeoSettings)
-            if self.is_itemview:
-                return 'seantis.dir.base.item'  in settings.geo_content_types
-            else:
-                return 'seantis.dir.base.directory' in settings.geo_content_types
+            settings = getUtility(IRegistry).forInterface(IGeoSettings)            
+            return self.context.portal_type in settings.geo_content_types
         except:
             logger.warn('collective.geo could not be loaded', exc_info=True)
             return False
@@ -145,24 +142,3 @@ class View(grok.View):
             session.set_lettermap(self.context, lettermap)
 
         return (mapwidget, )
-
-
-def ExtendedDirectory(directory):
-    interface = directory.interface
-    fields = [(f, interface[f]) for f in interface]
-    for name, field in fields:
-        if not hasattr(directory, name):
-            setattr(directory, name, DCFieldProperty(field))
-
-    return directory
-
-class DirectoryMetadataBase(object):
-
-    adapts(IDexterityContent)
-    
-    def __init__(self, context):
-        self.context = context
-
-        for fieldname in self.interface:
-            if not hasattr(self.context, fieldname):
-                setattr(self.context, fieldname, None)

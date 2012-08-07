@@ -129,7 +129,6 @@ class Directory(Container):
         """Returns the description with newlines replaced by <br/> tags"""
         return self.description and self.description.replace('\n', '<br />') or ''
 
-
 class DirectorySearchViewlet(grok.Viewlet):
 
     grok.name('seantis.dir.base.DirectorySearchViewlet')
@@ -307,13 +306,3 @@ class JsonSearch(core.View):
 class DirectoryViewletManager(grok.ViewletManager):
     grok.context(Interface)
     grok.name('seantis.dir.base.directory.viewletmanager')
-
-class DirectoryViewlet(grok.Viewlet):
-    grok.context(IDirectoryBase)
-    grok.name('seantis.dir.base.directory.detail')
-    grok.require('zope2.View')
-    grok.viewletmanager(DirectoryViewletManager)
-
-    template = grok.PageTemplate(u"""
-        <p tal:content="structure context/description"></p>
-    """)

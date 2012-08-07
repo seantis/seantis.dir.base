@@ -14,11 +14,12 @@
 }
 
 .directoryResult {
-    margin: 20px 0;
+    border-top: 1px solid #ddd;
+    padding: 0px 0 12px 0;
 }
 
 div#landingPageText {
-    width: 45%;
+    width: 50%;
     float: left;
     margin-top: 0;
     padding-top: 0;
@@ -26,20 +27,25 @@ div#landingPageText {
 
 #directoryResultMap {
     width: 50%;
-    position: absolute;
-    right: 0;
+    float: right;
 }
 
 div#directoryResultList, div#directoryInfo {
     padding-top: 0;
 }
 
-.directoryMarker {
-    position: absolute;   
+#directoryResultList {
+    float: left;
+    width: 50%;
 }
 
-.directoryMarker img {
+.directoryMarker {
+    float: left;
     position: relative;
-    top: -2px;
-    left: -2px;   
+    top: 9px;
+    margin-right: 5px;   
+}
+
+#document-action-kml_download {
+    display: none;
 }
