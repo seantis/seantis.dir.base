@@ -21,17 +21,22 @@ from collective.geo.settings.interfaces import IGeoSettings
 from collective.geo.mapwidget.browser.widget import MapWidget
 from collective.geo.mapwidget.maplayers import MapLayer
 from collective.geo.kml.browser.maplayers import KMLMapLayer
+from collective.geo.kml.browser import kmldocument
 
 from seantis.dir.base import session
+from seantis.dir.base import utils
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
 
 class DirectoryMapLayer(MapLayer):
     """ Defines the map layer for markers shown in the directory view. Pretty
-    much equal to the KMLMapLayer, but without any zooming function (i.e the
-    center and zoom of collective.geo.settings is used).
+    much equal to the KMLMapLayer, but with optional zooming and letter
+    setting by query.
 
     """
+
+    letter = None
+    zoom = False
 
     @memoizedproperty
     def jsfactory(self):
@@ -43,9 +48,22 @@ class DirectoryMapLayer(MapLayer):
         if not context_url.endswith('/'):
             context_url += '/'
         
+        zoom = ""
+        if self.zoom:
+            zoom = """
+            layer.events.on({"loadend":function(){
+                layer.map.zoomToExtent(layer.getDataExtent());
+                if(layer.features.length>1){
+                    layer.map.zoomTo(layer.map.getZoom()-1)
+                } else {
+                    layer.map.zoomTo(layer.map.getZoom()-4)
+                }
+            }});
+            """
+
         js = """
             function() {
-                var layer=new OpenLayers.Layer.GML('%s','%s'+'@@kml-document',{
+                var layer=new OpenLayers.Layer.GML('%s','%s'+'@@kml-document?letter=%s',{
                     format:OpenLayers.Format.KML,
                     projection:cgmap.createDefaultOptions().displayProjection,
                     formatOptions:{
@@ -54,14 +72,38 @@ class DirectoryMapLayer(MapLayer):
                     }
                 });
                 
+                %s
+
                 return layer
             }"""
-        return js % (title, context_url)
+        return js % (title, context_url, self.letter or u'', zoom)
 
 letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+class KMLDocument(kmldocument.KMLDocument):
+    
+    @property
+    def marker_url(self):
+        letter = self.request.get('letter', None) or None
+        return u'string:' + utils.get_marker_url(self.context, letter)
+
+    @property
+    def features(self):
+        features = super(KMLDocument, self).features
+        if features:
+            features[0].styles['marker_image'] = self.marker_url
+
+        return features
+
 class View(grok.View):
     grok.baseclass()
+
+    def update(self, **kwargs):
+        try:
+            self.lettermap = dict()
+            self.mapfields
+        except AttributeError:
+            pass
 
     @property
     def current_language(self):
@@ -112,14 +154,12 @@ class View(grok.View):
 
         mapwidget = MapWidget(self, self.request, self.context)
 
-        
         if self.is_itemview:
             if self.context.has_mapdata():
-                mapwidget._layers = [KMLMapLayer(context=self.context)]
-
-            # clear the possibly existing lettermap
-            session.set_lettermap(self.context, dict())
-
+                layer = DirectoryMapLayer(context=self.context)
+                layer.zoom = True
+                layer.letter = None
+                mapwidget._layers = [layer]
         else:
 
             # in a directory view we can expect a batch
@@ -130,24 +170,24 @@ class View(grok.View):
             index = 0
             maxindex = len(letters) - 1
 
-            lettermap = dict()
+            self.lettermap.clear()
             mapwidget._layers = list()
 
             for item in sorted(self.batch, key=lambda i: i.title):
                 if item.has_mapdata():
 
-                    # create a lettermap and store it in the session
-                    # the current request won't suffice as the map layers are
-                    # later loaded using ajax
+                    layer = DirectoryMapLayer(context=item)
+
                     if index <= maxindex:
-                        lettermap[item.id] = letters[index]
+                        layer.letter = self.lettermap[item] = letters[index]
                         index += 1
 
-                    mapwidget._layers.append(DirectoryMapLayer(context=item))
-
-            session.set_lettermap(self.context, lettermap)
+                    mapwidget._layers.append(layer)
 
         return (mapwidget, )
+
+    def marker_image(self, item):
+        return utils.get_marker_url(item, self.lettermap.get(item, None))
 
 migration_token = None
 def generate_token():

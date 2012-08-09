@@ -98,13 +98,11 @@ def unicode_collate_sortkey():
 
     return collator.sort_key
 
-def get_marker(item):
+def get_marker_url(item, letter=None):
     baseurl = item.absolute_url()
     imagedir = "/++resource++seantis.dir.base.images"
-    lettermap = session.get_lettermap(item.parent())
-    
-    if item.id in lettermap:
-        image = "/markers/marker-" + lettermap[item.id]
+    if letter:
+        image = "/markers/marker-" + letter
     else:
         image = "/singlemarker"
 

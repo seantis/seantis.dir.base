@@ -36,4 +36,13 @@
         name="seantis.dir.base.images"
         directory="images"/>
 
+    <!-- Override default kml-document -->
+    <browser:page
+      for="seantis.dir.base.item.IDirectoryItem"
+      name="kml-document"
+      class="seantis.dir.base.core.KMLDocument"
+      layer="collective.geo.kml.interfaces.IGeoKmlLayer"
+      permission="zope2.View"
+      />
+
 </configure>
