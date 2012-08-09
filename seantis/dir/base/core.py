@@ -1,13 +1,18 @@
 import logging
 logger = logging.getLogger('seantis.dir.base')
 
+from Acquisition import aq_inner, aq_parent
+
+from uuid import uuid4 as uuid
 from five import grok
 
-from zope.component import adapts, getUtility
+from zope.interface import Interface
+from zope.component import getUtility
+from zope.schema import getFieldsInOrder
 
-from plone.registry.interfaces import IRegistry
-from plone.dexterity.interfaces import IDexterityContent
-from plone.app.dexterity.behaviors.metadata import DCFieldProperty
+from Products.CMFCore.utils import getToolByName
+from plone.dexterity.utils import createContent
+from plone.dexterity.interfaces import IDexterityFTI
 from plone.memoize.instance import memoizedproperty
 from plone.memoize import view
 
@@ -142,3 +147,112 @@ class View(grok.View):
             session.set_lettermap(self.context, lettermap)
 
         return (mapwidget, )
+
+migration_token = None
+def generate_token():
+    global migration_token
+    migration_token = uuid().hex[:8]
+
+generate_token()
+
+class TypeMigrationView(grok.View):
+    grok.context(Interface)
+    grok.require('cmf.ManagePortal')
+    grok.name('typemigration')
+
+    def __init__(self, *args, **kwargs):
+        logger = logging.getLogger() # root
+        logger.info("Token for type migration: %s" % migration_token)
+
+        super(TypeMigrationView, self).__init__(*args, **kwargs)
+
+    @property
+    def valid_token(self):
+        return self.request.get('token', None) == migration_token
+
+    @property
+    def directory(self):
+        return getUtility(IDexterityFTI, name=self.request.get('directory', None))
+
+    @property
+    def item(self):
+        return getUtility(IDexterityFTI, name=self.request.get('item', None))
+
+    def render(self):
+
+        if not self.valid_token:
+            return "Invalid Token"
+
+        self.catalog = getToolByName(self.context, 'portal_catalog')
+
+        context_path = '/'.join(self.context.getPhysicalPath())
+        directories = self.catalog(
+            path={'query': context_path, 'depth': 1},
+            portal_type='seantis.dir.base.directory'
+        )
+        
+        if not directories:
+            return "No directories found"
+
+        for directory in directories:
+            self.upgrade_directory(directory)
+
+        self.catalog.clearFindAndRebuild()
+        generate_token()
+
+    def clone(self, original, type):
+        cloned = createContent(type.factory, title=original.title)
+        for key, type in getFieldsInOrder(type.lookupSchema()):
+            if not hasattr(original, key):
+                continue
+
+            setattr(cloned, key, getattr(original, key))
+
+        cloned._setId(original.id)
+
+        return cloned
+
+    def can_copy(self, obj):
+        return 'seantis' in obj.portal_type
+
+    def upgrade_directory(self, directory):
+
+        directory = aq_inner(directory.getObject())
+        parent = aq_parent(directory)
+
+        directory_path = '/'.join(directory.getPhysicalPath())
+        items = self.catalog(
+            path={'query': directory_path, 'depth': 1}
+        )
+
+        new_directory = self.clone(directory, self.directory)
+
+        for item in (aq_inner(i.getObject()) for i in items):
+            if not self.can_copy(item):
+                continue
+
+            if item.portal_type == 'seantis.dir.base.item':
+                item_path = '/'.join(item.getPhysicalPath())
+                subitems = self.catalog(
+                    path={'query': item_path, 'depth': 1}
+                )
+
+                new_item = self.clone(item, self.item)
+
+                for subitem in (aq_inner(i.getObject()) for i in subitems):
+
+                    if not self.can_copy(subitem):
+                        continue
+
+                    if 'dir.base' in subitem.portal_type:
+                        continue
+
+                    new_subitem = self.clone(subitem, getUtility(IDexterityFTI, subitem.portal_type))
+                    new_item._setObject(new_subitem.id, new_subitem, suppress_events=True)
+
+                new_directory._setObject(new_item.id, new_item, suppress_events=True)
+            else:
+                new_directory._setObject(item.id, item, suppress_events=True)
+
+        parent._delObject(directory.id, suppress_events=True)
+        parent._setObject(new_directory.id, new_directory, suppress_events=True)
