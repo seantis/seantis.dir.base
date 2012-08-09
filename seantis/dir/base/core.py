@@ -15,6 +15,7 @@ from plone.dexterity.utils import createContent
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.memoize.instance import memoizedproperty
 from plone.memoize import view
+from plone.registry.interfaces import IRegistry
 
 from collective.geo.settings.interfaces import IGeoSettings
 from collective.geo.mapwidget.browser.widget import MapWidget
