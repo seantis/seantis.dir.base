@@ -3,7 +3,6 @@ if (!seantis) seantis = {};
 seantis.maplayer = function(id, url, title, letter, zoom) {
     var kmlurl = url + '@@kml-document?letter=' + letter;
 
-    console.log(kmlurl);
     var layer = new OpenLayers.Layer.Vector(title, {
         protocol: new OpenLayers.Protocol.HTTP({
             url: kmlurl, 
@@ -16,16 +15,19 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
         projection: cgmap.createDefaultOptions().displayProjection
     });
 
-    if (zoom) {
-        layer.events.on({"loadend":function(){
-            layer.map.zoomToExtent(layer.getDataExtent());
-            if(layer.features.length>1){
-                layer.map.zoomTo(layer.map.getZoom()-1);
-            } else {
-                layer.map.zoomTo(layer.map.getZoom()-4);
-            }
-        }});
-    }
+    var zoom_to = function(layer) {
+        layer.map.zoomToExtent(layer.getDataExtent());
+        if(layer.features.length>1){
+            layer.map.zoomTo(layer.map.getZoom()-1);
+        } else {
+            layer.map.zoomTo(layer.map.getZoom()-4);
+        }
+    };
+
+    layer.events.on({"loadend":function(){
+        if (zoom) zoom_to(layer);
+        $(document.getElementById(layer.id+'_root')).css('cursor', 'pointer')
+    }});
 
     return layer;
 };
