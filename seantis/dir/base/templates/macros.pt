@@ -18,6 +18,7 @@
         <metal:use use-macro="context/@@collectivegeo-macros/openlayers" />
         <script type="text/javascript" src="++resource++geo.kml.javascripts/kml_openlayers.js"></script>
         <script type="text/javascript" tal:attributes="src string:$portal_url/deprecated.js"></script>
+        <script type="text/javascript" tal:attributes="src string:$portal_url/++resource++directory-map.js"></script>
       </tal:block>
     </metal:define>
 

@@ -176,6 +176,7 @@ class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
         # permanently override certain style settings
         self.geostyles['map_viewlet_position'] = u'fake-manager'
         self.geostyles['marker_image_size'] = 0.71875
+        self.geostyles['display_properties'] = []
         self.geostyles['use_custom_styles'] = True
 
 def label_widgets(directory, widgets):

@@ -45,4 +45,6 @@
       permission="zope2.View"
       />
 
+    <browser:resource name="directory-map.js" file="js/directory-map.js"/>
+
 </configure>

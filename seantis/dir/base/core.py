@@ -48,36 +48,48 @@ class DirectoryMapLayer(MapLayer):
         context_url = self.context.absolute_url()
         if not context_url.endswith('/'):
             context_url += '/'
-        
-        zoom = ""
-        if self.zoom:
-            zoom = """
-            layer.events.on({"loadend":function(){
-                layer.map.zoomToExtent(layer.getDataExtent());
-                if(layer.features.length>1){
-                    layer.map.zoomTo(layer.map.getZoom()-1)
-                } else {
-                    layer.map.zoomTo(layer.map.getZoom()-4)
-                }
-            }});
-            """
 
         js = """
-            function() {
-                var layer=new OpenLayers.Layer.GML('%s','%s'+'@@kml-document?letter=%s',{
-                    format:OpenLayers.Format.KML,
-                    projection:cgmap.createDefaultOptions().displayProjection,
-                    formatOptions:{
-                        extractStyles:true,
-                        extractAttributes:true
-                    }
-                });
-                
-                %s
+        function() {return seantis.maplayer('%(id)s', '%(url)s', '%(title)s', '%(letter)s', %(zoom)s);}
+        """
+        
+        # zoom = ""
+        # if self.zoom:
+        #     zoom = """
+        #     layer.events.on({"loadend":function(){
+        #         layer.map.zoomToExtent(layer.getDataExtent());
+        #         if(layer.features.length>1){
+        #             layer.map.zoomTo(layer.map.getZoom()-1)
+        #         } else {
+        #             layer.map.zoomTo(layer.map.getZoom()-4)
+        #         }
+        #     }});
+        #     """
 
-                return layer
-            }"""
-        return js % (title, context_url, self.letter or u'', zoom)
+        # js = """
+        #     function() {
+        #         var layer=new OpenLayers.Layer.Vector('%s', {
+        #             protocol: new OpenLayers.Protocol.HTTP({
+        #             url: '%s'+'@@kml-document?letter=%s',
+        #             format: new OpenLayers.Format.KML({
+        #                 extractStyles: true,
+        #                 extractAttributes: true}),
+        #             }),
+        #             strategies: [new OpenLayers.Strategy.Fixed()],
+        #             projection:cgmap.createDefaultOptions().displayProjection,
+        #         });
+
+        #         %s
+
+        #         return layer;
+        #     }"""
+
+        return js % dict(
+            id=self.context.id,
+            url=context_url,
+            title=title,
+            letter=self.letter or u'',
+            zoom=self.zoom and 'true' or 'false')
 
 letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
