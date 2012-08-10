@@ -26,7 +26,18 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
 
     layer.events.on({"loadend":function(){
         if (zoom) zoom_to(layer);
-        $(document.getElementById(layer.id+'_root')).css('cursor', 'pointer')
+
+        // this won't work on ie < 9 as they are rendered using canvas
+        // consider the use of the selectfeature to be compatible
+        // or just get rid of the click-functionality on those browsers
+        var placemark = $(document.getElementById(layer.id+'_root'));
+        if (placemark) {
+            placemark.css('cursor', 'pointer');
+            placemark.click(function() {
+                window.location = url;
+                return false;
+            });
+        }
     }});
 
     return layer;
