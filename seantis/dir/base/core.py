@@ -20,10 +20,8 @@ from plone.registry.interfaces import IRegistry
 from collective.geo.settings.interfaces import IGeoSettings
 from collective.geo.mapwidget.browser.widget import MapWidget
 from collective.geo.mapwidget.maplayers import MapLayer
-from collective.geo.kml.browser.maplayers import KMLMapLayer
 from collective.geo.kml.browser import kmldocument
 
-from seantis.dir.base import session
 from seantis.dir.base import utils
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
@@ -35,7 +33,10 @@ class DirectoryMapLayer(MapLayer):
 
     """
 
+    # A letter of A-Z used for the markers in the klm-document
     letter = None
+
+    # True if the map should be zoomed to the marker on load
     zoom = False
 
     @memoizedproperty
@@ -89,6 +90,8 @@ class KMLDocument(kmldocument.KMLDocument):
 
     @property
     def features(self):
+        """ Manipulates the features of the klm-document to include the marker
+        defined by the query (e.g. @@kml-document?letter=A). """
         features = super(KMLDocument, self).features
         if features:
             features[0].styles['marker_image'] = self.marker_url
@@ -100,6 +103,8 @@ class View(grok.View):
 
     def update(self, **kwargs):
         try:
+            # load the mapfields on update ensuring that they are available
+            # from the beginning
             self.lettermap = dict()
             self.mapfields
         except AttributeError:
@@ -187,8 +192,12 @@ class View(grok.View):
         return (mapwidget, )
 
     def marker_image(self, item):
+        """ Returns the marker image used in the mapfields. """
         return utils.get_marker_url(item, self.lettermap.get(item, None))
 
+# token that needs to bentered when running the type migration
+# this ensures that this is not done by accident and that only someone
+# with access to the console / logfiles may do it
 migration_token = None
 def generate_token():
     global migration_token
@@ -220,6 +229,25 @@ class TypeMigrationView(grok.View):
         return getUtility(IDexterityFTI, name=self.request.get('item', None))
 
     def render(self):
+        """ Migrates existing items from seantis.dir.base.* to the new
+        types (e.g. seantis.dir.facility.item).
+
+        View may be called from any context. Everything below that context will
+        be migrated.
+
+        Example:
+
+        http://localhost/reservation/@@typemigration
+            ?token=abcd1234
+            &directory=seantis.dir.facility.directory
+            &item=seantis.dir.facility.item
+
+        Note that this is more of a proof of concept than anything else.
+        I'm not really recommending this for production use.
+
+        It will delete anything below a directory that is not a seantis* type!
+
+        """
 
         if not self.valid_token:
             return "Invalid Token"
