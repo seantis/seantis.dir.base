@@ -121,7 +121,7 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
         // this won't work on ie < 8
         var el = document.getElementById(layer.id+'_root');
         var placemark = $(el);
-        var target = $('#'+id);
+        var target = $('#'+id + ', .'+id);
 
         if (placemark && target) {
             placemark.hover(
