@@ -148,8 +148,6 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
         if (zoom) zoom_to(layer);
         link_layer(layer, url);
         highlight_target(layer, id);
-        
-        console.log(layer.id+'_root');
     }});
 
     return layer;
