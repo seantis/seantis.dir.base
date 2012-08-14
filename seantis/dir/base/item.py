@@ -1,4 +1,5 @@
 import os
+import json
 from datetime import datetime
 
 from five import grok
@@ -18,8 +19,13 @@ from collective.dexteritytextindexer import searchable
 from collective.geo.contentlocations.geostylemanager import GeoStyleManager
 
 from zope.annotation.interfaces import IAttributeAnnotatable
-from collective.geo.geographer.interfaces import IGeoreferenceable, IGeoreferenced
+from collective.geo.geographer.interfaces import (
+    IGeoreferenceable, 
+    IGeoreferenced
+)
+from collective.geo.geographer.geo import GeoreferencingAnnotator
 from collective.geo.settings.interfaces import IGeoCustomFeatureStyle
+from collective.geo.contentlocations.geomanager import GeoManager
 
 from seantis.dir.base import _
 from seantis.dir.base import utils
@@ -164,6 +170,31 @@ class DirectoryItem(Container):
 
     def has_mapdata(self):
         return IGeoreferenced(self).type != None
+
+    def get_coordinates(self):
+        return GeoManager(self).getCoordinates()
+
+    def set_coordinates(self, type, coords):
+        geo = GeoreferencingAnnotator(self).geo
+        geo['type'] = type
+        geo['coordinates'] = coords
+        geo['crs'] = None
+
+    def remove_coordinates(self):
+        geo = GeoreferencingAnnotator(self).geo
+        geo['type'] = None
+        geo['coordinates'] = None
+
+    def get_coordinates_json(self):
+        return json.dumps(self.get_coordinates())
+
+    def set_coordinates_json(self, json_string):
+        if json_string is None or not json_string.strip():
+            return self.remove_coordinates()
+        
+        self.set_coordinates(*json.loads(json_string))
+        
+    coordinates_json = property(get_coordinates_json, set_coordinates_json)
 
 class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
 

@@ -4,6 +4,8 @@ from seantis.dir.base.directory import CATEGORIES
 from seantis.dir.base.item import IDirectoryItemBase
 from seantis.dir.base.interfaces import IFieldMapExtender
 
+from seantis.dir.base import _
+
 class FieldMap(object):
     """ Hierarchically maps columns in a row to objects. Each Fieldmap
     defines one object. Each child is another Fieldmap (and so on.)
@@ -131,12 +133,19 @@ class FieldMap(object):
             return lambda value: value
 
 def get_map(context):
-    itemfields = ('title','description','cat1','cat2','cat3','cat4', 'absolute_url')
+    itemfields = (
+        'title',
+        'description',
+        'cat1','cat2','cat3','cat4', 
+        'coordinates_json',
+        'absolute_url'
+    )
     
     itemmap = FieldMap()
     itemmap.root = True
     itemmap.keyfields = ('title',)
     itemmap.add_fields(itemfields)
+    itemmap.add_title('coordinates_json', _(u'Coordinates (JSON)'))
     itemmap.add_title('absolute_url', 'Url')
     itemmap.mark_readonly('absolute_url')
 
