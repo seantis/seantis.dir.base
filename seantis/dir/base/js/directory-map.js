@@ -22,15 +22,12 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
         } else {
             layer.map.zoomTo(layer.map.getZoom()-4);
         }
-    };
+    };    
 
-    layer.events.on({"loadend":function(){
-        if (zoom) zoom_to(layer);
-
-        // this won't work on ie < 9 as they are rendered using canvas
-        // consider the use of the selectfeature to be compatible
-        // or just get rid of the click-functionality on those browsers
+    var link_layer = function(layer, url) {
+        // this won't work on ie < 8
         var placemark = $(document.getElementById(layer.id+'_root'));
+
         if (placemark) {
             placemark.css('cursor', 'pointer');
             placemark.click(function() {
@@ -38,6 +35,121 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
                 return false;
             });
         }
+    };
+
+    var pulsate = function(layer, start) {
+        var parent = document.getElementById(layer.id+'_vroot');
+        if (!parent) return;
+
+        if (typeof parent.stop_animation !== 'undefined') {
+            parent.stop_animation();
+            delete parent.stop_animation;
+        }
+
+        if (! start) return;
+
+        var elements = parent.childNodes;
+        var stops = [];
+        for(var i=0; i<elements.length; i++) {
+            stops[i] = pulseate_element(elements[i]);
+        }
+        parent.stop_animation = function() {
+            for (var i=0; i<stops.length; i++) {
+                stops[i]();
+            }
+        }
+    }
+
+    var get_attr = function(el, attr) {
+        return parseInt(el.getAttribute(attr));
+    }
+
+    var set_attr = function(el, attr, val) {
+        if (isNaN(val)) return;
+        el.setAttribute(attr, val);
+    }
+
+    var pulseate_element = function(element) {
+        var height = get_attr(element, 'height');
+        var width = get_attr(element, 'width');
+        var x = get_attr(element, 'x');
+        var y = get_attr(element, 'y');
+        var strokewidth = get_attr(element, 'stroke-width');
+        
+        var on = function(offset) {
+            set_attr(element, "height", height+offset);
+            set_attr(element, "width", width+offset);
+            set_attr(element, "x", x-offset/2);
+            set_attr(element, "y", y-offset);
+            set_attr(element, "stroke-width", strokewidth+offset);
+        };
+
+        var count = 0;
+        var rising = true;
+        var pulse = function() {
+            count += rising ? 2 : -2;
+            on(count);
+
+            if (rising && count > 4) {
+                rising = false;
+            } else if (!rising && count < 0) {
+                rising = true;
+            }
+        };
+
+        var id = setInterval(pulse, 75);
+        return function() {
+            clearInterval(id);
+            on(0);
+        };
+    }
+
+    var move_animation = function(from, to, duration) {
+        var a = document.createElementNS(
+            'http://www.w3.org/2000/svg', 'animateMotion'
+        );
+        a.setAttributeNS(null, 'from', from);
+        a.setAttributeNS(null, 'to', to);
+        a.setAttributeNS(null, 'dur', duration);
+        a.setAttributeNS(null, 'fill', 'freeze');
+        a.setAttributeNS(null, 'begin', 'indefinite');
+        a.setAttributeNS(null, 'id', pseudo_uuid().substring(0, 8));
+        return a;
+    };
+
+    var highlight_target = function(layer, id) {
+        // this won't work on ie < 8
+        var el = document.getElementById(layer.id+'_root');
+        var placemark = $(el);
+        var target = $('#'+id);
+
+        if (placemark && target) {
+            placemark.hover(
+                function() {
+                    target.toggleClass("groupSelection", true);
+                },
+                function() {
+                    target.toggleClass("groupSelection", false);
+                }
+            );
+
+            target.hover(
+                function() {
+                    pulsate(layer, true);
+                },
+                function() {
+                    pulsate(layer, false);
+                }
+            );
+        }        
+    };
+
+    layer.events.on({"loadend":function(){
+        if (zoom) zoom_to(layer);
+        link_layer(layer, url);
+        highlight_target(layer, id);
+        
+        console.log(layer.id+'_root');
     }});
 
     return layer;
