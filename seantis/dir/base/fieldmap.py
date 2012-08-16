@@ -144,6 +144,7 @@ def get_map(context):
     itemmap = FieldMap()
     itemmap.root = True
     itemmap.keyfields = ('title',)
+    itemmap.typename = 'seantis.dir.base.item'
     itemmap.add_fields(itemfields)
     itemmap.add_title('coordinates_json', _(u'Coordinates (JSON)'))
     itemmap.add_title('absolute_url', 'Url')

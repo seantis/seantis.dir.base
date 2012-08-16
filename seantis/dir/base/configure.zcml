@@ -23,6 +23,15 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- Profile extending the default to provide base types for testing -->
+<!--     <genericsetup:registerProfile
+        name="basetype"
+        title="seantis.dir.base base type extension profile"
+        description="Provides a base type without special fields for testing"
+        directory="profiles/basetype"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        /> -->
+
     <!-- Resources -->
     <browser:resourceDirectory
         name="seantis.dir.base.javascripts"
