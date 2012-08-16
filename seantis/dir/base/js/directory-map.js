@@ -104,19 +104,6 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
         };
     }
 
-    var move_animation = function(from, to, duration) {
-        var a = document.createElementNS(
-            'http://www.w3.org/2000/svg', 'animateMotion'
-        );
-        a.setAttributeNS(null, 'from', from);
-        a.setAttributeNS(null, 'to', to);
-        a.setAttributeNS(null, 'dur', duration);
-        a.setAttributeNS(null, 'fill', 'freeze');
-        a.setAttributeNS(null, 'begin', 'indefinite');
-        a.setAttributeNS(null, 'id', pseudo_uuid().substring(0, 8));
-        return a;
-    };
-
     var highlight_target = function(layer, id) {
         // this won't work on ie < 8
         var el = document.getElementById(layer.id+'_root');
