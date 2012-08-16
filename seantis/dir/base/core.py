@@ -52,37 +52,6 @@ class DirectoryMapLayer(MapLayer):
         js = """
         function() {return seantis.maplayer('%(id)s', '%(url)s', '%(title)s', '%(letter)s', %(zoom)s);}
         """
-        
-        # zoom = ""
-        # if self.zoom:
-        #     zoom = """
-        #     layer.events.on({"loadend":function(){
-        #         layer.map.zoomToExtent(layer.getDataExtent());
-        #         if(layer.features.length>1){
-        #             layer.map.zoomTo(layer.map.getZoom()-1)
-        #         } else {
-        #             layer.map.zoomTo(layer.map.getZoom()-4)
-        #         }
-        #     }});
-        #     """
-
-        # js = """
-        #     function() {
-        #         var layer=new OpenLayers.Layer.Vector('%s', {
-        #             protocol: new OpenLayers.Protocol.HTTP({
-        #             url: '%s'+'@@kml-document?letter=%s',
-        #             format: new OpenLayers.Format.KML({
-        #                 extractStyles: true,
-        #                 extractAttributes: true}),
-        #             }),
-        #             strategies: [new OpenLayers.Strategy.Fixed()],
-        #             projection:cgmap.createDefaultOptions().displayProjection,
-        #         });
-
-        #         %s
-
-        #         return layer;
-        #     }"""
 
         return js % dict(
             id=self.context.id,
