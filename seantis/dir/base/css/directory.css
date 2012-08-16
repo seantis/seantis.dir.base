@@ -49,3 +49,7 @@ div#directoryResultList, div#directoryInfo {
 #document-action-kml_download {
     display: none;
 }
+
+a.groupSelection {
+    text-decoration: underline !important;
+}
