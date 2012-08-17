@@ -1,8 +1,4 @@
-from zope.interface import (
-    Interface,
-    invariant,
-    Invalid
-)
+from zope.interface import Interface
 from zope.schema import (
     Text,
     TextLine,

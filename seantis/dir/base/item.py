@@ -1,4 +1,3 @@
-import os
 import json
 from datetime import datetime
 
@@ -9,7 +8,6 @@ from zope.app.container.interfaces import IObjectMovedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from plone.dexterity.content import Container
-from plone.app.dexterity import browser
 from Products.CMFCore.interfaces import IActionSucceededEvent 
 from collective.geo.contentlocations.geostylemanager import GeoStyleManager
 

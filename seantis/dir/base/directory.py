@@ -1,19 +1,12 @@
 import json
 
 from five import grok
-from zope.schema import Text
-from zope.schema import TextLine
-from zope.schema import Datetime
-from zope.schema import Bool
-from zope.interface import invariant
 from zope.interface import Interface
-from zope.interface import Invalid
 from plone.directives import form
 from plone.dexterity.content import Container
 from Products.CMFPlone.PloneBatch import Batch
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 
-from seantis.dir.base import _
 from seantis.dir.base import core
 from seantis.dir.base import catalog
 from seantis.dir.base import utils
