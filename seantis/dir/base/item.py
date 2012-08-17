@@ -121,7 +121,10 @@ class DirectoryItem(Container):
         geo['coordinates'] = None
 
     def get_coordinates_json(self):
-        return json.dumps(self.get_coordinates())
+        if all(self.get_coordinates()):
+            return json.dumps(self.get_coordinates())
+        else:
+            return ""
 
     def set_coordinates_json(self, json_string):
         if json_string is None or not json_string.strip():
