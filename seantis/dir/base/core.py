@@ -17,6 +17,9 @@ from plone.memoize.instance import memoizedproperty
 from plone.memoize import view
 from plone.registry.interfaces import IRegistry
 
+from z3c.form.interfaces import IFieldsForm, IFormLayer, IAddForm, IEditForm
+from z3c.form.field import FieldWidgets
+
 from collective.geo.settings.interfaces import IGeoSettings
 from collective.geo.mapwidget.browser.widget import MapWidget
 from collective.geo.mapwidget.maplayers import MapLayer
@@ -25,6 +28,7 @@ from collective.geo.kml.browser import kmldocument
 from seantis.dir.base import utils
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
+from seantis.dir.base.interfaces import IDirectoryRoot, IDirectoryItemBase
 
 class DirectoryMapLayer(MapLayer):
     """ Defines the map layer for markers shown in the directory view. Pretty
@@ -78,6 +82,62 @@ class KMLDocument(kmldocument.KMLDocument):
             features[0].styles['marker_image'] = self.marker_url
 
         return features
+
+class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
+    """ Adapter that hooks into the widget manager of z3c.forms to
+    adjust categories to match the parents of items in add and edit forms. 
+
+    """
+
+    grok.adapts(IFieldsForm, IFormLayer, IDirectoryRoot)
+    
+    def __init__(self, form, request, context):
+        self.form = form
+        super(DirectoryFieldWidgets, self).__init__(form, request, context)
+
+    @property
+    def may_update_widgets(self):
+        # directory forms must be changed only if they are about adding an item
+        # to the directory, which is indicated by the existing widgets
+        if 'enable_filter' in self or 'enable_search' in self:
+            return False
+
+        return IAddForm.providedBy(self.form) or IEditForm.providedBy(self.form)
+
+    @property
+    def directory(self):
+        if IDirectoryItemBase.implementedBy(self.content):
+            return self.content.parent
+        else:
+            return self.content
+
+    def update(self):
+        super(DirectoryFieldWidgets, self).update()
+        
+        if self.may_update_widgets:
+            self.label_widgets()
+            self.remove_unused_widgets()
+
+    def remove_unused_widgets(self):
+        """Takes a list of widgets and removes all representing categories that
+        are unused in the given Directory. 
+
+        """
+        # Remove unused categories from form
+        unused = self.directory.unused_categories()
+        for key in unused:
+            del self[key]
+
+    def label_widgets(self):
+        """Takes a list of widgets and substitutes the labels of those representing
+        category values with the labels from the Directory. 
+
+        """
+        # Set correct label depending on the DirectoryItem value
+        labels = self.directory.labels()
+        for field, widget in self.items():
+            if field in labels:
+                widget.label = labels[field]
 
 class View(grok.View):
     grok.baseclass()

@@ -1,5 +1,5 @@
 from seantis.dir.base.tests import IntegrationTestCase
-from seantis.dir.base.item import IDirectoryItem
+from seantis.dir.base.interfaces import IDirectoryItem
 
 class TestDirectoryItem(IntegrationTestCase):
 
