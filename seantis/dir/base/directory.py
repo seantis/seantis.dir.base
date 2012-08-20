@@ -65,9 +65,10 @@ class DirectorySearchViewlet(grok.Viewlet):
         if IDirectoryBase.providedBy(self.context):
             return IDirectoryBase(self.context)
         elif IDirectoryItemBase.providedBy(self.context):
-            return IDirectoryItemBase(self.context).parent()
-        else:
-            return None
+            if hasattr(IDirectoryItemBase(self.context), 'parent'):
+                return IDirectoryItemBase(self.context).parent()
+        
+        return None
 
     @property
     def url(self):

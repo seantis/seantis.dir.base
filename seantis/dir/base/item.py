@@ -30,16 +30,21 @@ from seantis.dir.base.interfaces import IDirectoryItemBase
 
 @grok.subscribe(IDirectoryItemBase, IObjectMovedEvent)
 def onMovedItem(item, event):
-    item.changed(event.oldParent)
-    item.changed(event.newParent)
+    # changed may not necesseraly be there (e.g. the object is
+    # using IDirectoryItemBase as a dexterity behavior)
+    if hasattr(item, 'changed'):
+        item.changed(event.oldParent)
+        item.changed(event.newParent)
 
 @grok.subscribe(IDirectoryItemBase, IObjectModifiedEvent)
 def onModifiedItem(item, event):
-    item.changed(item.parent())
+    if hasattr(item, 'changed'):
+        item.changed(item.parent())
 
 @grok.subscribe(IDirectoryItemBase, IActionSucceededEvent)
 def onChangedWorkflowState(item, event):
-    item.changed(item.parent())
+    if hasattr(item, 'changed'):
+        item.changed(item.parent())
 
 
 class DirectoryItem(Container):
