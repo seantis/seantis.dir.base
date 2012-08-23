@@ -1,8 +1,4 @@
-from zope.interface import (
-    Interface,
-    invariant,
-    Invalid
-)
+from zope.interface import Interface
 from zope.schema import (
     Text,
     TextLine,
@@ -15,9 +11,6 @@ from plone.directives import form
 from collective.dexteritytextindexer import searchable
 
 from seantis.dir.base import _
-
-class NoCategoriesDefined(Invalid):
-    __doc__ = _(u"No categories were defined. Define at least one category")
 
 class IDirectoryRoot(form.Schema):
     """Root interface for directories and items alike."""
@@ -81,14 +74,6 @@ class IDirectoryBase(IDirectoryRoot):
             required=True,
             default=True
         )
-
-    @invariant
-    def validateCategories(data):
-        if not any((data.cat1, data.cat2, data.cat3, data.cat4)):
-            raise NoCategoriesDefined(
-                _(u"No categories were defined. Define at least one category")
-            )
-
 
 class IDirectory(IDirectoryBase):
     pass

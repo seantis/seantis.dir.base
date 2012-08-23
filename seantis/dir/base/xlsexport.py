@@ -96,7 +96,7 @@ def write_title(fieldmap, worksheet, language, directory=None):
         typ = fieldmap.typename
         title = None
 
-        if directory and typ == 'seantis.dir.base.item' and name in CATEGORIES:
+        if directory and '.item' in typ and name in CATEGORIES:
             title = getattr(directory, name)
         
         if not title:

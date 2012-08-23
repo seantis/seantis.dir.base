@@ -1,4 +1,3 @@
-import os
 import json
 from datetime import datetime
 
@@ -9,7 +8,6 @@ from zope.app.container.interfaces import IObjectMovedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from plone.dexterity.content import Container
-from plone.app.dexterity import browser
 from Products.CMFCore.interfaces import IActionSucceededEvent 
 from collective.geo.contentlocations.geostylemanager import GeoStyleManager
 
@@ -126,7 +124,10 @@ class DirectoryItem(Container):
         geo['coordinates'] = None
 
     def get_coordinates_json(self):
-        return json.dumps(self.get_coordinates())
+        if all(self.get_coordinates()):
+            return json.dumps(self.get_coordinates())
+        else:
+            return ""
 
     def set_coordinates_json(self, json_string):
         if json_string is None or not json_string.strip():

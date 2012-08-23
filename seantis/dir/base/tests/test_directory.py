@@ -1,7 +1,5 @@
 from seantis.dir.base.tests import IntegrationTestCase
 from seantis.dir.base.interfaces import IDirectory
-from seantis.dir.base.interfaces import IDirectoryBase
-from seantis.dir.base.interfaces import NoCategoriesDefined
 
 class TestDirectory(IntegrationTestCase):
 
@@ -28,19 +26,3 @@ class TestDirectory(IntegrationTestCase):
         self.assertEqual(labels.keys(), used)
         self.assertEqual(labels['cat1'], 'One')
         self.assertEqual(labels['cat3'], 'Three')
-
-    def test_validator(self):
-        directory = self.add_directory()
-        
-        try:
-            IDirectoryBase.validateInvariants(directory)
-            self.fail()
-        except NoCategoriesDefined:
-            pass
-
-        directory.cat1 = 'One'
-
-        try:
-            IDirectoryBase.validateInvariants(directory)
-        except:
-            self.fail()
