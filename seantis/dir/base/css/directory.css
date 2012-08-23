@@ -31,7 +31,7 @@ div#directoryResultList, div#directoryInfo {
 }
 
 #directoryResultList {
-    float: left;
+    width: 100%;
 }
 
 .directoryMarker {
