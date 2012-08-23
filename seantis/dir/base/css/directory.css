@@ -14,6 +14,7 @@
 }
 
 .directoryResult {
+    position: relative;
     border-top: 1px solid #ddd;
     padding: 0px 0 12px 0;
 }
@@ -25,25 +26,20 @@ div#landingPageText {
     padding-top: 0;
 }
 
-#directoryResultMap {
-    width: 50%;
-    float: right;
-}
-
 div#directoryResultList, div#directoryInfo {
     padding-top: 0;
 }
 
 #directoryResultList {
     float: left;
-    width: 50%;
 }
 
 .directoryMarker {
-    float: left;
-    position: relative;
-    top: 9px;
-    margin-right: 5px;   
+    position: absolute;
+    top: 5px;
+    right: 0;
+    margin-right: 4px;
+    left: auto;  
 }
 
 #document-action-kml_download {
