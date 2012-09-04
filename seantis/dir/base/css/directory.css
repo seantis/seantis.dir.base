@@ -32,8 +32,6 @@ div#directoryResultList, div#directoryInfo {
 .directoryMarker {
     position: absolute;
     top: 5px;
-    right: 0;
-    margin-right: 4px;
     left: auto;  
 }
 
