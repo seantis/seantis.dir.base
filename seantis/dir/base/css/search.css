@@ -7,9 +7,8 @@ div#directorySearch fieldset {
 }
 
 #directorySearch {
-    background-color: #efefef;
-    border: 1px solid #abc7d3;
-    border-radius: 2px;
+    border: 1px solid #444;
+    border-width: 1px 1px 1px 10px;
     margin-top: 10px;
 }
 
