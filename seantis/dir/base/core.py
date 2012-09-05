@@ -126,7 +126,8 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         # Remove unused categories from form
         unused = self.directory.unused_categories()
         for key in unused:
-            del self[key]
+            if key in self.__dict__:
+                del self[key]
 
     def label_widgets(self):
         """Takes a list of widgets and substitutes the labels of those representing
