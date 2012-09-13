@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-09-06 14:14+0000\n"
+"POT-Creation-Date: 2012-09-13 11:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: seantis.dir.base\n"
 
-#: ./directory.py:44
+#: ./directory.py:49
 #: ./item.py:43
 msgid "1st Category Name"
 msgstr ""
 
-#: ./directory.py:50
+#: ./directory.py:55
 #: ./item.py:51
 msgid "2nd Category Name"
 msgstr ""
 
-#: ./directory.py:56
+#: ./directory.py:61
 #: ./item.py:59
 msgid "3rd Category Name"
 msgstr ""
 
-#: ./directory.py:62
+#: ./directory.py:67
 #: ./item.py:67
 msgid "4th Category Name"
 msgstr ""
 
-#: ./directory.py:38
+#: ./directory.py:43
 #: ./item.py:36
 msgid "Description"
 msgstr ""
@@ -50,19 +50,19 @@ msgstr ""
 msgid "Directory Item"
 msgstr ""
 
-#: ./directory.py:74
+#: ./directory.py:79
 msgid "Enable filtering"
 msgstr ""
 
-#: ./directory.py:80
+#: ./directory.py:85
 msgid "Enable searching"
 msgstr ""
 
-#: ./templates/search.pt:32
+#: ./templates/search.pt:28
 msgid "Filter"
 msgstr ""
 
-#: ./templates/search.pt:40
+#: ./templates/search.pt:11
 msgid "Fulltext search"
 msgstr ""
 
@@ -90,7 +90,7 @@ msgstr ""
 msgid "Invalid email address"
 msgstr ""
 
-#: ./directory.py:68
+#: ./directory.py:73
 msgid "Last time a DirectoryItem was modified"
 msgstr ""
 
@@ -107,12 +107,16 @@ msgstr ""
 msgid "Not all required fields have a value"
 msgstr ""
 
-#: ./templates/search.pt:42
+#: ./templates/search.pt:8
 msgid "Search"
 msgstr ""
 
 #: ./item.py:44
 msgid "Start typing and select a category. To add a new category write the name and hit enter."
+msgstr ""
+
+#: ./directory.py:38
+msgid "Subtitle"
 msgstr ""
 
 #: ./xlsimport.py:35

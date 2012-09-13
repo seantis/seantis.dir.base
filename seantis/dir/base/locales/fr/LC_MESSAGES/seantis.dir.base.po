@@ -17,100 +17,100 @@ msgstr ""
 #: ./directory.py:49
 #: ./item.py:43
 msgid "1st Category Name"
-msgstr "Kategorie 1"
+msgstr ""
 
 #: ./directory.py:55
 #: ./item.py:51
 msgid "2nd Category Name"
-msgstr "Kategorie 2"
+msgstr ""
 
 #: ./directory.py:61
 #: ./item.py:59
 msgid "3rd Category Name"
-msgstr "Kategorie 3"
+msgstr ""
 
 #: ./directory.py:67
 #: ./item.py:67
 msgid "4th Category Name"
-msgstr "Kategorie 4"
+msgstr ""
 
 #: ./directory.py:43
 #: ./item.py:36
 msgid "Description"
-msgstr "Beschreibung"
+msgstr ""
 
 #: ./profiles/default/types/seantis.dir.base.directory.xml
 msgid "Directory"
-msgstr "Verzeichnis"
+msgstr ""
 
 #: ./profiles/default/types/seantis.dir.base.item.xml
 msgid "Directory Item"
-msgstr "Verzeichniseintrag"
+msgstr ""
 
 #: ./directory.py:79
 msgid "Enable filtering"
-msgstr "Filter zeigen"
+msgstr ""
 
 #: ./directory.py:85
 msgid "Enable searching"
-msgstr "Suche zeigen"
+msgstr ""
 
 #: ./templates/search.pt:28
 msgid "Filter"
-msgstr "Filtern"
+msgstr ""
 
 #: ./templates/search.pt:11
 msgid "Fulltext search"
-msgstr "Volltext Suche"
+msgstr ""
 
 #: ./xlsimport.py:85
 msgid "Import"
-msgstr "Importieren"
+msgstr ""
 
 #: ./xlsimport.py:40
 msgid "Import directory items"
-msgstr "Verzeichniseinträge importieren"
+msgstr ""
 
 #: ./xlsimport.py:37
 msgid "Import directory items using xls. The xls is expected to have the format defined in the template which you can <a href='#xlstemplate'>download here</a>"
-msgstr "Verzeichniseinträge mittels Excel(Xls) importieren. Die Excel Datei muss der Vorlage entsprechen welche Sie <a href='#xlstemplate'>hier herunterladen</a> können"
+msgstr ""
 
 #: ./xlsimport.py:110
 msgid "Imported ${number} items"
-msgstr "${number} Verzeichniseinträge importiert"
+msgstr ""
 
 #: ./xlsimport.py:99
 msgid "Invalid XLS file"
-msgstr "Ungültige XLS Datei"
+msgstr ""
 
 #: ./validators.py:13
 msgid "Invalid email address"
-msgstr "Ungültige Email Adresse"
+msgstr ""
 
 #: ./directory.py:73
 msgid "Last time a DirectoryItem was modified"
-msgstr "Letztes Änderungsdatum eines Verzeichniseintrages"
+msgstr ""
 
 #: ./directory.py:34
 #: ./item.py:31
 msgid "Name"
-msgstr "Name"
+msgstr ""
 
 #: ./directory.py:27
 msgid "No categories were defined. Define at least one category"
-msgstr "Es wurden keine Kategorien definiert. Definieren Sie mindestens eine Kategorie"
+msgstr ""
 
 #: ./xlsimport.py:188
 msgid "Not all required fields have a value"
-msgstr "Nicht alle benötigten Felder haben einen Wert"
+msgstr ""
 
 #: ./templates/search.pt:8
 msgid "Search"
-msgstr "Suchen"
+msgstr ""
 
 #: ./item.py:44
 msgid "Start typing and select a category. To add a new category write the name and hit enter."
-msgstr "Tippen und eine Kategorie wählen. Um eine neue Kategorie zu erstellen, Text eingeben und Enter drücken."
+msgstr ""
 
 #: ./directory.py:38
 msgid "Subtitle"
@@ -118,5 +118,5 @@ msgstr ""
 
 #: ./xlsimport.py:35
 msgid "XLS file"
-msgstr "XLS Datei"
+msgstr ""
 

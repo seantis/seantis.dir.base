@@ -18,7 +18,7 @@ CURRENT_PATH=`pwd`
 CATALOGNAME="seantis.dir.base"
 
 # List of languages
-LANGUAGES="de"
+LANGUAGES="de fr"
 
 # Create locales folder structure for languages
 install -d locales
