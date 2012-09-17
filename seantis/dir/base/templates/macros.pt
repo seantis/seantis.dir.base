@@ -29,7 +29,6 @@
             <metal:use use-macro="context/@@collectivegeo-macros/map-widget" />
           </tal:omit>
         </div>
-        <div style="clear:both;"></div>
       </tal:block>
     </metal:define>
 
@@ -38,6 +37,28 @@
         <img tal:condition="python: item.has_mapdata()" tal:attributes="src python: view.marker_image(item)" width="23" height="23"/>
       </div>
     </metal:define>
+
+    <metal:define define-macro="categorylist">
+      <div class="directoryCategoryList">
+        <ul>
+          <li tal:repeat="value listvalues">
+            <tal:block content="value"></tal:block>
+          </li>
+        </ul>
+      </div>
+    </metal:define>
+
+    <metal:define define-macro="resultlist">
+      <div id="directoryResultList">
+        <div class="directoryResult" tal:repeat="item items">
+
+          <metal:use use-macro="context/@@seantis-dir-macros/macros/map-marker"></metal:use>
+
+          <div tal:define="context python: item" tal:replace="structure provider:seantis.dir.base.item.viewletmanager"/>
+        </div>
+      </div>
+    </metal:define>
+            
 
   </body>
 </html>

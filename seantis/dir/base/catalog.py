@@ -77,14 +77,15 @@ def getObjects(directory, results):
         
     return objects
 
-def possible_values(directory, items):
+def possible_values(directory, items, categories=None):
     """Returns a dictionary with the keys being the categories of the directory,
     filled with a list of all possible values for each category. If an item 
     contains a list of values (as opposed to a single string) those values 
     flattened. In other words, there is no hierarchy in the resulting list.
 
     """
-    values = dict([(cat,list()) for cat in directory.all_categories()])
+    categories = categories or directory.all_categories()
+    values = dict([(cat,list()) for cat in categories])
     
     for item in items:
         for cat in values.keys():
@@ -93,7 +94,7 @@ def possible_values(directory, items):
 
     return values
 
-def grouped_possible_values(directory, items):
+def grouped_possible_values(directory, items, categories=None):
     """Same as possible_values, but with the categories of the dictionary being
     unique and each value being wrapped in a tuple with the first element
     as the actual value and the second element as the count non-unique values.
@@ -102,7 +103,7 @@ def grouped_possible_values(directory, items):
 
     """
 
-    possible = possible_values(directory, items)
+    possible = possible_values(directory, items, categories)
     grouped = dict([(k, dict()) for k in possible.keys()])
 
     for category, items in possible.items():
@@ -112,12 +113,12 @@ def grouped_possible_values(directory, items):
 
     return grouped
 
-def grouped_possible_values_counted(directory, items):
+def grouped_possible_values_counted(directory, items, categories=None):
     """Returns a dictionary of categories with a list of possible values
     including counts in brackets.
 
     """
-    possible = grouped_possible_values(directory, items)
+    possible = grouped_possible_values(directory, items, categories)
     result = dict((k, []) for k in possible.keys())
 
     for category, values in possible.items():

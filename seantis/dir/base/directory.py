@@ -183,6 +183,22 @@ class View(core.View):
 
         super(View, self).update(**kwargs)
 
+    def category_values(self, category, filtered=True):
+        """ Returns all possible values of the given category (1-4). 
+        If filtered is True, only the items matching the current filter/search
+        are considered.
+        """
+
+        assert category in (1, 2, 3, 4)
+        category = 'cat%i' % category
+
+        items = filtered and self.items or catalog.items(self.context)
+        grouped = catalog.grouped_possible_values(
+            self.context, items, categories=[category]
+        )
+
+        return sorted(grouped[category].keys())
+
     @property
     def batch(self):
         start = int(self.request.get('b_start') or 0)
