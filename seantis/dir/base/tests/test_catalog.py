@@ -88,6 +88,13 @@ class TestCatalog(IntegrationTestCase):
         self.assertEqual(len(possible['cat3']), 3)
         self.assertEqual(len(possible['cat4']), 0)
 
+        possible = possible_values(directory, found, categories=("cat1","cat2"))
+
+        self.assertTrue('cat1' in possible)
+        self.assertTrue('cat2' in possible)
+        self.assertFalse('cat3' in possible)
+        self.assertFalse('cat4' in possible)
+
     def test_grouped_possible_values(self):
 
         directory = self.toy_data()
