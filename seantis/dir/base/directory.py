@@ -168,8 +168,17 @@ class View(core.View):
             
         return action, param
 
+    def filter_url(self, category, value):
+        base = self.context.absolute_url()
+        base += '?filter=true&%s=%s' % (category, utils.remove_count(value))
+        return base
+
     @property
     def filtered(self):
+        if 'search' in self.request.keys():
+            return True
+        if 'filter' in self.request.keys():
+            return True
         return len(self.items) != self.unfiltered_count
 
     def update(self, **kwargs):
@@ -193,11 +202,11 @@ class View(core.View):
         assert category in const.CATEGORIES
 
         items = filtered and self.items or catalog.items(self.context)
-        grouped = catalog.grouped_possible_values(
+        values = catalog.grouped_possible_values_counted(
             self.context, items, categories=[category]
         )
 
-        return sorted(grouped[category].keys())
+        return values[category]
 
     @property
     def batch(self):
