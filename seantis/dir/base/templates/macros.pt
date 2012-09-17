@@ -41,8 +41,8 @@
     <metal:define define-macro="categorylist">
       <div class="directoryCategoryList">
         <ul>
-          <li tal:repeat="value listvalues">
-            <tal:block content="value"></tal:block>
+          <li tal:repeat="value python: view.category_values(category, filtered=False)">
+            <a tal:content="value" tal:attributes="href python: view.filter_url(category, value)"></a>
           </li>
         </ul>
       </div>
@@ -57,8 +57,7 @@
           <div tal:define="context python: item" tal:replace="structure provider:seantis.dir.base.item.viewletmanager"/>
         </div>
       </div>
-    </metal:define>
-            
+    </metal:define>    
 
   </body>
 </html>
