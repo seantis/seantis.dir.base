@@ -11,6 +11,7 @@ from seantis.dir.base import core
 from seantis.dir.base import catalog
 from seantis.dir.base import utils
 from seantis.dir.base import session
+from seantis.dir.base import const
 from seantis.dir.base.const import CATEGORIES, ITEMSPERPAGE
 
 from seantis.dir.base.interfaces import IDirectoryItemBase, IDirectoryBase
@@ -184,13 +185,12 @@ class View(core.View):
         super(View, self).update(**kwargs)
 
     def category_values(self, category, filtered=True):
-        """ Returns all possible values of the given category (1-4). 
+        """ Returns all possible values of the given category (cat1-cat4). 
         If filtered is True, only the items matching the current filter/search
         are considered.
         """
 
-        assert category in (1, 2, 3, 4)
-        category = 'cat%i' % category
+        assert category in const.CATEGORIES
 
         items = filtered and self.items or catalog.items(self.context)
         grouped = catalog.grouped_possible_values(
