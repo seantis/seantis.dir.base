@@ -2,121 +2,125 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2012-09-13 11:34+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2012-09-18 11:21+0100\n"
+"Last-Translator: RES <r.schumacher@froidevauxpartner.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"X-Generator: Poedit 1.5.3\n"
 
-#: ./directory.py:49
-#: ./item.py:43
+#: directory.py:49 item.py:43
 msgid "1st Category Name"
-msgstr ""
+msgstr "Nom de 1ère catégorie"
 
-#: ./directory.py:55
-#: ./item.py:51
+#: directory.py:55 item.py:51
 msgid "2nd Category Name"
-msgstr ""
+msgstr "Nom de 2ème catégorie"
 
-#: ./directory.py:61
-#: ./item.py:59
+#: directory.py:61 item.py:59
 msgid "3rd Category Name"
-msgstr ""
+msgstr "Nom de 3ème catégorie"
 
-#: ./directory.py:67
-#: ./item.py:67
+#: directory.py:67 item.py:67
 msgid "4th Category Name"
-msgstr ""
+msgstr "Nom de 4ème catégorie"
 
-#: ./directory.py:43
-#: ./item.py:36
+#: directory.py:43 item.py:36
 msgid "Description"
-msgstr ""
+msgstr "Déscription"
 
-#: ./profiles/default/types/seantis.dir.base.directory.xml
+#: profiles/default/types/seantis.dir.base.directory.xml
 msgid "Directory"
-msgstr ""
+msgstr "Dossier"
 
-#: ./profiles/default/types/seantis.dir.base.item.xml
+#: profiles/default/types/seantis.dir.base.item.xml
 msgid "Directory Item"
-msgstr ""
+msgstr "Dossier d'article"
 
-#: ./directory.py:79
+#: directory.py:79
 msgid "Enable filtering"
-msgstr ""
+msgstr "Activer le filtrage"
 
-#: ./directory.py:85
+#: directory.py:85
 msgid "Enable searching"
-msgstr ""
+msgstr "Activer la recherche"
 
-#: ./templates/search.pt:28
+#: templates/search.pt:28
 msgid "Filter"
-msgstr ""
+msgstr "Recherche avancée"
 
-#: ./templates/search.pt:11
+#: templates/search.pt:11
 msgid "Fulltext search"
-msgstr ""
+msgstr "Recherche de texte complet"
 
-#: ./xlsimport.py:85
+#: xlsimport.py:85
 msgid "Import"
-msgstr ""
+msgstr "Importation"
 
-#: ./xlsimport.py:40
+#: xlsimport.py:40
 msgid "Import directory items"
-msgstr ""
+msgstr "Importation des éléments de dossier"
 
-#: ./xlsimport.py:37
-msgid "Import directory items using xls. The xls is expected to have the format defined in the template which you can <a href='#xlstemplate'>download here</a>"
+#: xlsimport.py:37
+msgid ""
+"Import directory items using xls. The xls is expected to have the format "
+"defined in the template which you can <a href='#xlstemplate'>download here</"
+"a>"
 msgstr ""
+"Importation des éléments d'annuaire à l'aide xls. Les xls devrait avoir le "
+"format défini dans le modèle que vous pouvez télécharger ici "
+"href='#xlstemplate'> <a </ a>"
 
-#: ./xlsimport.py:110
+#: xlsimport.py:110
 msgid "Imported ${number} items"
-msgstr ""
+msgstr "Importé $ {numéro} articles"
 
-#: ./xlsimport.py:99
+#: xlsimport.py:99
 msgid "Invalid XLS file"
-msgstr ""
+msgstr "Invalid fichier XLS"
 
-#: ./validators.py:13
+#: validators.py:13
 msgid "Invalid email address"
-msgstr ""
+msgstr "Adresse e-mail non valide"
 
-#: ./directory.py:73
+#: directory.py:73
 msgid "Last time a DirectoryItem was modified"
-msgstr ""
+msgstr "La dernière fois, un DirectoryItem a été modifié"
 
-#: ./directory.py:34
-#: ./item.py:31
+#: directory.py:34 item.py:31
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
-#: ./directory.py:27
+#: directory.py:27
 msgid "No categories were defined. Define at least one category"
-msgstr ""
+msgstr "Pas de catégories ont été définies. Définissez au moins une catégorie"
 
-#: ./xlsimport.py:188
+#: xlsimport.py:188
 msgid "Not all required fields have a value"
-msgstr ""
+msgstr "Pas tous les champs obligatoires ont une valeur"
 
-#: ./templates/search.pt:8
+#: templates/search.pt:8
 msgid "Search"
-msgstr ""
+msgstr "Recherche"
 
-#: ./item.py:44
-msgid "Start typing and select a category. To add a new category write the name and hit enter."
+#: item.py:44
+msgid ""
+"Start typing and select a category. To add a new category write the name and "
+"hit enter."
 msgstr ""
+"Commencez à taper et sélectionnez une catégorie. Pour ajouter une nouvelle "
+"catégorie d'écrire le nom et appuyez sur Entrée."
 
-#: ./directory.py:38
+#: directory.py:38
 msgid "Subtitle"
-msgstr ""
+msgstr "Sous-titre"
 
-#: ./xlsimport.py:35
+#: xlsimport.py:35
 msgid "XLS file"
-msgstr ""
-
+msgstr "fichier XLS"
