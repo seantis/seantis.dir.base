@@ -112,7 +112,7 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         # like a poor mans version of plone.autoform (though it's actually more
         # advanced when it comes to the field ordering)
         # => see field_order, omitted_fields, reorder_widgets and update
-        if 'seantis.dir' in form.portal_type:
+        if hasattr(form, 'portal_type') and 'seantis.dir' in form.portal_type:
             self.hook_form = True
             self.reorder_widgets()
         else:
