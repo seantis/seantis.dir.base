@@ -1,4 +1,5 @@
 import collections
+from itertools import tee, islice, chain, izip
 from os import path
 
 from Acquisition import aq_inner
@@ -107,3 +108,10 @@ def get_marker_url(item, letter=None):
         image = "/singlemarker"
 
     return baseurl + imagedir + image + '.png'
+
+# loving this: http://stackoverflow.com/a/1012089/138103
+def previous_and_next(some_iterable):
+    prevs, items, nexts = tee(some_iterable, 3)
+    prevs = chain([None], prevs)
+    nexts = chain(islice(nexts, 1, None), [None])
+    return izip(prevs, items, nexts)

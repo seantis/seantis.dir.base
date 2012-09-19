@@ -11,13 +11,15 @@ from zope.component import getUtility
 from zope.schema import getFieldsInOrder
 
 from Products.CMFCore.utils import getToolByName
+from plone.dexterity.schema import SCHEMA_CACHE
 from plone.dexterity.utils import createContent
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.memoize.instance import memoizedproperty
 from plone.memoize import view
+from plone.z3cform.fieldsets.utils import move
 from plone.registry.interfaces import IRegistry
 
-from z3c.form.interfaces import IFieldsForm, IFormLayer, IAddForm, IEditForm
+from z3c.form.interfaces import IFieldsForm, IFormLayer
 from z3c.form.field import FieldWidgets
 
 from collective.geo.settings.interfaces import IGeoSettings
@@ -101,20 +103,47 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
 
     """
 
-    grok.adapts(IFieldsForm, IFormLayer, IDirectoryRoot)
+    grok.adapts(IFieldsForm, IFormLayer, Interface)
     
     def __init__(self, form, request, context):
         self.form = form
+
+        # if this is a seantis dir type this widget manager adapter acts
+        # like a poor mans version of plone.autoform (though it's actually more
+        # advanced when it comes to the field ordering)
+        # => see field_order, omitted_fields, reorder_widgets and update
+        if 'seantis.dir' in form.portal_type:
+            self.hook_form = True
+            self.reorder_widgets()
+        else:
+            self.hook_form = False
+
         super(DirectoryFieldWidgets, self).__init__(form, request, context)
 
     @property
-    def may_update_widgets(self):
-        # directory forms must be changed only if they are about adding an item
-        # to the directory, which is indicated by the existing widgets
-        if 'enable_filter' in self or 'enable_search' in self:
-            return False
+    def update_category_widgets(self):
+        """ Return true if the category widgets need to be removed / renamed. """
 
-        return IAddForm.providedBy(self.form) or IEditForm.providedBy(self.form)
+        return '.item' in self.form.portal_type
+
+    @property
+    def omitted_fields(self):
+        """ Gets the omitted fields from the schema. May be specified like this:
+
+        ISchema.setTaggedValue('seantis.dir.base.omitted', ['field1', 'field2'])
+        """
+        iface = SCHEMA_CACHE.get(self.form.portal_type)
+        return iface.queryTaggedValue('seantis.dir.base.omitted', [])
+
+    @property
+    def field_order(self):
+        """ See reorder_widgets. """
+        iface = SCHEMA_CACHE.get(self.form.portal_type)
+        return iface.queryTaggedValue('seantis.dir.base.order', ['*'])
+
+    @property
+    def omitted_categories(self):
+        return self.directory.unused_categories()
 
     @property
     def directory(self):
@@ -125,27 +154,63 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
 
     def update(self):
         super(DirectoryFieldWidgets, self).update()
-        
-        if self.may_update_widgets:
-            self.label_widgets()
-            self.remove_unused_widgets()
 
-    def remove_unused_widgets(self):
-        """Takes a list of widgets and removes all representing categories that
-        are unused in the given Directory. 
+        # some forms are adapted which we don't care about, since the
+        # add forms can't be adapted by the schema interface (they
+        # implement the folder interface, not the type interface)
+        # -> skip those
+        if not self.hook_form: 
+            return
+
+        # remove / rename category fields
+        if self.update_category_widgets:
+            self.label_widgets()
+            map(self.remove_widget, self.omitted_categories)
+
+        # remove omitted fields
+        map(self.remove_widget, self.omitted_fields)
+
+    def remove_widget(self, key):
+        # the second way is probably the right one, but the first way
+        # worked in older plone versions before, so i'll leave it
+        if key in self.__dict__:
+            del self[key]
+
+        if key in self.form.widgets:
+            del self.form.widgets[key]                        
+
+    def reorder_widgets(self):
+        """ Reorders the widgets of the form. Must be called before the parent's
+        __init__ method. The field order is a list of fields. Fields present
+        in the list are put in the order of the list. Fields not present in the
+        list are put at the location of the asterisk (*) which must be present
+        in the list.
+
+        Example:
+        class ISchema(Interface):
+            field1 = Field()
+            field2 = Field()
+            field3 = Field()
+            field4 = Field()
+            field5 = Field()
+
+        ISchema.setTaggedValue('seantis.dir.base.order', 
+            ["field5", "field4", "*", "field1"]
+
+        Will produce this order:
+        Field5, Field4, Field2, Field3, Field1
 
         """
-        # Remove unused categories from form
-        unused = self.directory.unused_categories()
-        for key in unused:
+        order = self.field_order
+        default = order.index('*')
 
-            # the second way is probably the right one, but the first way
-            # worked in older plone versions before, so i'll leave it
-            if key in self.__dict__:
-                del self[key]
+        # move fields before the star
+        for prev, curr, next in utils.previous_and_next(reversed(order[:default])):
+            move(self.form, curr, before=prev or '*')
 
-            if key in self.form.widgets:
-                del self.form.widgets[key]
+        # move fields after the star
+        for prev, curr, next in utils.previous_and_next(order[default+1:]):
+            move(self.form, curr, after=prev or '*')
 
     def label_widgets(self):
         """Takes a list of widgets and substitutes the labels of those representing
