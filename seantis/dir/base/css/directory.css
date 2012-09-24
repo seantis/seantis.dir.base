@@ -35,7 +35,7 @@ div#directoryResultList, div#directoryInfo {
     left: auto;  
 }
 
-#document-action-kml_download {
+#content #document-action-kml_download {
     display: none;
 }
 
