@@ -39,7 +39,7 @@ div#directoryResultList, div#directoryInfo {
     padding-left: 10px !important;
 }
 
-#document-action-kml_download {
+#content #document-action-kml_download {
     display: none;
 }
 
