@@ -304,12 +304,13 @@ class View(grok.View):
             mapwidget._layers = list()
 
             for item in sorted(self.batch, key=lambda i: i.title):
-                if item.has_mapdata():
+
+                if not item.id in self.lettermap and item.has_mapdata():
 
                     layer = DirectoryMapLayer(context=item)
 
                     if index <= maxindex:
-                        layer.letter = self.lettermap[item] = letters[index]
+                        layer.letter = self.lettermap[item.id] = letters[index]
                         index += 1
 
                     mapwidget._layers.append(layer)
@@ -318,6 +319,7 @@ class View(grok.View):
 
     def marker_image(self, item):
         """ Returns the marker image used in the mapfields. """
+
         marker = IMapMarker(item)
         return marker.url(self.lettermap.get(item, None))
 
