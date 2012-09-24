@@ -292,12 +292,13 @@ class View(grok.View):
             mapwidget._layers = list()
 
             for item in sorted(self.batch, key=lambda i: i.title):
-                if item.has_mapdata():
+
+                if not item.id in self.lettermap and item.has_mapdata():
 
                     layer = DirectoryMapLayer(context=item)
 
                     if index <= maxindex:
-                        layer.letter = self.lettermap[item] = letters[index]
+                        layer.letter = self.lettermap[item.id] = letters[index]
                         index += 1
 
                     mapwidget._layers.append(layer)
@@ -306,7 +307,7 @@ class View(grok.View):
 
     def marker_image(self, item):
         """ Returns the marker image used in the mapfields. """
-        return utils.get_marker_url(item, self.lettermap.get(item, None))
+        return utils.get_marker_url(item, self.lettermap.get(item.id, None))
 
 # token that needs to bentered when running the type migration
 # this ensures that this is not done by accident and that only someone
