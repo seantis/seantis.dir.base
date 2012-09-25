@@ -19,7 +19,7 @@ from plone.memoize import view
 from plone.z3cform.fieldsets.utils import move
 from plone.registry.interfaces import IRegistry
 
-from z3c.form.interfaces import IFieldsForm, IFormLayer
+from z3c.form.interfaces import IFieldsForm, IFormLayer, IAddForm
 from z3c.form.field import FieldWidgets
 
 from collective.geo.settings.interfaces import IGeoSettings
@@ -103,7 +103,7 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
 
     """
 
-    grok.adapts(IFieldsForm, IFormLayer, Interface)
+    grok.adapts(IFieldsForm, IFormLayer, IDirectoryRoot)
     
     def __init__(self, form, request, context):
         self.form = form
@@ -222,6 +222,19 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         for field, widget in self.items():
             if field in labels:
                 widget.label = labels[field]
+
+class DirectoryFieldWidgetsAddForm(DirectoryFieldWidgets):
+    """ The DirectoryFieldWidgets form adapter doesn't adapt Directory creation
+    forms, as their context is the folder not the item to be. IDirectoryRoot
+    does therefore not adapt to the context.
+
+    This subclass adapts to all add forms on the plone site. If this is indeed
+    a good idea remains to be seen. It probably isn't, but it's what I got
+    so far. 
+
+    """
+
+    grok.adapts(IAddForm, IFormLayer, Interface)
 
 class View(grok.View):
     grok.baseclass()
