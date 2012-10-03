@@ -42,6 +42,34 @@ def get_object(directory, result):
     
     return obj
 
+def is_exact_match(item, term):
+    """Returns true if a given item is an exact match of term. Term is the same
+    as in category_search. 
+
+    """
+    
+    for key in term.keys():
+        # categories can be lists or strings, but we want a list in any case
+        attrlist = getattr(item, key) or (u'', )
+        if not hasattr(attrlist, '__iter__'):
+            attrlist = (attrlist, )
+
+        # also use a stripped attribute list as some users will end up adding
+        # unused spaces
+        striplist = [attr.strip() for attr in attrlist]
+
+        # same goes for terms
+        termlist = term[key]
+        if not hasattr(termlist, '__iter__'):
+            termlist = (termlist, )
+
+        # if there is any term which is not matching, it's not an exact match
+        matching_term = lambda term: term in attrlist or term in striplist
+        if any([True for t in termlist if not matching_term(t)]):
+            return False
+
+    return True
+
 class DirectoryCatalog(grok.Adapter):
 
     grok.context(IDirectoryBase)
@@ -52,20 +80,23 @@ class DirectoryCatalog(grok.Adapter):
         self.catalog = getToolByName(context, 'portal_catalog')
         self.path = '/'.join(context.getPhysicalPath())
 
-    def sortkey(self):
-        """Returns the default sortkey."""
-        uca_sortkey = utils.unicode_collate_sortkey()
-        return lambda i: uca_sortkey(i.title)
-
     def query(self, **kwargs):
+        """Runs a query on the catalog with default parameters set.
+        Not part of the official IDirectoryCatalog interface as this is
+        highly storage_backend dependent. """
         results = self.catalog(path={'query': self.path, 'depth': 1},
             object_provides=IDirectoryItemBase.__identifier__,
             **kwargs
         )
         return results
 
-    def get_object(self, result):
-        return get_object(self.directory, result)
+    def sortkey(self):
+        """Returns the default sortkey."""
+        uca_sortkey = utils.unicode_collate_sortkey()
+        return lambda i: uca_sortkey(i.title)
+
+    def get_object(self, brain):
+        return get_object(self.directory, brain)
 
     def items(self):
         cachekey = directory_cachekey(self.directory)
@@ -80,27 +111,22 @@ class DirectoryCatalog(grok.Adapter):
     def filter(self, term):
 
         results = self.query(categories={'query':term.values(), 'operator':'and'})
-
-        def filter_key(item):
-            for category, value in term.items():
-                if value == '!empty':
-                    continue
-                if not value in getattr(item, category):
-                    return False
-            return True
+        filter_key = lambda item: is_exact_match(item, term)
 
         return filter(filter_key, map(self.get_object, results))
 
     def search(self, text):
         return map(self.get_object, self.query(SearchableText=text))
 
-    def possible_values(self, items, categories=None):
+    def possible_values(self, items=None, categories=None):
         """Returns a dictionary with the keys being the categories of the directory,
         filled with a list of all possible values for each category. If an item 
         contains a list of values (as opposed to a single string) those values 
         flattened. In other words, there is no hierarchy in the resulting list.
 
         """
+        items = items or self.items()
+
         categories = categories or self.directory.all_categories()
         values = dict([(cat,list()) for cat in categories])
         
@@ -111,7 +137,7 @@ class DirectoryCatalog(grok.Adapter):
 
         return values
 
-    def grouped_possible_values(self, items, categories=None):
+    def grouped_possible_values(self, items=None, categories=None):
         """Same as possible_values, but with the categories of the dictionary being
         unique and each value being wrapped in a tuple with the first element
         as the actual value and the second element as the count non-unique values.
@@ -130,7 +156,7 @@ class DirectoryCatalog(grok.Adapter):
 
         return grouped
 
-    def grouped_possible_values_counted(self, items, categories=None):
+    def grouped_possible_values_counted(self, items=None, categories=None):
         """Returns a dictionary of categories with a list of possible values
         including counts in brackets.
 

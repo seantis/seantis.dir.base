@@ -140,11 +140,12 @@ class IDirectoryItem(IDirectoryItemBase):
 
 class IDirectoryCatalog(Interface):
     """Describes the adapter interface for directory objects that deals
-    with iterating over directory items."""
+    with iterating over directory items. The Directory Catalog Adapter is
+    used throughout seantis.dir.base, allowing for extension modules to define
+    their own data backend. """
 
     def items(self):
-        """Returns the items of the directory. Those items aren't required
-        to actually exist in the ZODB."""
+        """Returns the items of the directory."""
 
     def filter(self, term):
         """Returns the items filtered by the term. The term is a dictionary
@@ -168,6 +169,48 @@ class IDirectoryCatalog(Interface):
 
     def sortkey(self):
         """Returns a sort keyfunction to sort the items of the catalog. """
+
+    def get_object(self, result):
+        """Returns the result of getObject of the given brain. Use this
+        to cache getObject results. If another backend than zodb is used
+        this function may return the result without alteration.
+        """
+
+    def possible_values(self, items=None, categories=None):
+        """Returns a dictionary with keys being cat1-4, and values being
+        a list of possible values for the given category. Values which are
+        available in different items should not be merged or grouped. For each
+        value in an item a value in the values list must exist.
+
+        e.g.
+            { 'cat1': ["Rock", "Pop", "Pop", "Pop", "Rock"]}
+
+        Might be moved away from the interface in the future.
+
+        """
+
+    def grouped_possible_values(self, items=None, categories=None):
+        """Same as possible_values, but with the values being a list of tuples
+        with index 0 being the value and index 1 being the mergecount.
+
+        e.g.
+            { 'cat1': [("Rock", 2), ("Pop", 3)] }
+
+        Might be moved away from the interface in the future.
+
+        """
+
+    def grouped_possible_values_counted(self, items=None, categories=None):
+        """Same as possible_values, but with the values being a list of 
+        categories as strings, containing a count. 
+
+        e.g.
+            { 'cat1': ["Rock (2)", "Pop (2)"] }
+
+        Might be moved away from the interface in the future.
+
+        """
+
 
 class IFieldMapExtender(Interface):
     """Interface describing an object which can extend the FieldMap class used

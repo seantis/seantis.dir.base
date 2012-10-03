@@ -9,7 +9,6 @@ from Products.CMFPlone.PloneBatch import Batch
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 
 from seantis.dir.base import core
-from seantis.dir.base import catalog
 from seantis.dir.base import utils
 from seantis.dir.base import session
 from seantis.dir.base import const
