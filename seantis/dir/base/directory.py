@@ -2,6 +2,7 @@ import json
 
 from five import grok
 from zope.interface import Interface
+from zope.component import getAdapter
 from plone.directives import form
 from plone.dexterity.content import Container
 from Products.CMFPlone.PloneBatch import Batch
@@ -14,7 +15,9 @@ from seantis.dir.base import session
 from seantis.dir.base import const
 from seantis.dir.base.const import CATEGORIES, ITEMSPERPAGE
 
-from seantis.dir.base.interfaces import IDirectoryItemBase, IDirectoryBase
+from seantis.dir.base.interfaces import (
+    IDirectoryItemBase, IDirectoryBase, IDirectoryCatalog
+)
 
 class Directory(Container):
     """Represents objects created using IDirectory."""
@@ -46,7 +49,20 @@ class Directory(Container):
         """Returns the description with newlines replaced by <br/> tags"""
         return self.description and self.description.replace('\n', '<br />') or ''
 
-class DirectorySearchViewlet(grok.Viewlet):
+class DirectoryCatalogMixin(object):
+    _catalog = None
+
+    @property
+    def catalog(self):
+        if not self._catalog:
+            self._catalog = getAdapter(self.directory, IDirectoryCatalog)
+        return self._catalog
+
+    @property
+    def directory(self):
+        return self.context
+
+class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
 
     grok.name('seantis.dir.base.DirectorySearchViewlet')
     grok.context(form.Schema)
@@ -55,12 +71,13 @@ class DirectorySearchViewlet(grok.Viewlet):
 
     _template = grok.PageTemplateFile('templates/search.pt')
 
-    def get_context(self, context):
+    @property
+    def directory(self):
         if IDirectoryBase.providedBy(self.context):
-            return IDirectoryBase(self.context)
+            return self.context
         elif IDirectoryItemBase.providedBy(self.context):
             if hasattr(IDirectoryItemBase(self.context), 'parent'):
-                return IDirectoryItemBase(self.context).parent()
+                return self.context.parent()
         
         return None
 
@@ -90,17 +107,14 @@ class DirectorySearchViewlet(grok.Viewlet):
     def filterstyle(self):
         return 'width: %s%%' % self.widths[1]
 
-    def update(self, **kwargs):
-        self.context = self.get_context(self.context)
-        
-        if self.context: 
-            self.items = catalog.items(self.context)
+    def update(self, **kwargs):        
+        if self.directory: 
+            self.items = self.catalog.items()
 
-            self.values = catalog.grouped_possible_values_counted(
-                          self.context, self.items)
-            self.labels = self.context.labels()
-            self.select = session.get_last_filter(self.context)
-            self.searchtext = session.get_last_search(self.context)
+            self.values = self.catalog.grouped_possible_values_counted(self.items)
+            self.labels = self.directory.labels()
+            self.select = session.get_last_filter(self.directory)
+            self.searchtext = session.get_last_search(self.directory)
 
     def render(self, **kwargs):
         if self.context != None:
@@ -116,10 +130,10 @@ class DirectorySearchViewlet(grok.Viewlet):
         # specifying self.template. Once 1.9+ of grokcore.viewlet is widely used
         # self._template can be renamed to self.template and the render method 
         # can be removed.
-        return self.get_context(self.context) != None
+        return self.directory != None
 
 
-class View(core.View):
+class View(core.View, DirectoryCatalogMixin):
     """Default view of Directory."""
 
     grok.context(IDirectoryBase)
@@ -131,12 +145,12 @@ class View(core.View):
 
     def filter(self, terms):
         if terms:
-            self.items = catalog.category_filter(self.context, terms)
+            self.items = self.catalog.filter(terms)
         session.set_last_filter(self.context, terms)
 
     def search(self, searchtext):
         if searchtext:
-            self.items = catalog.fulltext_search(self.context, searchtext)
+            self.items = self.catalog.search(searchtext)
         session.set_last_search(self.context, searchtext)
 
     def reset(self, *args):
@@ -182,10 +196,9 @@ class View(core.View):
         return len(self.items) != self.unfiltered_count
 
     def update(self, **kwargs):
-        self.items = catalog.items(self.context)
+        self.items = self.catalog.items()
         self.unfiltered_count = len(self.items)
-        self.values = catalog.grouped_possible_values_counted(
-                      self.context, self.items)
+        self.values = self.catalog.grouped_possible_values_counted(self.items)
         self.labels = self.context.labels()
 
         action, param = self.primary_action()
@@ -201,9 +214,9 @@ class View(core.View):
 
         assert category in const.CATEGORIES
 
-        items = filtered and self.items or catalog.items(self.context)
-        values = catalog.grouped_possible_values_counted(
-            self.context, items, categories=[category]
+        items = filtered and self.items or self.catalog.items()
+        values = self.catalog.grouped_possible_values_counted(
+            items, categories=[category]
         )
 
         return values[category]
@@ -213,7 +226,7 @@ class View(core.View):
         start = int(self.request.get('b_start') or 0)
         return Batch(self.items, ITEMSPERPAGE, start, orphan=1)
 
-class JsonFilterView(core.View):
+class JsonFilterView(core.View, DirectoryCatalogMixin):
     """View to filter the catalog with ajax."""
 
     grok.context(IDirectoryBase)
@@ -226,12 +239,12 @@ class JsonFilterView(core.View):
         if not len(terms.keys()):
             return json.dumps({})
 
-        items = catalog.category_filter(self.context, terms)
-        result = catalog.grouped_possible_values_counted(self.context, items)
+        items = self.catalog.filter(terms)
+        result = self.catalog.grouped_possible_values_counted(items)
         return json.dumps(result)
 
 
-class JsonSearch(core.View):
+class JsonSearch(core.View, DirectoryCatalogMixin):
     """View to search for a category using the jquery tokenizer plugin."""
 
     grok.context(IDirectoryBase)
@@ -244,8 +257,7 @@ class JsonSearch(core.View):
         if not category in CATEGORIES:
             return json.dumps([])
 
-        directory = self.context
-        possible = catalog.grouped_possible_values(directory, catalog.items(directory))
+        possible = self.catalog.grouped_possible_values(self.catalog.items())
         possible = possible[category].keys()
 
         query = self.request['q']
