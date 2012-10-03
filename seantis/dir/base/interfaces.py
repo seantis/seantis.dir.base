@@ -138,6 +138,37 @@ class IDirectoryItem(IDirectoryItemBase):
 
     """
 
+class IDirectoryCatalog(Interface):
+    """Describes the adapter interface for directory objects that deals
+    with iterating over directory items."""
+
+    def items(self):
+        """Returns the items of the directory. Those items aren't required
+        to actually exist in the ZODB."""
+
+    def filter(self, term):
+        """Returns the items filtered by the term. The term is a dictionary
+        of categories with the values being strings to search for.
+
+        e.g.
+
+        term=dict(cat1='category-value-1', cat2='category-value-2')
+
+        If the value is equal to '!empty', the category is not searched.
+        This is a bit of a relic and might be dropped in the future.
+        In fact, these two terms should yield the exact same result:
+
+        1: dict(cat1='category-value-1', cat2='!empty')
+        2: dict(cat1='category-value-1')
+
+        """
+
+    def search(self, text):
+        """Returns a list of items that turn up in the fulltext search."""
+
+    def sortkey(self):
+        """Returns a sort keyfunction to sort the items of the catalog. """
+
 class IFieldMapExtender(Interface):
     """Interface describing an object which can extend the FieldMap class used
     for xlsimport/xlsexport.

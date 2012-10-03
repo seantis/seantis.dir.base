@@ -1,9 +1,13 @@
-from datetime import datetime
+from five import grok
+
 from itertools import groupby
 from Products.CMFCore.utils import getToolByName
-from plone.memoize import ram
 
-from seantis.dir.base.item import IDirectoryItemBase
+from seantis.dir.base.interfaces import (
+    IDirectoryItemBase, 
+    IDirectoryBase,
+    IDirectoryCatalog
+)
 from seantis.dir.base import utils
 
 class WrappedDict(dict):
@@ -12,222 +16,105 @@ class WrappedDict(dict):
 
     """
 
-def _items(directory):
-    """Returns all items of a directory. If the user is anonymous, the result
-    is cached until a modification to any directory item or the directory itself
-    is made. See events in item.py for reference.
+class DirectoryCatalog(grok.Adapter):
 
-    """
-    membership = getToolByName(directory, 'portal_membership')
-    if membership.isAnonymousUser():
-        items = _cached_items(directory)
-    else:
-        items = _uncached_items(directory)
+    grok.context(IDirectoryBase)
+    grok.provides(IDirectoryCatalog)
 
-    return items
+    def __init__(self, context):
+        self.directory = context
+        self.catalog = getToolByName(context, 'portal_catalog')
+        self.path = '/'.join(context.getPhysicalPath())
 
-def directory_cachekey(method, directory):
-    """Returns the cache key for a directory."""
-    return (directory.id, directory.modified(), directory.child_modified)
+    def sortkey(self):
+        """Returns the default sortkey."""
+        uca_sortkey = utils.unicode_collate_sortkey()
+        return lambda i: uca_sortkey(i.title)
 
-@ram.cache(directory_cachekey)
-def _cached_items(directory):
-    """_uncached_items with a cache."""
-    items = _uncached_items(directory)
+    def items(self):
+        results = self.catalog(path={'query': self.path, 'depth': 1},
+            object_provides=IDirectoryItemBase.__identifier__
+        )
 
-    #mark the dictionary for testing
-    items._cache_time = datetime.now()
-    return items
+        return [r.getObject() for r in results]
 
-def _uncached_items(directory):
-    """Returns all items of the given directory uncached."""
-    catalog = getToolByName(directory, 'portal_catalog')
-    path = '/'.join(directory.getPhysicalPath())
+    def filter(self, term):
 
-    results = catalog(
-        path={'query': path, 'depth':1},
-        object_provides=IDirectoryItemBase.__identifier__
-    )
+        results = self.catalog(path={'query': self.path, 'depth':1}, 
+            categories={'query': term.values(), 'operator':'and'},
+            object_provides=IDirectoryItemBase.__identifier__
+        )
 
-    items = WrappedDict()
-    for result in results:
-        items[result.getRID()] = result.getObject()
-    
-    return items
+        def filter_key(item):
+            for category, value in term.items():
+                if value == '!empty':
+                    continue
+                if not value in getattr(item, category):
+                    return False
+            return True
 
-def sortkey():
-    """Returns the default sortkey."""
-    uca_sortkey = utils.unicode_collate_sortkey()
-    return lambda i: uca_sortkey(i.title)
+        return filter(filter_key, (r.getObject() for r in results))
 
-def items(directory):
-    """Returns all items of the given directory."""
-    return sorted(_items(directory).values(), key=sortkey())
+    def search(self, text):
+        results = self.catalog(path={'query': self.path, 'depth':1},
+            SearchableText=text,
+            object_provides=IDirectoryItemBase.__identifier__
+        )
 
-def getObjects(directory, results):
-    """Returns a list of objects from a ZCatalog resultset either by loading
-    the item from cache or by calling getObject directly.
+        return [r.getObject() for r in results]
 
-    """
-    cache = _items(directory)
-    objects = []
-    for result in results:
-        loaded = cache.get(result.getRID(), None) or result.getObject()
-        objects.append(loaded)
+    def possible_values(self, items, categories=None):
+        """Returns a dictionary with the keys being the categories of the directory,
+        filled with a list of all possible values for each category. If an item 
+        contains a list of values (as opposed to a single string) those values 
+        flattened. In other words, there is no hierarchy in the resulting list.
+
+        """
+        categories = categories or self.directory.all_categories()
+        values = dict([(cat,list()) for cat in categories])
         
-    return objects
+        for item in items:
+            for cat in values.keys():
+                for word in item.keywords(categories=(cat,)):
+                    word and values[cat].append(word)
 
-def possible_values(directory, items, categories=None):
-    """Returns a dictionary with the keys being the categories of the directory,
-    filled with a list of all possible values for each category. If an item 
-    contains a list of values (as opposed to a single string) those values 
-    flattened. In other words, there is no hierarchy in the resulting list.
+        return values
 
-    """
-    categories = categories or directory.all_categories()
-    values = dict([(cat,list()) for cat in categories])
-    
-    for item in items:
-        for cat in values.keys():
-            for word in item.keywords(categories=(cat,)):
-                word and values[cat].append(word)
+    def grouped_possible_values(self, items, categories=None):
+        """Same as possible_values, but with the categories of the dictionary being
+        unique and each value being wrapped in a tuple with the first element
+        as the actual value and the second element as the count non-unique values.
 
-    return values
+        It's really the grouped result of possible_values.
 
-def grouped_possible_values(directory, items, categories=None):
-    """Same as possible_values, but with the categories of the dictionary being
-    unique and each value being wrapped in a tuple with the first element
-    as the actual value and the second element as the count non-unique values.
+        """
 
-    It's really the grouped result of possible_values.
+        possible = self.possible_values(items, categories)
+        grouped = dict([(k, dict()) for k in possible.keys()])
 
-    """
+        for category, items in possible.items():
+            groups = groupby(sorted(items))
+            for group, values in groups:
+                grouped[category][group] = len(list(values))
 
-    possible = possible_values(directory, items, categories)
-    grouped = dict([(k, dict()) for k in possible.keys()])
+        return grouped
 
-    for category, items in possible.items():
-        groups = groupby(sorted(items))
-        for group, values in groups:
-            grouped[category][group] = len(list(values))
+    def grouped_possible_values_counted(self, items, categories=None):
+        """Returns a dictionary of categories with a list of possible values
+        including counts in brackets.
 
-    return grouped
+        """
+        possible = self.grouped_possible_values(items, categories)
+        result = dict((k, []) for k in possible.keys())
 
-def grouped_possible_values_counted(directory, items, categories=None):
-    """Returns a dictionary of categories with a list of possible values
-    including counts in brackets.
+        for category, values in possible.items():
+            counted = []
+            for text, count in values.items():
+                counted.append(utils.add_count(text, count))
+            
+            result[category] = sorted(counted, key=utils.unicode_collate_sortkey())
 
-    """
-    possible = grouped_possible_values(directory, items, categories)
-    result = dict((k, []) for k in possible.keys())
-
-    for category, values in possible.items():
-        counted = []
-        for text, count in values.items():
-            counted.append(utils.add_count(text, count))
-        
-        result[category] = sorted(counted, key=utils.unicode_collate_sortkey())
-
-    return result
-
-def fuzzy_filter(directory, categories):
-    """Filter the given list of categories in the directory. This utilizes
-    the categories index which is a list of all categories on any given item.
-
-    Since a value may be part of multiple categories in the same item this
-    does not return an exact result. In other words, in this function you
-    can't search for items with a specific value on category x. 
-
-    It would be possible to do by using different indexes for each category,
-    but it would probably not be much faster but more cumbersome for general
-    searches over the catalog.
-
-    """
-
-    catalog = getToolByName(directory, 'portal_catalog')
-    path = '/'.join(directory.getPhysicalPath())
-    
-    results = catalog(
-        path={'query': path, 'depth':1}, 
-        categories={'query':categories, 'operator':'and'},
-        object_provides=IDirectoryItemBase.__identifier__
-    )
-
-    return getObjects(directory, results)
-
-def category_filter(directory, term):
-    """Filter a list of category values. The term argument is a 
-    dictionary with the keys being the categories to search and the values
-    being the category values to look for.
-
-    So given an item with the following values
-    item.cat1 = 'asdf', item.cat2='qwerty'
-
-    One will find it by using one of these terms:
-    term = dict(cat1='asdf')
-    term = dict(cat2='qwerty')
-    term = dict(cat1='asdf', cat2='qwerty')
-
-    This method will return all items that mach the term.
-
-    Note that to filter for empty values one should use '' instead of None.
-    
-    Categories with the value '!empty' are considered nonselected and will
-    therefore not be used for filtering.
-
-    For more examples see test_catalog.py
-    """
-    term = dict([(k,v) for k, v in term.items() if not u'!empty' in v])
-    assert(all([v != None for v in term.values()]))
-
-    results = fuzzy_filter(directory, term.values())
-    return sorted([r for r in results if is_exact_match(r, term)], key=sortkey())
-
-def fulltext_search(directory, text):
-    """Search for a text in the descendants of a directory. Although this
-    function searches for descendents up to a depth of three, only 
-    DirectoryItems are returned. 
-
-    """
-    catalog = getToolByName(directory, 'portal_catalog')
-    path = '/'.join(directory.getPhysicalPath())
-
-    # Perform fulltext search
-    results = catalog(
-        path={'query': path, 'depth':3},
-        SearchableText=text,
-        object_provides=IDirectoryItemBase.__identifier__
-    )
-
-    return getObjects(directory, results)
-
-def is_exact_match(item, term):
-    """Returns true if a given item is an exact match of term. Term is the same
-    as in category_search. 
-
-    """
-    
-    for key in term.keys():
-        # categories can be lists or strings, but we want a list in any case
-        attrlist = getattr(item, key) or (u'', )
-        if not hasattr(attrlist, '__iter__'):
-            attrlist = (attrlist, )
-
-        # also use a stripped attribute list as some users will end up adding
-        # unused spaces
-        striplist = [attr.strip() for attr in attrlist]
-
-        # same goes for terms
-        termlist = term[key]
-        if not hasattr(termlist, '__iter__'):
-            termlist = (termlist, )
-
-        # if there is any term which is not matching, it's not an exact match
-        matching_term = lambda term: term in attrlist or term in striplist
-        if any([True for t in termlist if not matching_term(t)]):
-            return False
-
-    return True
+        return result
 
 def children(folder, portal_type):
     """Returns the descendants of a folder that match the given portal type."""
