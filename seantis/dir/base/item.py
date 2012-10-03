@@ -71,7 +71,7 @@ class DirectoryItem(Container):
     def changed(self, parent):
         """Sets the time when a childitem was changed."""
         if parent:
-            self.child_modified = datetime.now()
+            parent.child_modified = datetime.now()
 
     def categories(self):
         """Returns a list of tuples with each tuple containing three values:

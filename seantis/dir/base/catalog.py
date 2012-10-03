@@ -3,6 +3,8 @@ from five import grok
 from itertools import groupby
 from Products.CMFCore.utils import getToolByName
 
+from zope.ramcache.ram import RAMCache
+
 from seantis.dir.base.interfaces import (
     IDirectoryItemBase, 
     IDirectoryBase,
@@ -10,11 +12,35 @@ from seantis.dir.base.interfaces import (
 )
 from seantis.dir.base import utils
 
-class WrappedDict(dict):
-    """Wrapper around normal dictionary to allow the dynamic creation of
-    attributes on the instance, which is not possible in a normal dict.
+directory_cache = RAMCache()
+directory_cache.update(maxAge=0, maxEntries=10)
 
-    """
+item_cache = RAMCache()
+item_cache.update(maxAge=0, maxEntries=10000)
+
+uncached = object()
+
+def directory_cachekey(directory):
+    return ''.join(map(str,(
+        directory.id, 
+        directory.modified(), 
+        directory.child_modified
+    )))
+
+def directory_item_cachekey(directory, item):
+    return directory_cachekey(directory) + str(item.getRID())
+
+def get_object(directory, result):
+
+    cachekey = directory_item_cachekey(directory, result)
+
+    obj = item_cache.query(cachekey, default=uncached)
+    
+    if obj is uncached:
+        obj = result.getObject()
+        item_cache.set(obj, cachekey)
+    
+    return obj
 
 class DirectoryCatalog(grok.Adapter):
 
@@ -31,19 +57,29 @@ class DirectoryCatalog(grok.Adapter):
         uca_sortkey = utils.unicode_collate_sortkey()
         return lambda i: uca_sortkey(i.title)
 
-    def items(self):
+    def query(self, **kwargs):
         results = self.catalog(path={'query': self.path, 'depth': 1},
-            object_provides=IDirectoryItemBase.__identifier__
+            object_provides=IDirectoryItemBase.__identifier__,
+            **kwargs
         )
+        return results
 
-        return [r.getObject() for r in results]
+    def get_object(self, result):
+        return get_object(self.directory, result)
+
+    def items(self):
+        cachekey = directory_cachekey(self.directory)
+        result = directory_cache.query(cachekey, default=uncached)
+
+        if result is uncached:
+            result = map(self.get_object, self.query())
+            directory_cache.set(result, cachekey)
+
+        return result
 
     def filter(self, term):
 
-        results = self.catalog(path={'query': self.path, 'depth':1}, 
-            categories={'query': term.values(), 'operator':'and'},
-            object_provides=IDirectoryItemBase.__identifier__
-        )
+        results = self.query(categories={'query':term.values(), 'operator':'and'})
 
         def filter_key(item):
             for category, value in term.items():
@@ -53,15 +89,10 @@ class DirectoryCatalog(grok.Adapter):
                     return False
             return True
 
-        return filter(filter_key, (r.getObject() for r in results))
+        return filter(filter_key, map(self.get_object, results))
 
     def search(self, text):
-        results = self.catalog(path={'query': self.path, 'depth':1},
-            SearchableText=text,
-            object_provides=IDirectoryItemBase.__identifier__
-        )
-
-        return [r.getObject() for r in results]
+        return map(self.get_object, self.query(SearchableText=text))
 
     def possible_values(self, items, categories=None):
         """Returns a dictionary with the keys being the categories of the directory,
