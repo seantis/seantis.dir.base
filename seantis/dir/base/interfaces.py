@@ -168,7 +168,11 @@ class IDirectoryCatalog(Interface):
         """Returns a list of items that turn up in the fulltext search."""
 
     def sortkey(self):
-        """Returns a sort keyfunction to sort the items of the catalog. """
+        """Returns a sort keyfunction to sort the items of the catalog. 
+        The items, filter and search functions return the items roted
+        by this key.
+
+        """
 
     def get_object(self, result):
         """Returns the result of getObject of the given brain. Use this

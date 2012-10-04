@@ -1,6 +1,6 @@
 from five import grok
 
-from itertools import groupby
+from itertools import groupby, imap, ifilter
 from Products.CMFCore.utils import getToolByName
 
 from zope.ramcache.ram import RAMCache
@@ -110,6 +110,8 @@ class DirectoryCatalog(grok.Adapter):
             result = map(self.get_object, self.query())
             directory_cache.set(result, cachekey)
 
+        result.sort(key=self.sortkey())
+
         return result
 
     def filter(self, term):
@@ -117,10 +119,16 @@ class DirectoryCatalog(grok.Adapter):
         results = self.query(categories={'query':term.values(), 'operator':'and'})
         filter_key = lambda item: is_exact_match(item, term)
 
-        return filter(filter_key, map(self.get_object, results))
+        return sorted(
+            ifilter(filter_key, imap(self.get_object, results)),
+            key=self.sortkey()
+        )
 
     def search(self, text):
-        return map(self.get_object, self.query(SearchableText=text))
+        return sorted(
+            imap(self.get_object, self.query(SearchableText=text)),
+            key=self.sortkey()
+        )
 
     def possible_values(self, items=None, categories=None):
         """Returns a dictionary with the keys being the categories of the directory,

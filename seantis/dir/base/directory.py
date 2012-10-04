@@ -107,10 +107,14 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
         return 'width: %s%%' % self.widths[1]
 
     def update(self, **kwargs):        
-        if self.directory: 
-            self.items = self.catalog.items()
+        if self.directory:
+            if hasattr(self.view, 'catalog'):
+                catalog = self.view.catalog
+            else:
+                catalog = self.catalog
+            self.items = catalog.items()
 
-            self.values = self.catalog.grouped_possible_values_counted(self.items)
+            self.values = catalog.grouped_possible_values_counted(self.items)
             self.labels = self.directory.labels()
             self.select = session.get_last_filter(self.directory)
             self.searchtext = session.get_last_search(self.directory)
