@@ -56,6 +56,7 @@
 
           <div tal:define="context python: item" tal:replace="structure provider:seantis.dir.base.item.viewletmanager"/>
         </div>
+        <div class="directoryResult" tal:condition="python: len(items) == 0" i18n:translate="">No Results</div>
       </div>
     </metal:define>    
 
