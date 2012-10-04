@@ -49,6 +49,10 @@ def is_exact_match(item, term):
     """
     
     for key in term.keys():
+        # empty keys are like missing keys
+        if term[key] == '!empty':
+            continue
+
         # categories can be lists or strings, but we want a list in any case
         attrlist = getattr(item, key) or (u'', )
         if not hasattr(attrlist, '__iter__'):

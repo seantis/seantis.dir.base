@@ -238,10 +238,24 @@ class JsonFilterView(core.View, DirectoryCatalogMixin):
         if not len(terms.keys()):
             return json.dumps({})
 
+        if self.request.get('replay'):
+            results = []
+            
+            for i in xrange(1, len(terms.keys())+1):
+                cats = const.CATEGORIES[:i]
+                term = dict([(k,v) for k , v in terms.items() if k in cats])
+
+                items = self.catalog.filter(term)
+                result = self.catalog.grouped_possible_values_counted(items)
+
+                results.append(result)
+
+            return json.dumps(results)
+
         items = self.catalog.filter(terms)
         result = self.catalog.grouped_possible_values_counted(items)
+        
         return json.dumps(result)
-
 
 class JsonSearch(core.View, DirectoryCatalogMixin):
     """View to search for a category using the jquery tokenizer plugin."""
