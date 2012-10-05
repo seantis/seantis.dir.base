@@ -107,32 +107,32 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
         return 'width: %s%%' % self.widths[1]
 
     def update(self, **kwargs):        
-        if self.directory:
-            if hasattr(self.view, 'catalog'):
-                catalog = self.view.catalog
-            else:
-                catalog = self.catalog
-            self.items = catalog.items()
+        if not self.available():
+            return
+        
+        if hasattr(self.view, 'catalog'):
+            catalog = self.view.catalog
+            self.items = self.view.items
+        else:
+            catalog = self.catalog
+            self.items = self.catalog.items()
 
-            self.values = catalog.grouped_possible_values_counted(self.items)
-            self.labels = self.directory.labels()
-            self.select = session.get_last_filter(self.directory)
-            self.searchtext = session.get_last_search(self.directory)
+        self.values = catalog.grouped_possible_values_counted(self.items)
+        self.labels = self.directory.labels()
+        self.select = session.get_last_filter(self.directory)
+        self.searchtext = session.get_last_search(self.directory)
 
     def render(self, **kwargs):
-        if self.context != None:
+        if self.available():
             return self._template.render(self)
         else:
             return u''
 
     def available(self):
-        # grok.Viewlet does provide a way to indicate if the viewlet should be 
-        # rendered or not (called between update and render). Unfortunately it is 
-        # not used in versions prior to 1.9 which is quite new. 
-        # For this reason the render method above is used instead of just 
-        # specifying self.template. Once 1.9+ of grokcore.viewlet is widely used
-        # self._template can be renamed to self.template and the render method 
-        # can be removed.
+        if hasattr(self.view, 'hide_search_viewlet'):
+            if self.view.hide_search_viewlet:
+                return False
+
         return self.directory != None
 
 
