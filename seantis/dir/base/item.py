@@ -20,6 +20,8 @@ from collective.geo.geographer.geo import GeoreferencingAnnotator
 from collective.geo.settings.interfaces import IGeoCustomFeatureStyle
 from collective.geo.contentlocations.geomanager import GeoManager
 
+from plone.memoize import instance
+
 from seantis.dir.base import utils
 from seantis.dir.base.interfaces import IDirectoryItemBase
 
@@ -89,6 +91,7 @@ class DirectoryItem(Container):
         
         return items
 
+    @instance.memoize
     def keywords(self, categories=None):
         """Returns a flat list of all categories, wheter they are actually
         visible in the directory or not, unless a list of categories is

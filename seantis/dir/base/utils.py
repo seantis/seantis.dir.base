@@ -1,15 +1,14 @@
 import collections
+from time import time
 from itertools import tee, islice, chain, izip
 from os import path
 
 from Acquisition import aq_inner
 from zope.component import getMultiAdapter
 from zope.schema import getFieldsInOrder
-from Products.CMFCore.utils import getToolByName
 from zope import i18n
 
 import pyuca
-from seantis.dir.base import session
 
 allkeys = path.join('/'.join(path.split(pyuca.__file__)[:-1]), 'allkeys.txt')
 collator = pyuca.Collator(allkeys)
@@ -115,3 +114,12 @@ def previous_and_next(some_iterable):
     prevs = chain([None], prevs)
     nexts = chain(islice(nexts, 1, None), [None])
     return izip(prevs, items, nexts)
+
+def naive_time(fn):
+    def wrapper(*args, **kwargs):
+        start = time()
+        result = fn(*args, **kwargs)
+        print "%s took %i ms" % (fn.__name__, int((time() - start) * 1000))
+        return result
+
+    return wrapper
