@@ -148,3 +148,10 @@ class IFieldMapExtender(Interface):
         the directory item is set as context.
 
         """
+
+class IMapMarker(Interface):
+    """Interface for providing the URL of the marker image on the map."""
+    def url(self, letter):
+        """
+        Returns the absolute URL of the marker image.
+        """

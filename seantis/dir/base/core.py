@@ -28,7 +28,7 @@ from collective.geo.kml.browser import kmldocument
 from seantis.dir.base import utils
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
-from seantis.dir.base.interfaces import IDirectoryRoot, IDirectoryItemBase
+from seantis.dir.base.interfaces import IDirectoryRoot, IDirectoryItemBase, IMapMarker
 
 class DirectoryMapLayer(MapLayer):
     """ Defines the map layer for markers shown in the directory view. Pretty
@@ -66,12 +66,24 @@ class DirectoryMapLayer(MapLayer):
 
 letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+class LetterMapMarker(grok.Adapter):
+
+    grok.context(IDirectoryItemBase)
+    grok.implements(IMapMarker)
+
+    def url(self, letter):
+        """
+        Returns URL to a marker image with the letter given as argument.
+        """
+        return utils.get_marker_url(self.context, letter)
+
 class KMLDocument(kmldocument.KMLDocument):
     
     @property
     def marker_url(self):
         letter = self.request.get('letter', None) or None
-        return u'string:' + utils.get_marker_url(self.context, letter)
+        marker = IMapMarker(self.context)
+        return u'string:' + marker.url(letter)
 
     @property
     def features(self):
@@ -241,7 +253,8 @@ class View(grok.View):
 
     def marker_image(self, item):
         """ Returns the marker image used in the mapfields. """
-        return utils.get_marker_url(item, self.lettermap.get(item, None))
+        marker = IMapMarker(item)
+        return marker.url(self.lettermap.get(item, None))
 
 # token that needs to bentered when running the type migration
 # this ensures that this is not done by accident and that only someone
