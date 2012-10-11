@@ -32,7 +32,11 @@ div#directoryResultList, div#directoryInfo {
 .directoryMarker {
     position: absolute;
     top: 5px;
-    left: auto;  
+    left: auto !important;  
+}
+
+.directoryInfoText {
+    padding-left: 10px !important;
 }
 
 #document-action-kml_download {
