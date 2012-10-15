@@ -333,4 +333,4 @@ class View(grok.View):
     def marker_image(self, item):
         """ Returns the marker image used in the mapfields. """
         marker = IMapMarker(item)
-        return marker.url(self.lettermap.get(item, None))
+        return marker.url(self.lettermap.get(item.id, None))
