@@ -46,3 +46,15 @@ div#directoryResultList, div#directoryInfo {
 a.groupSelection {
     text-decoration: underline !important;
 }
+
+/* make the circles in the collective geo maps more visible */
+#geoshapemap circle, #geoshapemap polyline, #geoshapemap path {
+    stroke: #0e52ea;
+    stroke-width: 2px;
+    fill: white;
+    fill-opacity: 0.5;
+}
+
+#geoshapemap polyline {
+    fill: none;   
+}
