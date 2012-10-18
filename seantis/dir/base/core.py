@@ -1,19 +1,12 @@
 import logging
 logger = logging.getLogger('seantis.dir.base')
 
-from Acquisition import aq_inner, aq_parent
-
-from uuid import uuid4 as uuid
 from five import grok
 
 from zope.interface import Interface
 from zope.component import getUtility
-from zope.schema import getFieldsInOrder
 
-from Products.CMFCore.utils import getToolByName
 from plone.dexterity.schema import SCHEMA_CACHE
-from plone.dexterity.utils import createContent
-from plone.dexterity.interfaces import IDexterityFTI
 from plone.memoize.instance import memoizedproperty
 from plone.memoize import view
 from plone.z3cform.fieldsets.utils import move
