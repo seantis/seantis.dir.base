@@ -33,6 +33,20 @@ class Directory(Container):
         """Return names of all unused (empty) category attributes."""
         return [c for c in self.all_categories() if not getattr(self, c)]
 
+    def suggested_values(self, category):
+        """Returns a list of suggested values defined on the directory.
+        Will always return a list, thought the list may be empty. 
+
+        """
+
+        assert category in CATEGORIES
+        attribute = '%s_suggestions' % category
+
+        if not hasattr(self, attribute):
+            return []
+
+        return getattr(self, attribute) or []
+
     def labels(self):
         """Return a dictionary with they key being the category attribute
         name and the value being the label defined by the attribute value.
@@ -275,7 +289,8 @@ class JsonSearch(core.View, DirectoryCatalogMixin):
             return json.dumps([])
 
         possible = self.catalog.grouped_possible_values(self.catalog.items())
-        possible = possible[category].keys()
+        possible = set(possible[category].keys())
+        possible = possible.union(self.context.suggested_values(category))
 
         query = self.request['q']
 

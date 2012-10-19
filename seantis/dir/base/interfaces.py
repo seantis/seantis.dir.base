@@ -39,10 +39,30 @@ class IDirectoryBase(IDirectoryRoot):
             default=u''
         )
 
+    cat1_suggestions = List(
+            title=_(u'Suggested Values for the 1st Category'),
+            required=False,
+            description=_(
+                u'These values are suggested when typing category values in the'
+                u'category items, in addition to values found in other items.'
+            ),
+            value_type=TextLine(),
+        )
+
     cat2 = TextLine(
             title=_(u'2nd Category Name'),
             required=False,
             default=u''
+        )
+
+    cat2_suggestions = List(
+            title=_(u'Suggested Values for the 2nd Category'),
+            required=False,
+            description=_(
+                u'These values are suggested when typing category values in the'
+                u'category items, in addition to values found in other items.'
+            ),
+            value_type=TextLine(),
         )
 
     cat3 = TextLine(
@@ -51,11 +71,31 @@ class IDirectoryBase(IDirectoryRoot):
             default=u''
         )
 
+    cat3_suggestions = List(
+            title=_(u'Suggested Values for the 3rd Category'),
+            required=False,
+            description=_(
+                u'These values are suggested when typing category values in the'
+                u'category items, in addition to values found in other items.'
+            ),
+            value_type=TextLine(),
+        )
+
     cat4 = TextLine(
             title=_(u'4th Category Name'),
             required=False,
             default=u''
         )
+
+    cat4_suggestions = List(
+            title=_(u'Suggested Values for the 4th Category'),
+            required=False,
+            description=_(
+                u'These values are suggested when typing category values in the'
+                u'category items, in addition to values found in other items.'
+            ),
+            value_type=TextLine(),
+        )  
 
     child_modified = Datetime(
             title=_(u'Last time a DirectoryItem was modified'),
