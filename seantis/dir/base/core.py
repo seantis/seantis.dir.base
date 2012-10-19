@@ -100,6 +100,8 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
     
     def __init__(self, form, request, context):
         self.form = form
+        self.context = context
+        self.request = request
 
         # if this is a seantis dir type this widget manager adapter acts
         # like a poor mans version of plone.autoform (though it's actually more
@@ -135,6 +137,12 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         return iface.queryTaggedValue('seantis.dir.base.order', ['*'])
 
     @property
+    def custom_labels(self):
+        """ See label_widgets. """
+        iface = SCHEMA_CACHE.get(self.form.portal_type)
+        return iface.queryTaggedValue('seantis.dir.base.labels', {})
+
+    @property
     def omitted_categories(self):
         return self.directory.unused_categories()
 
@@ -162,6 +170,9 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
 
         # remove omitted fields
         map(self.remove_widget, self.omitted_fields)
+
+        # apply custom labels
+        self.custom_label_widgets()
 
     def remove_widget(self, key):
         # the second way is probably the right one, but the first way
@@ -215,6 +226,16 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         for field, widget in self.items():
             if field in labels:
                 widget.label = labels[field]
+
+    def custom_label_widgets(self):
+        """Goes throught he custom labels and applies them. """
+        
+        for field, label in self.custom_labels.items():
+            if field in self.form.widgets:
+                self.form.widgets[field].label = utils.translate(
+                    self.context, self.request, label
+                )
+                
 
 class DirectoryFieldWidgetsAddForm(DirectoryFieldWidgets):
     """ The DirectoryFieldWidgets form adapter doesn't adapt Directory creation

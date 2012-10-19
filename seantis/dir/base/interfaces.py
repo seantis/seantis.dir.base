@@ -43,7 +43,7 @@ class IDirectoryBase(IDirectoryRoot):
             title=_(u'Suggested Values for the 1st Category'),
             required=False,
             description=_(
-                u'These values are suggested when typing category values in the'
+                u'These values are suggested when typing category values in the '
                 u'category items, in addition to values found in other items.'
             ),
             value_type=TextLine(),
@@ -59,7 +59,7 @@ class IDirectoryBase(IDirectoryRoot):
             title=_(u'Suggested Values for the 2nd Category'),
             required=False,
             description=_(
-                u'These values are suggested when typing category values in the'
+                u'These values are suggested when typing category values in the '
                 u'category items, in addition to values found in other items.'
             ),
             value_type=TextLine(),
@@ -75,7 +75,7 @@ class IDirectoryBase(IDirectoryRoot):
             title=_(u'Suggested Values for the 3rd Category'),
             required=False,
             description=_(
-                u'These values are suggested when typing category values in the'
+                u'These values are suggested when typing category values in the '
                 u'category items, in addition to values found in other items.'
             ),
             value_type=TextLine(),
@@ -91,7 +91,7 @@ class IDirectoryBase(IDirectoryRoot):
             title=_(u'Suggested Values for the 4th Category'),
             required=False,
             description=_(
-                u'These values are suggested when typing category values in the'
+                u'These values are suggested when typing category values in the '
                 u'category items, in addition to values found in other items.'
             ),
             value_type=TextLine(),

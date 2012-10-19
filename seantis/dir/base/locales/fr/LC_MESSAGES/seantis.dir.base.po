@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-09-20 07:27+0000\n"
+"POT-Creation-Date: 2012-10-19 09:30+0000\n"
 "PO-Revision-Date: 2012-09-18 11:43+0100\n"
 "Last-Translator: Fabian Reinhard <fabian.reinhard@seantis.ch>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,15 +19,15 @@ msgstr ""
 msgid "1st Category Name"
 msgstr "Nom de 1ère catégorie"
 
-#: ./interfaces.py:43
+#: ./interfaces.py:53
 msgid "2nd Category Name"
 msgstr "Nom de 2ème catégorie"
 
-#: ./interfaces.py:49
+#: ./interfaces.py:69
 msgid "3rd Category Name"
 msgstr "Nom de 3ème catégorie"
 
-#: ./interfaces.py:55
+#: ./interfaces.py:85
 msgid "4th Category Name"
 msgstr "Nom de 4ème catégorie"
 
@@ -47,19 +47,19 @@ msgstr "Dossier"
 msgid "Directory Item"
 msgstr "Dossier d'article"
 
-#: ./interfaces.py:67
+#: ./interfaces.py:107
 msgid "Enable filtering"
 msgstr "Activer le filtrage"
 
-#: ./interfaces.py:73
+#: ./interfaces.py:113
 msgid "Enable searching"
 msgstr "Activer la recherche"
 
-#: ./templates/search.pt:27
+#: ./templates/search.pt:7
 msgid "Filter"
 msgstr "Recherche avancée"
 
-#: ./templates/search.pt:10
+#: ./templates/search.pt:49
 msgid "Fulltext search"
 msgstr "Recherche de texte complet"
 
@@ -87,7 +87,7 @@ msgstr "Invalid fichier XLS"
 msgid "Invalid email address"
 msgstr "Adresse e-mail non valide"
 
-#: ./interfaces.py:61
+#: ./interfaces.py:101
 msgid "Last time a DirectoryItem was modified"
 msgstr "La dernière fois, un DirectoryItem a été modifié"
 
@@ -95,21 +95,45 @@ msgstr "La dernière fois, un DirectoryItem a été modifié"
 msgid "Name"
 msgstr "Nom"
 
+#: ./templates/macros.pt:59
+msgid "No Results"
+msgstr ""
+
 #: ./xlsimport.py:187
 msgid "Not all required fields have a value"
 msgstr "Pas tous les champs obligatoires ont une valeur"
 
-#: ./templates/search.pt:7
+#: ./templates/search.pt:46
 msgid "Search"
 msgstr "Recherche"
 
-#: ./interfaces.py:103
+#: ./interfaces.py:143
 msgid "Start typing and select a category. To add a new category write the name and hit enter."
 msgstr "Commencez à taper et sélectionnez une catégorie. Pour ajouter une nouvelle catégorie d'écrire le nom et appuyez sur entrée."
 
 #: ./interfaces.py:26
 msgid "Subtitle"
 msgstr "Sous-titre"
+
+#: ./interfaces.py:43
+msgid "Suggested Values for the 1st Category"
+msgstr ""
+
+#: ./interfaces.py:59
+msgid "Suggested Values for the 2nd Category"
+msgstr ""
+
+#: ./interfaces.py:75
+msgid "Suggested Values for the 3rd Category"
+msgstr ""
+
+#: ./interfaces.py:91
+msgid "Suggested Values for the 4th Category"
+msgstr ""
+
+#: ./interfaces.py:45
+msgid "These values are suggested when typing category values in the category items, in addition to values found in other items."
+msgstr ""
 
 #: ./xlsimport.py:35
 msgid "XLS file"
