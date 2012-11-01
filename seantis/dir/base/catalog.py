@@ -191,6 +191,10 @@ def fulltext_search(directory, text):
     catalog = getToolByName(directory, 'portal_catalog')
     path = '/'.join(directory.getPhysicalPath())
 
+    # make the search fuzzyish (cannot do wildcard in front)
+    if not text.endswith('*'):
+        text += '*'
+
     # Perform fulltext search
     results = catalog(
         path={'query': path, 'depth':3},
