@@ -125,6 +125,11 @@ class DirectoryCatalog(grok.Adapter):
         )
 
     def search(self, text):
+        
+        # make the search fuzzyish (cannot do wildcard in front)
+        if not text.endswith('*'):
+            text += '*'
+     
         return sorted(
             imap(self.get_object, self.query(SearchableText=text)),
             key=self.sortkey()
