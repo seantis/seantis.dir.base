@@ -118,7 +118,7 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
 
     @property
     def directory(self):
-        if IDirectoryItemBase.implementedBy(self.content):
+        if IDirectoryItemBase.providedBy(self.content):
             return self.content.parent
         else:
             return self.content
