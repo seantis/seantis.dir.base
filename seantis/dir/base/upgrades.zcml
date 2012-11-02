@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    i18n_domain="seantis.dir.base">
+       
+    <gs:upgradeStep
+        title="Upgrade seantis.dir.base"
+        description="seantis.dir.base upgrade step"
+        source="1"
+        destination="2012110201"
+        handler=".upgrades.upgrade_to_2012110201"
+        profile="seantis.dir.base:default" />
+       
+</configure>
