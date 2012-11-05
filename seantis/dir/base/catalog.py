@@ -12,9 +12,6 @@ from seantis.dir.base.interfaces import (
 )
 from seantis.dir.base import utils
 
-directory_cache = RAMCache()
-directory_cache.update(maxAge=0, maxEntries=10)
-
 item_cache = RAMCache()
 item_cache.update(maxAge=0, maxEntries=10000)
 
@@ -103,13 +100,7 @@ class DirectoryCatalog(grok.Adapter):
         return get_object(self.directory, brain)
 
     def items(self):
-        cachekey = directory_cachekey(self.directory)
-        result = directory_cache.query(cachekey, default=uncached)
-
-        if result is uncached:
-            result = map(self.get_object, self.query())
-            directory_cache.set(result, cachekey)
-
+        result = map(self.get_object, self.query())
         result.sort(key=self.sortkey())
 
         return result
