@@ -21,6 +21,7 @@ from collective.geo.mapwidget.maplayers import MapLayer
 from collective.geo.kml.browser import kmldocument
 
 from seantis.dir.base import utils
+from seantis.dir.base import session
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
 from seantis.dir.base.interfaces import IDirectoryRoot, IDirectoryItemBase, IMapMarker
@@ -300,6 +301,21 @@ class View(grok.View):
     def is_itemview(self):
         # if no items are found it must be a single item view
         return not hasattr(self, 'items')
+
+    @property
+    def filtered(self):
+        if self.is_itemview:
+            directory = self.context.parent()
+            return any((
+                session.get_last_search(directory),
+                session.get_last_filter(directory)
+            ))
+        else:
+            if 'search' in self.request.keys():
+                return True
+            if 'filter' in self.request.keys():
+                return True
+            return len(self.items) != self.unfiltered_count
 
     @property
     @view.memoize

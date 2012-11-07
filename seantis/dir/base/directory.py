@@ -127,7 +127,17 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
             catalog = self.catalog
             self.items = self.catalog.items()
 
-        self.values = catalog.grouped_possible_values_counted(self.items)
+        # for the first category, count all items, for the others
+        # count the ones in the current filter (might also be all)
+        self.values = dict(
+            catalog.grouped_possible_values_counted(
+                categories=['cat1']
+            ).items() + \
+            catalog.grouped_possible_values_counted(
+                self.items, categories=['cat2', 'cat3', 'cat4']
+            ).items()
+        )
+
         self.labels = self.directory.labels()
         self.select = session.get_last_filter(self.directory)
         self.searchtext = session.get_last_search(self.directory)
@@ -199,14 +209,6 @@ class View(core.View, DirectoryCatalogMixin):
         base = self.context.absolute_url()
         base += '?filter=true&%s=%s' % (category, utils.remove_count(value))
         return base
-
-    @property
-    def filtered(self):
-        if 'search' in self.request.keys():
-            return True
-        if 'filter' in self.request.keys():
-            return True
-        return len(self.items) != self.unfiltered_count
 
     def update(self, **kwargs):
         self.items = self.catalog.items()
