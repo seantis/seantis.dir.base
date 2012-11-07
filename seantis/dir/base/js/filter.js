@@ -12,7 +12,11 @@
         // Performs a server request for possible values depending on the given
         // terms. Caches the requests if possible (not yet).
         this.query = function(terms, callback) {
-            $.getJSON(seantis.get_filter_url(), terms, callback);
+            var search_url = $('#directorySearchForm').attr('data-search-url') + '/filter';
+            if (!search_url) {
+                return;
+            }
+            $.getJSON(search_url, terms, callback);
         };
 
         // Updates the page with the result of the selected filter
