@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.2a1'
+version = '1.2b1'
 
 setup(name='seantis.dir.base',
       version=version,

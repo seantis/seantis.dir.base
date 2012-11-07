@@ -1,9 +1,10 @@
 
 # Changelog
 
-1.2 (alpha)
+1.2 (beta)
 ---
 
+- Makes catalog adaptable for better customization
 - Adds maps to items using collective.geo
 - Refactors design. Base does no longer hold it's own type.
 
