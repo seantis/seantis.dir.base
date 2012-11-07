@@ -16,6 +16,14 @@ div#directorySearch fieldset {
     float: left;
 }
 
+@media all and (max-width: 500px) {
+    #directorySearch form {
+        float: none;
+        clear: both;
+        width: auto;   
+    }   
+}
+
 .directorySearchFormSelection, 
 .visualMarginRight, 
 .directorySearchFormButtons, 

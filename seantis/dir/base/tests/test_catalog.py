@@ -1,8 +1,11 @@
+from zope.component import getAdapter
+
 from seantis.dir.base.tests import IntegrationTestCase
-from seantis.dir.base import catalog
-from seantis.dir.base.catalog import category_filter
-from seantis.dir.base.catalog import possible_values
-from seantis.dir.base.catalog import grouped_possible_values
+from seantis.dir.base.interfaces import IDirectoryCatalog
+from seantis.dir.base.catalog import is_exact_match
+
+def get_catalog(directory):
+    return getAdapter(directory, IDirectoryCatalog)
 
 class TestCatalog(IntegrationTestCase):
 
@@ -37,42 +40,44 @@ class TestCatalog(IntegrationTestCase):
     def test_category_filter(self):
 
         directory = self.toy_data()
+        catalog = get_catalog(directory)
 
-        found = category_filter(directory, dict(cat1='For Kids'))
+        found = catalog.filter(dict(cat1='For Kids'))
         self.assertEqual(len(found), 4)
 
-        found = category_filter(directory, dict(cat1='For Adults'))
+        found = catalog.filter(dict(cat1='For Adults'))
         self.assertEqual(len(found), 3)
 
-        found = category_filter(directory, dict(cat2='Toys'))
+        found = catalog.filter(dict(cat2='Toys'))
         self.assertEqual(len(found), 3)
 
-        found = category_filter(directory, dict(cat3='Lego'))
+        found = catalog.filter(dict(cat3='Lego'))
         self.assertEqual(len(found), 2)
 
-        found = category_filter(directory, dict(
+        found = catalog.filter(dict(
                 cat1='For Kids', 
                 cat2='Cartoons',
                 cat3='Mickey Mouse'
             ))
         self.assertEqual(len(found), 1)
 
-        found = category_filter(directory, dict(cat1=''))
+        found = catalog.filter(dict(cat1=''))
         self.assertEqual(len(found), 0)
 
-        found = category_filter(directory, dict(cat2=''))
+        found = catalog.filter(dict(cat2=''))
         self.assertEqual(len(found), 1)
 
-        found = category_filter(directory, dict(cat1=['For Kids', 'For Adults']))
+        found = catalog.filter(dict(cat1=['For Kids', 'For Adults']))
         self.assertEqual(len(found), 1)
-        found = category_filter(directory, dict(cat1=['For Adults', 'For Kids']))
+        found = catalog.filter(dict(cat1=['For Adults', 'For Kids']))
         self.assertEqual(len(found), 1)
 
     def test_possible_values(self):
 
         directory = self.toy_data()
+        catalog = get_catalog(directory)
 
-        possible = possible_values(directory, catalog.items(directory))
+        possible = catalog.possible_values()
         self.assertEqual(directory.all_categories(), possible.keys())
 
         self.assertEqual(len(possible['cat1']), 9)
@@ -80,19 +85,27 @@ class TestCatalog(IntegrationTestCase):
         self.assertEqual(len(possible['cat3']), 7) # Empty values are not counted
         self.assertEqual(len(possible['cat4']), 0)
 
-        found = category_filter(directory, dict(cat2='Toys'))
-        possible = possible_values(directory, found)
+        found = catalog.filter(dict(cat2='Toys'))
+        possible = catalog.possible_values(found)
 
         self.assertEqual(len(possible['cat1']), 4) # Lists in items are flattend
         self.assertEqual(len(possible['cat2']), 3) 
         self.assertEqual(len(possible['cat3']), 3)
         self.assertEqual(len(possible['cat4']), 0)
 
+        possible = catalog.possible_values(found, categories=("cat1","cat2"))
+
+        self.assertTrue('cat1' in possible)
+        self.assertTrue('cat2' in possible)
+        self.assertFalse('cat3' in possible)
+        self.assertFalse('cat4' in possible)
+
     def test_grouped_possible_values(self):
 
         directory = self.toy_data()
+        catalog = get_catalog(directory)
 
-        possible = grouped_possible_values(directory, catalog.items(directory))
+        possible = catalog.grouped_possible_values()
 
         self.assertEqual(len(possible['cat1'].keys()), 4)
         self.assertEqual(possible['cat1']['For Kids'], 4)
@@ -118,19 +131,6 @@ class TestCatalog(IntegrationTestCase):
         items = self.add_item_bulk(self.add_directory(), values)
         term = dict(cat1='far')
 
-        self.assertTrue(catalog.is_exact_match(items[0], term))
-        self.assertFalse(catalog.is_exact_match(items[1], term))
-        self.assertTrue(catalog.is_exact_match(items[2], term))
-
-    def test_cache(self):
-        directory = self.toy_data()
-
-        items = catalog._items(directory)
-        self.assertFalse(hasattr(items, '_cache_time'))
-        self.assertEqual(len(items.values()), 8)
-
-        self.logout()
-
-        items = catalog._items(directory)
-        self.assertTrue(hasattr(items, '_cache_time'))
-        self.assertEqual(len(items.values()), 0)
+        self.assertTrue(is_exact_match(items[0], term))
+        self.assertFalse(is_exact_match(items[1], term))
+        self.assertTrue(is_exact_match(items[2], term))

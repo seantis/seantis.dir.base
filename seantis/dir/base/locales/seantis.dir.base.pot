@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-09-20 07:27+0000\n"
+"POT-Creation-Date: 2012-10-19 09:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,15 +21,15 @@ msgstr ""
 msgid "1st Category Name"
 msgstr ""
 
-#: ./interfaces.py:43
+#: ./interfaces.py:53
 msgid "2nd Category Name"
 msgstr ""
 
-#: ./interfaces.py:49
+#: ./interfaces.py:69
 msgid "3rd Category Name"
 msgstr ""
 
-#: ./interfaces.py:55
+#: ./interfaces.py:85
 msgid "4th Category Name"
 msgstr ""
 
@@ -49,19 +49,19 @@ msgstr ""
 msgid "Directory Item"
 msgstr ""
 
-#: ./interfaces.py:67
+#: ./interfaces.py:107
 msgid "Enable filtering"
 msgstr ""
 
-#: ./interfaces.py:73
+#: ./interfaces.py:113
 msgid "Enable searching"
 msgstr ""
 
-#: ./templates/search.pt:27
+#: ./templates/search.pt:7
 msgid "Filter"
 msgstr ""
 
-#: ./templates/search.pt:10
+#: ./templates/search.pt:49
 msgid "Fulltext search"
 msgstr ""
 
@@ -89,7 +89,7 @@ msgstr ""
 msgid "Invalid email address"
 msgstr ""
 
-#: ./interfaces.py:61
+#: ./interfaces.py:101
 msgid "Last time a DirectoryItem was modified"
 msgstr ""
 
@@ -97,20 +97,44 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+#: ./templates/macros.pt:59
+msgid "No Results"
+msgstr ""
+
 #: ./xlsimport.py:187
 msgid "Not all required fields have a value"
 msgstr ""
 
-#: ./templates/search.pt:7
+#: ./templates/search.pt:46
 msgid "Search"
 msgstr ""
 
-#: ./interfaces.py:103
+#: ./interfaces.py:143
 msgid "Start typing and select a category. To add a new category write the name and hit enter."
 msgstr ""
 
 #: ./interfaces.py:26
 msgid "Subtitle"
+msgstr ""
+
+#: ./interfaces.py:43
+msgid "Suggested Values for the 1st Category"
+msgstr ""
+
+#: ./interfaces.py:59
+msgid "Suggested Values for the 2nd Category"
+msgstr ""
+
+#: ./interfaces.py:75
+msgid "Suggested Values for the 3rd Category"
+msgstr ""
+
+#: ./interfaces.py:91
+msgid "Suggested Values for the 4th Category"
+msgstr ""
+
+#: ./interfaces.py:45
+msgid "These values are suggested when typing category values in the category items, in addition to values found in other items."
 msgstr ""
 
 #: ./xlsimport.py:35

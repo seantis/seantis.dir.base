@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-09-20 07:27+0000\n"
+"POT-Creation-Date: 2012-10-19 09:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 msgid "1st Category Name"
 msgstr "Kategorie 1"
 
-#: ./interfaces.py:43
+#: ./interfaces.py:53
 msgid "2nd Category Name"
 msgstr "Kategorie 2"
 
-#: ./interfaces.py:49
+#: ./interfaces.py:69
 msgid "3rd Category Name"
 msgstr "Kategorie 3"
 
-#: ./interfaces.py:55
+#: ./interfaces.py:85
 msgid "4th Category Name"
 msgstr "Kategorie 4"
 
@@ -46,19 +46,19 @@ msgstr "Verzeichnis"
 msgid "Directory Item"
 msgstr "Verzeichnis-Eintrag"
 
-#: ./interfaces.py:67
+#: ./interfaces.py:107
 msgid "Enable filtering"
 msgstr "Filter zeigen"
 
-#: ./interfaces.py:73
+#: ./interfaces.py:113
 msgid "Enable searching"
 msgstr "Suche zeigen"
 
-#: ./templates/search.pt:27
+#: ./templates/search.pt:7
 msgid "Filter"
 msgstr "Filtern"
 
-#: ./templates/search.pt:10
+#: ./templates/search.pt:49
 msgid "Fulltext search"
 msgstr "Volltext Suche"
 
@@ -86,7 +86,7 @@ msgstr "Ungültige XLS Datei"
 msgid "Invalid email address"
 msgstr "Ungültige Email Adresse"
 
-#: ./interfaces.py:61
+#: ./interfaces.py:101
 msgid "Last time a DirectoryItem was modified"
 msgstr "Letztes Änderungsdatum eines Verzeichniseintrages"
 
@@ -94,21 +94,45 @@ msgstr "Letztes Änderungsdatum eines Verzeichniseintrages"
 msgid "Name"
 msgstr "Name"
 
+#: ./templates/macros.pt:59
+msgid "No Results"
+msgstr "Keine Resultate"
+
 #: ./xlsimport.py:187
 msgid "Not all required fields have a value"
 msgstr "Nicht alle benötigten Felder haben einen Wert"
 
-#: ./templates/search.pt:7
+#: ./templates/search.pt:46
 msgid "Search"
 msgstr "Suchen"
 
-#: ./interfaces.py:103
+#: ./interfaces.py:143
 msgid "Start typing and select a category. To add a new category write the name and hit enter."
 msgstr "Tippen und eine Kategorie wählen. Um eine neue Kategorie zu erstellen, Text eingeben und Enter drücken."
 
 #: ./interfaces.py:26
 msgid "Subtitle"
 msgstr "Untertitel"
+
+#: ./interfaces.py:43
+msgid "Suggested Values for the 1st Category"
+msgstr "Vorschläge für die erste Kategorie"
+
+#: ./interfaces.py:59
+msgid "Suggested Values for the 2nd Category"
+msgstr "Vorschläge für die zweite Kategorie"
+
+#: ./interfaces.py:75
+msgid "Suggested Values for the 3rd Category"
+msgstr "Vorschläge für die dritte Kategorie"
+
+#: ./interfaces.py:91
+msgid "Suggested Values for the 4th Category"
+msgstr "Vorschläge für die vierte Kategorie"
+
+#: ./interfaces.py:45
+msgid "These values are suggested when typing category values in the category items, in addition to values found in other items."
+msgstr "Diese Werte werden vorgeschlagen wenn Kategorie Werte im Eintrag eingegeben werden, zusätzlich zu den Werten die in anderen Einträgen gefunden werden."
 
 #: ./xlsimport.py:35
 msgid "XLS file"

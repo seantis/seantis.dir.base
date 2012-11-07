@@ -57,26 +57,37 @@
             });
         };
 
+        // Reapplies the selections from the last run by doing a round trip
+        // to the server and filter the options accordingly. It's not the
+        // most stellar design. It grew historically.
         this.initialize = function() {
-            var selections = [];
-            for (var i = 1; i <=4; i++) {
-                var category = this.category(i);
-                selections.push(category && category.val() || null);
-            }
-            for (i = 1; i <= 4; i++) {
-                if (selections[i-1]) {
-                    var that = this;
+            var terms = this.terms(4);
+            if (!terms) return;
 
-                    this.update(i, function(index) {
-                        var oldsel = selections[index-1];
-                        if (oldsel) {
-                            var newsel = that.closest(that.options(index), oldsel);
-                            that.select(index, newsel);
-                            console.log(newsel);
-                        }
-                    });
+            var that = this;
+            terms.replay = true;
+
+            this.query(terms, function(data) {
+
+                var get_options = function(category, index) {
+                    var i = index -1;
+                    if (i < data.length) 
+                        return data[i][category];
+                    else if (index >= 1)
+                        return get_options(category, index - 1);
+                };
+
+                for (var i=2; i <= 4; i++) {
+                    var category = 'cat' + i;
+                    var options = get_options(category, i-1);
+                    
+                    that.options(i, options);
+
+                    if (category in terms) {
+                        that.select(i, that.closest(options, terms[category]));
+                    }
                 }
-            }
+            });
         };
 
         // Returns the closest value in the list. E.g 'foo (3)'' will yield
