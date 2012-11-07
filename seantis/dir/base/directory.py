@@ -73,7 +73,13 @@ class DirectoryCatalogMixin(object):
 
     @property
     def directory(self):
-        return self.context
+        if IDirectoryBase.providedBy(self.context):
+            return self.context
+        elif IDirectoryItemBase.providedBy(self.context):
+            if hasattr(IDirectoryItemBase(self.context), 'parent'):
+                return self.context.parent()
+        
+        return None
 
 class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
 
@@ -85,18 +91,8 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
     _template = grok.PageTemplateFile('templates/search.pt')
 
     @property
-    def directory(self):
-        if IDirectoryBase.providedBy(self.context):
-            return self.context
-        elif IDirectoryItemBase.providedBy(self.context):
-            if hasattr(IDirectoryItemBase(self.context), 'parent'):
-                return self.context.parent()
-        
-        return None
-
-    @property
-    def url(self):
-        return self.context.absolute_url()
+    def search_url(self):
+        return self.directory.absolute_url()
 
     def remove_count(self, text):
         return utils.remove_count(text);
