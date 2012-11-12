@@ -31,10 +31,6 @@ div#directorySearch fieldset {
     width: 200px;
 }
 
-.directorySearchFormButtons input {
-    width: 75px;
-}
-
 .seantis-directory-category,
 #searchtext {
     width: 180px;

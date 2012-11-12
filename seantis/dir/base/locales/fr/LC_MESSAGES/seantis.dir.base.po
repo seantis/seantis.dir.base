@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-10-19 09:30+0000\n"
+"POT-Creation-Date: 2012-11-12 11:21+0000\n"
 "PO-Revision-Date: 2012-09-18 11:43+0100\n"
 "Last-Translator: Fabian Reinhard <fabian.reinhard@seantis.ch>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,7 +59,7 @@ msgstr "Activer la recherche"
 msgid "Filter"
 msgstr "Recherche avancée"
 
-#: ./templates/search.pt:49
+#: ./templates/search.pt:53
 msgid "Fulltext search"
 msgstr "Recherche de texte complet"
 
@@ -103,7 +103,11 @@ msgstr ""
 msgid "Not all required fields have a value"
 msgstr "Pas tous les champs obligatoires ont une valeur"
 
-#: ./templates/search.pt:46
+#: ./templates/search.pt:39
+msgid "Reset"
+msgstr ""
+
+#: ./templates/search.pt:50
 msgid "Search"
 msgstr "Recherche"
 

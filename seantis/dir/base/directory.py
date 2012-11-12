@@ -94,6 +94,10 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
     def search_url(self):
         return self.directory.absolute_url()
 
+    @property
+    def reset_url(self):
+        return self.directory.absolute_url() + '?reset=true'
+
     def remove_count(self, text):
         return utils.remove_count(text);
 
@@ -141,6 +145,24 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
         self.labels = self.directory.labels()
         self.select = session.get_last_filter(self.directory)
         self.searchtext = session.get_last_search(self.directory)
+
+    @property
+    def show_filter_reset(self):       
+        show_reset = bool(len([v for v in self.select.values() if v != '!empty']))
+
+        if not show_reset and not self.context.enable_search:
+            show_reset = self.show_search_reset
+            
+        return show_reset
+
+    @property
+    def show_search_reset(self):
+        show_reset = bool(self.searchtext)
+
+        if not show_reset and not self.context.enable_filter:
+            show_reset = self.show_filter_reset
+
+        return show_reset
 
     def render(self, **kwargs):
         if self.available():

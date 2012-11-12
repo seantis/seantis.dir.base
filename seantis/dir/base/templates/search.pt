@@ -33,7 +33,11 @@
                 </div>
                 <div class="directorySearchFormButtons">
                     <div>
+                    <span>
                         <input type="submit" class="context" name="filter" i18n:attributes="value Filter" />
+                    </span><span>
+                        <input type="submit" name="reset" tal:condition="viewlet/show_filter_reset" i18n:translate="" value="Reset" i18n:attributes="value" />
+                    </span>
                     </div>
                 </div>
             </fieldset>
@@ -52,7 +56,11 @@
                 </div>
                 <div class="directorySearchFormButtons">
                     <div>
+                    <span>
                         <input type="submit" class="context" name="search" i18n:attributes="value Search" />
+                    </span><span>
+                        <input type="submit" name="reset" tal:condition="viewlet/show_search_reset" i18n:translate="" value="Reset" i18n:attributes="value" />
+                    </span>
                     </div>
                 </div>
             </fieldset>
