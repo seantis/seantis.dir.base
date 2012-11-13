@@ -133,18 +133,21 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
 
         # for the first category, count all items, for the others
         # count the ones in the current filter (might also be all)
-        self.values = dict(
-            catalog.grouped_possible_values_counted(
-                categories=['cat1']
-            ).items() + \
-            catalog.grouped_possible_values_counted(
+        self.all_values = catalog.grouped_possible_values_counted()
+
+        self.values = dict(cat1=self.all_values['cat1'])
+        self.values.update(catalog.grouped_possible_values_counted(
                 self.items, categories=['cat2', 'cat3', 'cat4']
-            ).items()
-        )
+        ))
 
         self.labels = self.directory.labels()
         self.select = session.get_last_filter(self.directory)
         self.searchtext = session.get_last_search(self.directory)
+
+    def category_cache(self, cat):
+        """Returns the given categories as json for the client side cache."""
+
+        return json.dumps(self.all_values[cat])
 
     @property
     def show_filter_reset(self):       

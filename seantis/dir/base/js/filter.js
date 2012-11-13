@@ -21,7 +21,6 @@
 
         // Updates the page with the result of the selected filter
         this.update = function(eventindex, callback) {
-            this.cache_all(); // Cache the initial full lists of values
 
             // If there's no selection, reset the values
             var first = this.first();
@@ -239,29 +238,9 @@
             }
         };
 
-        // Caches all categories in the respective data attribute
-        this.cache_all = function() {
-            for (var ix = 1; ix <= this.categories.length; ix++) {
-                if (!this.category_cached(ix)) {
-                    this.cache_category(ix);
-                }
-            }
-        };
-
-        // Caches the given category in its data attribute
-        this.cache_category = function(index) {
-            this.category(index).data('cache', this.options(index));
-        };
-
         // Returns the cache of the given category
         this.category_cache = function(index) {
             return this.category(index).data('cache');
-        };
-
-        // Returns true if the given category has a cache
-        this.category_cached = function(index) {
-            var data = this.category(index).data('cache');
-            return typeof data !== 'undefined';
         };
 
         // Resets all categories from cache
