@@ -106,7 +106,6 @@ class DirectoryCatalog(grok.Adapter):
         return result
 
     def filter(self, term):
-
         results = self.query(categories={'query':term.values(), 'operator':'and'})
         filter_key = lambda item: is_exact_match(item, term)
 

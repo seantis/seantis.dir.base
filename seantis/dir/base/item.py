@@ -84,7 +84,8 @@ class DirectoryItem(Container):
         items = []
         labels = self.parent().labels()
         for cat in labels.keys():
-            items.append((cat, labels[cat], getattr(self, cat) or u''))
+            value = hasattr(self, cat) and getattr(self, cat) or u''
+            items.append((cat, labels[cat], value))
         
         return items
 
