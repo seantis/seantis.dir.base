@@ -9,6 +9,10 @@ An example, offering a directory of contacts can be found here:
 
 This module is probably only really useful for anyone if used as a base to build on. By itself it only offers the categorization and search functionalities.
 
+# Build Status
+
+[![Build Status](https://secure.travis-ci.org/seantis/seantis.dir.base.png)](https://travis-ci.org/seantis/seantis.dir.base)
+
 # Dependencies
 
 seantis.dir.base relies on Plone 4.0+ with the following modules:
