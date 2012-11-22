@@ -12,6 +12,9 @@ from collective.dexteritytextindexer import searchable
 
 from seantis.dir.base import _
 
+class IDirectoryPage(Interface):
+    """Marker interface for directory views."""
+
 class IDirectoryRoot(form.Schema):
     """Root interface for directories and items alike."""
 

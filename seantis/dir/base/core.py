@@ -3,7 +3,7 @@ logger = logging.getLogger('seantis.dir.base')
 
 from five import grok
 
-from zope.interface import Interface
+from zope.interface import Interface, implements
 from zope.component import getUtility
 
 from plone.dexterity.schema import SCHEMA_CACHE
@@ -24,7 +24,9 @@ from seantis.dir.base import utils
 from seantis.dir.base import session
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
-from seantis.dir.base.interfaces import IDirectoryRoot, IDirectoryItemBase, IMapMarker
+from seantis.dir.base.interfaces import (
+    IDirectoryPage, IDirectoryRoot, IDirectoryItemBase, IMapMarker
+)
 
 class DirectoryMapLayer(MapLayer):
     """ Defines the map layer for markers shown in the directory view. Pretty
@@ -252,6 +254,9 @@ class DirectoryFieldWidgetsAddForm(DirectoryFieldWidgets):
     grok.adapts(IAddForm, IFormLayer, Interface)
 
 class View(grok.View):
+
+    implements(IDirectoryPage)
+
     grok.baseclass()
 
     def update(self, **kwargs):
