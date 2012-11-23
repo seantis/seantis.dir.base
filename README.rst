@@ -1,4 +1,5 @@
-# Introduction
+Introduction
+============
 
 seantis.dir.base allows to put dexterity objects into 1-4 categories, showing those categories in a browsable and searchable catalog.
 
@@ -9,11 +10,13 @@ An example, offering a directory of contacts can be found here:
 
 This module is probably only really useful for anyone if used as a base to build on. By itself it only offers the categorization and search functionalities.
 
-# Build Status
+Build Status
+============
 
 [![Build Status](https://secure.travis-ci.org/seantis/seantis.dir.base.png)](https://travis-ci.org/seantis/seantis.dir.base)
 
-# Installation
+Installation
+============
 
 1. Add dexterity to Plone by adding the following Known Good Set to your buildout.cfg:
 
@@ -40,17 +43,20 @@ This module is probably only really useful for anyone if used as a base to build
 
 4. Install seantis.dir.base using portal_quickinstaller
 
-# Links
+Links
+=====
 
 - Main github project repository: https://github.com/seantis/seantis.dir.base
 - Issue tracker: https://github.com/seantis/seantis.dir.base/issues
 - Package on pypi: http://pypi.python.org/pypi/seantis.dir.base
 - Continuous integration: https://travis-ci.org/seantis/seantis.dir.base
 
-# License
+License
+=======
 
 seantis.dir.base is released under GPL v2
 
-# Maintainer
+Maintainer
+==========
 
 seantis.dir.base is maintained by Seantis GmbH (www.seantis.ch)
