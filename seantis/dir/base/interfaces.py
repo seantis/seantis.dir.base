@@ -12,11 +12,14 @@ from collective.dexteritytextindexer import searchable
 
 from seantis.dir.base import _
 
+
 class IDirectoryPage(Interface):
     """Marker interface for directory views."""
 
+
 class IDirectoryRoot(form.Schema):
     """Root interface for directories and items alike."""
+
 
 class IDirectoryBase(IDirectoryRoot):
     """Container for all directory items."""
@@ -29,13 +32,13 @@ class IDirectoryBase(IDirectoryRoot):
             title=_(u'Subtitle'),
             required=False
         )
-    
+
     description = Text(
             title=_(u'Description'),
             required=False,
             default=u''
         )
-    
+
     cat1 = TextLine(
             title=_(u'1st Category Name'),
             required=False,
@@ -98,7 +101,7 @@ class IDirectoryBase(IDirectoryRoot):
                 u'category items, in addition to values found in other items.'
             ),
             value_type=TextLine(),
-        )  
+        )
 
     child_modified = Datetime(
             title=_(u'Last time a DirectoryItem was modified'),
@@ -118,8 +121,10 @@ class IDirectoryBase(IDirectoryRoot):
             default=True
         )
 
+
 class IDirectory(IDirectoryBase):
     pass
+
 
 class IDirectoryItemBase(IDirectoryRoot):
     """Single entry of a directory. Usually you would not want to directly
@@ -172,14 +177,16 @@ class IDirectoryItemBase(IDirectoryRoot):
             required=False,
         )
 
+
 class IDirectoryItem(IDirectoryItemBase):
     """Marker interface for IDirectory. Exists foremostely to allow
-    the overriding of adapters/views in seantis.dir.base. (Given a 
-    number of adapters the most specific is used. So if there's an 
+    the overriding of adapters/views in seantis.dir.base. (Given a
+    number of adapters the most specific is used. So if there's an
     adapter for IDirectoryItem and IDirectoryItemBase, the former
     takes precedence.
 
     """
+
 
 class IDirectoryCatalog(Interface):
     """Describes the adapter interface for directory objects that deals
@@ -211,7 +218,7 @@ class IDirectoryCatalog(Interface):
         """Returns a list of items that turn up in the fulltext search."""
 
     def sortkey(self):
-        """Returns a sort keyfunction to sort the items of the catalog. 
+        """Returns a sort keyfunction to sort the items of the catalog.
         The items, filter and search functions return the items roted
         by this key.
 
@@ -248,8 +255,8 @@ class IDirectoryCatalog(Interface):
         """
 
     def grouped_possible_values_counted(self, items=None, categories=None):
-        """Same as possible_values, but with the values being a list of 
-        categories as strings, containing a count. 
+        """Same as possible_values, but with the values being a list of
+        categories as strings, containing a count.
 
         e.g.
             { 'cat1': ["Rock (2)", "Pop (2)"] }
@@ -269,6 +276,7 @@ class IFieldMapExtender(Interface):
         the directory item is set as context.
 
         """
+
 
 class IMapMarker(Interface):
     """Interface for providing the URL of the marker image on the map."""

@@ -8,12 +8,12 @@ from zope.app.container.interfaces import IObjectMovedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from plone.dexterity.content import Container
-from Products.CMFCore.interfaces import IActionSucceededEvent 
+from Products.CMFCore.interfaces import IActionSucceededEvent
 from collective.geo.contentlocations.geostylemanager import GeoStyleManager
 
 from zope.annotation.interfaces import IAttributeAnnotatable
 from collective.geo.geographer.interfaces import (
-    IGeoreferenceable, 
+    IGeoreferenceable,
     IGeoreferenced
 )
 from collective.geo.geographer.geo import GeoreferencingAnnotator
@@ -26,6 +26,7 @@ from seantis.dir.base.interfaces import IDirectoryItemBase
 # Subscribe to every event that potentially has an impact on the
 # caching in order to trigger a cache invalidation.
 
+
 @grok.subscribe(IDirectoryItemBase, IObjectMovedEvent)
 def onMovedItem(item, event):
     # changed may not necesseraly be there (e.g. the object is
@@ -34,15 +35,18 @@ def onMovedItem(item, event):
         item.changed(event.oldParent)
         item.changed(event.newParent)
 
+
 @grok.subscribe(IDirectoryItemBase, IObjectModifiedEvent)
 def onModifiedItem(item, event):
     if hasattr(item, 'changed'):
         item.changed(item.parent())
 
+
 @grok.subscribe(IDirectoryItemBase, IActionSucceededEvent)
 def onChangedWorkflowState(item, event):
     if hasattr(item, 'changed'):
         item.changed(item.parent())
+
 
 class DirectoryItem(Container):
     """Represents objects created using IDirectoryItem."""
@@ -86,7 +90,7 @@ class DirectoryItem(Container):
         for cat in labels.keys():
             value = hasattr(self, cat) and getattr(self, cat) or u''
             items.append((cat, labels[cat], value))
-        
+
         return items
 
     def keywords(self, categories=None):
@@ -132,15 +136,16 @@ class DirectoryItem(Container):
     def set_coordinates_json(self, json_string):
         if json_string is None or not json_string.strip():
             return self.remove_coordinates()
-        
+
         self.set_coordinates(*json.loads(json_string))
-        
+
     coordinates_json = property(get_coordinates_json, set_coordinates_json)
+
 
 class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
 
     grok.context(IDirectoryItemBase)
-    grok.provides(IGeoCustomFeatureStyle) 
+    grok.provides(IGeoCustomFeatureStyle)
 
     def __init__(self, context):
         super(DirectoryItemGeoStyleAdapter, self).__init__(context)
@@ -151,9 +156,11 @@ class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
         self.geostyles['display_properties'] = []
         self.geostyles['use_custom_styles'] = True
 
+
 class DirectoryItemViewletManager(grok.ViewletManager):
     grok.context(Interface)
     grok.name('seantis.dir.base.item.viewletmanager')
+
 
 class DirectoryItemViewlet(grok.Viewlet):
     grok.context(IDirectoryItemBase)

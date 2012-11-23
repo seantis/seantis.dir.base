@@ -6,7 +6,7 @@ from Products.CMFCore.utils import getToolByName
 from zope.ramcache.ram import RAMCache
 
 from seantis.dir.base.interfaces import (
-    IDirectoryItemBase, 
+    IDirectoryItemBase,
     IDirectoryBase,
     IDirectoryCatalog
 )
@@ -17,34 +17,38 @@ item_cache.update(maxAge=0, maxEntries=10000)
 
 uncached = object()
 
+
 def directory_cachekey(directory):
-    return ''.join(map(str,(
+    return ''.join(map(str, (
         directory.id, 
         directory.modified(), 
         directory.child_modified
     )))
 
+
 def directory_item_cachekey(directory, item):
     return directory_cachekey(directory) + str(item.getRID())
+
 
 def get_object(directory, result):
 
     cachekey = directory_item_cachekey(directory, result)
 
     obj = item_cache.query(cachekey, default=uncached)
-    
+
     if obj is uncached:
         obj = result.getObject()
         item_cache.set(obj, cachekey)
-    
+
     return obj
+
 
 def is_exact_match(item, term):
     """Returns true if a given item is an exact match of term. Term is the same
-    as in category_search. 
+    as in category_search.
 
     """
-    
+
     for key in term.keys():
         # empty keys are like missing keys
         if term[key] == '!empty':
@@ -70,6 +74,7 @@ def is_exact_match(item, term):
             return False
 
     return True
+
 
 class DirectoryCatalog(grok.Adapter):
 
@@ -106,7 +111,7 @@ class DirectoryCatalog(grok.Adapter):
         return result
 
     def filter(self, term):
-        results = self.query(categories={'query':term.values(), 'operator':'and'})
+        results = self.query(categories={'query': term.values(), 'operator': 'and'})
         filter_key = lambda item: is_exact_match(item, term)
 
         return sorted(
@@ -115,11 +120,11 @@ class DirectoryCatalog(grok.Adapter):
         )
 
     def search(self, text):
-        
+
         # make the search fuzzyish (cannot do wildcard in front)
         if not text.endswith('*'):
             text += '*'
-     
+
         return sorted(
             imap(self.get_object, self.query(SearchableText=text)),
             key=self.sortkey()
@@ -127,16 +132,16 @@ class DirectoryCatalog(grok.Adapter):
 
     def possible_values(self, items=None, categories=None):
         """Returns a dictionary with the keys being the categories of the directory,
-        filled with a list of all possible values for each category. If an item 
-        contains a list of values (as opposed to a single string) those values 
+        filled with a list of all possible values for each category. If an item
+        contains a list of values (as opposed to a single string) those values
         flattened. In other words, there is no hierarchy in the resulting list.
 
         """
         items = items or self.items()
 
         categories = categories or self.directory.all_categories()
-        values = dict([(cat,list()) for cat in categories])
-        
+        values = dict([(cat, list()) for cat in categories])
+
         for item in items:
             for cat in values.keys():
                 for word in item.keywords(categories=(cat,)):
@@ -175,19 +180,20 @@ class DirectoryCatalog(grok.Adapter):
             counted = []
             for text, count in values.items():
                 counted.append(utils.add_count(text, count))
-            
+
             result[category] = sorted(counted, key=utils.unicode_collate_sortkey())
 
         return result
 
+
 def children(folder, portal_type):
     """Returns the descendants of a folder that match the given portal type."""
-    
+
     catalog = getToolByName(folder, 'portal_catalog')
     path = '/'.join(folder.getPhysicalPath())
-    
+
     results = catalog(
-        path={'query': path, 'depth':1}, 
+        path={'query': path, 'depth': 1},
         portal_type=portal_type
     )
 

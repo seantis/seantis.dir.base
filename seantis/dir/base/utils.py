@@ -15,6 +15,7 @@ collator = pyuca.Collator(allkeys)
 
 print 'loaded collator'
 
+
 def flatten(l):
     """Generator for flattening irregularly nested lists. 'Borrowed' from here:
     http://stackoverflow.com/questions/2158395/flatten-an-irregular-list-of-lists-in-python
@@ -27,12 +28,14 @@ def flatten(l):
         else:
             yield el
 
+
 def get_interface_fields(interface):
     """ Retrieve the field values from a schema interface. Returns a dictionary
     with the keys being the field names and the values being the fields.
 
     """
     return dict(getFieldsInOrder(interface))
+
 
 def anonymousHasRight(folder, right='View'):
     """
@@ -58,15 +61,18 @@ def anonymousHasRight(folder, right='View'):
                 selected = not not p['selected']
                 return selected
 
+
 def get_current_language(context, request):
     """Returns the current language"""
     context = aq_inner(context)
     portal_state = getMultiAdapter((context, request), name=u'plone_portal_state')
     return portal_state.language()
 
+
 def add_count(text, count):
     """Adds a count to a text."""
     return '%s (%i)' % (text, count)
+
 
 def remove_count(text):
     """Removes the count from with_count from a text."""
@@ -76,13 +82,15 @@ def remove_count(text):
     else:
         return text[:pos]
 
+
 def translate(context, request, text):
     lang = get_current_language(context, request)
     return i18n.translate(text, target_language=lang)
 
+
 def unicode_collate_sortkey():
     """ Returns a sort function to sanely sort unicode values.
-    
+
     A more exact solution would be to use pyUCA but that relies on an external
     C Library and is more complicated
 
@@ -98,6 +106,7 @@ def unicode_collate_sortkey():
 
     return collator.sort_key
 
+
 def get_marker_url(item, letter=None):
     baseurl = item.absolute_url()
     imagedir = "/++resource++seantis.dir.base.images"
@@ -108,12 +117,14 @@ def get_marker_url(item, letter=None):
 
     return baseurl + imagedir + image + '.png'
 
+
 # loving this: http://stackoverflow.com/a/1012089/138103
 def previous_and_next(some_iterable):
     prevs, items, nexts = tee(some_iterable, 3)
     prevs = chain([None], prevs)
     nexts = chain(islice(nexts, 1, None), [None])
     return izip(prevs, items, nexts)
+
 
 def naive_time(fn):
     def wrapper(*args, **kwargs):

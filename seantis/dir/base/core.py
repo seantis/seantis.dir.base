@@ -28,6 +28,7 @@ from seantis.dir.base.interfaces import (
     IDirectoryPage, IDirectoryRoot, IDirectoryItemBase, IMapMarker
 )
 
+
 class DirectoryMapLayer(MapLayer):
     """ Defines the map layer for markers shown in the directory view. Pretty
     much equal to the KMLMapLayer, but with optional zooming and letter
@@ -46,7 +47,7 @@ class DirectoryMapLayer(MapLayer):
         title = self.context.Title().replace("'", "\\'")
         if isinstance(title, str):
             title = title.decode('utf-8')
-        
+
         context_url = self.context.absolute_url()
         if not context_url.endswith('/'):
             context_url += '/'
@@ -64,6 +65,7 @@ class DirectoryMapLayer(MapLayer):
 
 letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+
 class LetterMapMarker(grok.Adapter):
 
     grok.context(IDirectoryItemBase)
@@ -75,8 +77,9 @@ class LetterMapMarker(grok.Adapter):
         """
         return utils.get_marker_url(self.context, letter)
 
+
 class KMLDocument(kmldocument.KMLDocument):
-    
+
     @property
     def marker_url(self):
         letter = self.request.get('letter', None) or None
@@ -93,14 +96,15 @@ class KMLDocument(kmldocument.KMLDocument):
 
         return features
 
+
 class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
     """ Adapter that hooks into the widget manager of z3c.forms to
-    adjust categories to match the parents of items in add and edit forms. 
+    adjust categories to match the parents of items in add and edit forms.
 
     """
 
     grok.adapts(IFieldsForm, IFormLayer, IDirectoryRoot)
-    
+
     def __init__(self, form, request, context):
         self.form = form
         self.context = context
@@ -163,7 +167,7 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         # add forms can't be adapted by the schema interface (they
         # implement the folder interface, not the type interface)
         # -> skip those
-        if not self.hook_form: 
+        if not self.hook_form:
             return
 
         # remove / rename category fields
@@ -184,7 +188,7 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
             del self[key]
 
         if key in self.form.widgets:
-            del self.form.widgets[key]                        
+            del self.form.widgets[key]
 
     def reorder_widgets(self):
         """ Reorders the widgets of the form. Must be called before the parent's
@@ -201,7 +205,7 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
             field4 = Field()
             field5 = Field()
 
-        ISchema.setTaggedValue('seantis.dir.base.order', 
+        ISchema.setTaggedValue('seantis.dir.base.order',
             ["field5", "field4", "*", "field1"]
 
         Will produce this order:
@@ -216,12 +220,12 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
             move(self.form, curr, before=prev or '*')
 
         # move fields after the star
-        for prev, curr, next in utils.previous_and_next(order[default+1:]):
+        for prev, curr, next in utils.previous_and_next(order[default + 1:]):
             move(self.form, curr, after=prev or '*')
 
     def label_widgets(self):
         """Takes a list of widgets and substitutes the labels of those representing
-        category values with the labels from the Directory. 
+        category values with the labels from the Directory.
 
         """
         # Set correct label depending on the DirectoryItem value
@@ -232,13 +236,13 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
 
     def custom_label_widgets(self):
         """Goes throught he custom labels and applies them. """
-        
+
         for field, label in self.custom_labels.items():
             if field in self.form.widgets:
                 self.form.widgets[field].label = utils.translate(
                     self.context, self.request, label
                 )
-                
+
 
 class DirectoryFieldWidgetsAddForm(DirectoryFieldWidgets):
     """ The DirectoryFieldWidgets form adapter doesn't adapt Directory creation
@@ -247,11 +251,12 @@ class DirectoryFieldWidgetsAddForm(DirectoryFieldWidgets):
 
     This subclass adapts to all add forms on the plone site. If this is indeed
     a good idea remains to be seen. It probably isn't, but it's what I got
-    so far. 
+    so far.
 
     """
 
     grok.adapts(IAddForm, IFormLayer, Interface)
+
 
 class View(grok.View):
 
@@ -275,14 +280,14 @@ class View(grok.View):
     @property
     @view.memoize
     def show_map(self):
-        """ The map is shown if the interface is defined in the 
+        """ The map is shown if the interface is defined in the
         collective.geo.settings. Said module usually sets or removes the
         interfaces. But since we define our own adapter which is always
         present we simply hide the mapwidget if the seantis.dir.base types
         are not in the content_types list. """
 
         try:
-            settings = getUtility(IRegistry).forInterface(IGeoSettings)            
+            settings = getUtility(IRegistry).forInterface(IGeoSettings)
             return self.context.portal_type in settings.geo_content_types
         except:
             logger.warn('collective.geo could not be loaded', exc_info=True)
@@ -326,7 +331,7 @@ class View(grok.View):
     @view.memoize
     def mapfields(self):
         """ Returns the mapwidgets to be shown on in the directory and item view."""
-        
+
         if not self.show_map:
             return tuple()
 

@@ -1,6 +1,7 @@
 from seantis.dir.base.tests import IntegrationTestCase
 from seantis.dir.base.interfaces import IDirectoryItem
 
+
 class TestDirectoryItem(IntegrationTestCase):
 
     def test_add(self):
@@ -20,7 +21,7 @@ class TestDirectoryItem(IntegrationTestCase):
         item.cat1 = '1'
         item.cat2 = '2'
         item.cat3 = '3'
-        item.cat4 = '4' # Will be ignored
+        item.cat4 = '4'  # Will be ignored
 
         categories = item.categories()
         self.assertEqual(len(categories), 3)
@@ -40,7 +41,7 @@ class TestDirectoryItem(IntegrationTestCase):
         item.cat1 = ['tag one', 'tag two']
         directory.cat2 = None
         directory.cat3 = None
-        
+
         categories = item.categories()
 
         self.assertEqual(len(categories), 1)

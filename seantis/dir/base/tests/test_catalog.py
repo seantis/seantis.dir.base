@@ -4,8 +4,10 @@ from seantis.dir.base.tests import IntegrationTestCase
 from seantis.dir.base.interfaces import IDirectoryCatalog
 from seantis.dir.base.catalog import is_exact_match
 
+
 def get_catalog(directory):
     return getAdapter(directory, IDirectoryCatalog)
+
 
 class TestCatalog(IntegrationTestCase):
 
@@ -26,10 +28,10 @@ class TestCatalog(IntegrationTestCase):
         )
 
         items = self.add_item_bulk(directory, values)
-        self.assertEqual(len(items), len(values))    
+        self.assertEqual(len(items), len(values))
 
         #self.assertEqual(sorted(catalog.items(directory)), sorted(items))
-        
+
         # Add the same items to another dictionary to ensure that only
         # one directory is filtered at a time
         other_dir = self.add_directory('Some other directory')
@@ -55,7 +57,7 @@ class TestCatalog(IntegrationTestCase):
         self.assertEqual(len(found), 2)
 
         found = catalog.filter(dict(
-                cat1='For Kids', 
+                cat1='For Kids',
                 cat2='Cartoons',
                 cat3='Mickey Mouse'
             ))
@@ -81,19 +83,19 @@ class TestCatalog(IntegrationTestCase):
         self.assertEqual(directory.all_categories(), possible.keys())
 
         self.assertEqual(len(possible['cat1']), 9)
-        self.assertEqual(len(possible['cat2']), 7) # Empty values are not counted 
-        self.assertEqual(len(possible['cat3']), 7) # Empty values are not counted
+        self.assertEqual(len(possible['cat2']), 7)  # Empty values are not counted
+        self.assertEqual(len(possible['cat3']), 7)  # Empty values are not counted
         self.assertEqual(len(possible['cat4']), 0)
 
         found = catalog.filter(dict(cat2='Toys'))
         possible = catalog.possible_values(found)
 
-        self.assertEqual(len(possible['cat1']), 4) # Lists in items are flattend
-        self.assertEqual(len(possible['cat2']), 3) 
+        self.assertEqual(len(possible['cat1']), 4)  # Lists in items are flattend
+        self.assertEqual(len(possible['cat2']), 3)
         self.assertEqual(len(possible['cat3']), 3)
         self.assertEqual(len(possible['cat4']), 0)
 
-        possible = catalog.possible_values(found, categories=("cat1","cat2"))
+        possible = catalog.possible_values(found, categories=("cat1", "cat2"))
 
         self.assertTrue('cat1' in possible)
         self.assertTrue('cat2' in possible)

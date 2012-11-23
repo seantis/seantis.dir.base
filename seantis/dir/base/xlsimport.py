@@ -36,6 +36,7 @@ class IImportDirectorySchema(form.Schema):
 
 IMPORTHELP = _(u"Import directory items using xls. The xls is expected to have the format defined in the template which you can <a href='#xlstemplate'>download here</a>")
 
+
 class Import(form.Form):
     label = _(u'Import directory items')
     fields = field.Fields(IImportDirectorySchema)
@@ -47,14 +48,14 @@ class Import(form.Form):
     ignoreContext = True
 
     def abort_action(self, action, messages):
-        """ Aborts the given actiona and adds the list of messages as 
+        """ Aborts the given actiona and adds the list of messages as
         error-widgets to the form.
 
         """
         form = action.form
         formcontent = form.getContent()
         request = action.request
-        
+
         for msg in messages:
             args = (Invalid(msg), request, None, None, form, formcontent)
             err = InvalidErrorViewSnippet(*args)
@@ -96,18 +97,19 @@ class Import(form.Form):
             io = StringIO(data["xls_file"].data)
             workbook = xlrd.open_workbook(file_contents=io.read())
         except (KeyError, TypeError, xlrd.XLRDError):
-            self.abort_action(action,(_(u'Invalid XLS file'),))
+            self.abort_action(action, (_(u'Invalid XLS file'),))
             return
 
         errors = []
         report_error = lambda err: errors.append(err)
-        
+
         records = len(import_xls(self.context, workbook, report_error))
 
         if errors:
             self.abort_action(action, errors)
         else:
-            self.status = _(u'Imported ${number} items', mapping={u'number':records})
+            self.status = _(u'Imported ${number} items', mapping={u'number': records})
+
 
 def import_xls(directory, workbook, error=lambda e: None):
     # Get the fieldmap defining hierarchies and the cell/field mapping
@@ -126,6 +128,7 @@ def import_xls(directory, workbook, error=lambda e: None):
     else:
         return dict()
 
+
 def generate_objects(folder, fieldmap, values, error):
     """Recursively creates the objects and its children."""
 
@@ -142,10 +145,10 @@ def generate_objects(folder, fieldmap, values, error):
             continue
 
         groupvalues = [val for val in group]
-        
+
         # For each group create the group (think folder)
         obj = generate_object(folder, fieldmap, key, groupvalues[0], error)
-        
+
         if not obj:
             continue
         else:
@@ -155,12 +158,13 @@ def generate_objects(folder, fieldmap, values, error):
         # it is best to fail hard as there is a programming error
         if not obj.isPrincipiaFolderish and fieldmap.children:
             raise FatalImportError
-        
+
         # Go through the children and add them to the folder
         for child in fieldmap.children:
             created[obj].append(generate_objects(obj, child, groupvalues, error))
 
     return created
+
 
 def generate_object(folder, fieldmap, key, objvalues, error):
     """Creates an object and adds it to the folder."""
@@ -180,9 +184,10 @@ def generate_object(folder, fieldmap, key, objvalues, error):
     # If the verification doesn't check it will grigger a rollback later
     return verify(obj, fieldmap, error) and obj or None
 
+
 def verify(obj, fieldmap, error):
     msgs = []
-    
+
     if not has_requirements(obj, fieldmap):
         msgs.append(_(u'Not all required fields have a value'))
     try:
@@ -190,8 +195,9 @@ def verify(obj, fieldmap, error):
     except Exception, e:
         msgs.append(unicode(e.message))
 
-    map(error, msgs)    
+    map(error, msgs)
     return len(msgs) == 0
+
 
 def has_requirements(obj, fieldmap):
     for field in get_required_fields(obj, fieldmap):
@@ -199,13 +205,15 @@ def has_requirements(obj, fieldmap):
             return False
         if not getattr(obj, field):
             return False
-    
+
     return True
+
 
 def get_required_fields(obj, fieldmap):
     fields = get_interface_fields(fieldmap.interface)
     return [k for k, v in fields.items() if v.required]
-    
+
+
 def add_defaults(attributes, fieldmap):
     mapfields = fieldmap.fieldmap.keys()
 
@@ -221,6 +229,7 @@ def add_defaults(attributes, fieldmap):
         default = ifields[field].default
         attributes[field] = default
 
+
 def cell2value(cell):
     """ Converts cells to string at this point. Could be extended by
     introducing module/value specific adaptors, but this is not needed atm.
@@ -232,8 +241,9 @@ def cell2value(cell):
         return u''
     elif cell.ctype == XL_CELL_NUMBER:
         return u'%0.f' % cell.value
-    
+
     raise NotImplementedError
+
 
 def get_values(workbook, fieldmap):
     """ Returns the values from the workbook orderd according to the fieldmaps
@@ -251,10 +261,10 @@ def get_values(workbook, fieldmap):
 
         if not cell(minix).value:
             break
-        
+
         cells = []
 
-        for i in range(minix, maxix+1):
+        for i in range(minix, maxix + 1):
             value = cell2value(cell(i))
 
             # Some values need to be wrapped to be useful
@@ -262,7 +272,7 @@ def get_values(workbook, fieldmap):
             cells.append(unwrapped)
 
         values.append(cells)
-    
+
     # Sort according to all keys and subkeys to allow grouping later
     keyindexes = fieldmap.keyindexes(True)
     sortfn = lambda row: ''.join([row[i].encode('utf-8') for i in keyindexes])
