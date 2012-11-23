@@ -38,7 +38,7 @@ This module is probably only really useful for anyone if used as a base to build
             ...
             zope_i18n_compile_mo_files true
 
-4. Install dexterity and seantis.dir.base using portal_quickinstaller
+4. Install seantis.dir.base using portal_quickinstaller
 
 # Links
 
