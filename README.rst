@@ -18,28 +18,28 @@ Build Status
 Installation
 ============
 
-1. Add dexterity to Plone by adding the following Known Good Set to your buildout.cfg:
+1. Add dexterity to Plone by adding the following Known Good Set to your buildout.cfg::
 
-        extends =
-            ...
-            http://dist.plone.org/release/4.2/versions.cfg
-
-2. Add the module to your instance eggs
-
-        [instance]
+    extends =
         ...
-        eggs =
-            ...
-            seantis.dir.base
+        http://dist.plone.org/release/4.2/versions.cfg
 
+2. Add the module to your instance eggs::
 
-3. Ensure that the i18n files are compiled by adding
-
-        [instance]
+    [instance]
+    ...
+    eggs =
         ...
-        environment-vars = 
-            ...
-            zope_i18n_compile_mo_files true
+        seantis.dir.base
+
+
+3. Ensure that the i18n files are compiled by adding::
+
+    [instance]
+    ...
+    environment-vars = 
+        ...
+        zope_i18n_compile_mo_files true
 
 4. Install seantis.dir.base using portal_quickinstaller
 
