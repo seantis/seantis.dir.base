@@ -57,10 +57,10 @@ class TestCatalog(IntegrationTestCase):
         self.assertEqual(len(found), 2)
 
         found = catalog.filter(dict(
-                cat1='For Kids',
-                cat2='Cartoons',
-                cat3='Mickey Mouse'
-            ))
+            cat1='For Kids',
+            cat2='Cartoons',
+            cat3='Mickey Mouse'
+        ))
         self.assertEqual(len(found), 1)
 
         found = catalog.filter(dict(cat1=''))

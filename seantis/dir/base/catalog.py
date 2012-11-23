@@ -20,8 +20,8 @@ uncached = object()
 
 def directory_cachekey(directory):
     return ''.join(map(str, (
-        directory.id, 
-        directory.modified(), 
+        directory.id,
+        directory.modified(),
         directory.child_modified
     )))
 
@@ -90,7 +90,8 @@ class DirectoryCatalog(grok.Adapter):
         """Runs a query on the catalog with default parameters set.
         Not part of the official IDirectoryCatalog interface as this is
         highly storage_backend dependent. """
-        results = self.catalog(path={'query': self.path, 'depth': 1},
+        results = self.catalog(
+            path={'query': self.path, 'depth': 1},
             object_provides=IDirectoryItemBase.__identifier__,
             **kwargs
         )
@@ -111,7 +112,9 @@ class DirectoryCatalog(grok.Adapter):
         return result
 
     def filter(self, term):
-        results = self.query(categories={'query': term.values(), 'operator': 'and'})
+        results = self.query(
+            categories={'query': term.values(), 'operator': 'and'}
+        )
         filter_key = lambda item: is_exact_match(item, term)
 
         return sorted(
@@ -131,10 +134,11 @@ class DirectoryCatalog(grok.Adapter):
         )
 
     def possible_values(self, items=None, categories=None):
-        """Returns a dictionary with the keys being the categories of the directory,
-        filled with a list of all possible values for each category. If an item
-        contains a list of values (as opposed to a single string) those values
-        flattened. In other words, there is no hierarchy in the resulting list.
+        """Returns a dictionary with the keys being the categories of the
+        directory, filled with a list of all possible values for each category.
+        If an item contains a list of values (as opposed to a single string)
+        those values flattened. In other words, there is no hierarchy in the
+        resulting list.
 
         """
         items = items or self.items()
@@ -150,9 +154,10 @@ class DirectoryCatalog(grok.Adapter):
         return values
 
     def grouped_possible_values(self, items=None, categories=None):
-        """Same as possible_values, but with the categories of the dictionary being
-        unique and each value being wrapped in a tuple with the first element
-        as the actual value and the second element as the count non-unique values.
+        """Same as possible_values, but with the categories of the dictionary
+        being unique and each value being wrapped in a tuple with the first
+        element as the actual value and the second element as the count
+        non-unique values.
 
         It's really the grouped result of possible_values.
 
@@ -181,7 +186,8 @@ class DirectoryCatalog(grok.Adapter):
             for text, count in values.items():
                 counted.append(utils.add_count(text, count))
 
-            result[category] = sorted(counted, key=utils.unicode_collate_sortkey())
+            result[category] = sorted(counted,
+                                      key=utils.unicode_collate_sortkey())
 
         return result
 

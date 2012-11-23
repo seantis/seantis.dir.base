@@ -224,8 +224,8 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
             move(self.form, curr, after=prev or '*')
 
     def label_widgets(self):
-        """Takes a list of widgets and substitutes the labels of those representing
-        category values with the labels from the Directory.
+        """Takes a list of widgets and substitutes the labels of those
+        representing category values with the labels from the Directory.
 
         """
         # Set correct label depending on the DirectoryItem value

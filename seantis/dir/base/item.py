@@ -111,7 +111,7 @@ class DirectoryItem(Container):
         return self.description and self.description.replace('\n', '<br />') or ''
 
     def has_mapdata(self):
-        return IGeoreferenced(self).type != None
+        return IGeoreferenced(self).type is not None
 
     def get_coordinates(self):
         return GeoManager(self).getCoordinates()

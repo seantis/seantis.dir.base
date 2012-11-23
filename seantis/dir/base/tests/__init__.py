@@ -3,6 +3,7 @@ import random
 from seantis.dir.base.tests.layer import Layer
 from Products.PloneTestCase.ptc import PloneTestCase
 
+
 class IntegrationTestCase(PloneTestCase):
     layer = Layer
 
@@ -21,8 +22,8 @@ class IntegrationTestCase(PloneTestCase):
         for i, val in enumerate(values):
             name = '%i' % ids[i]
             item = self.add_item(directory, name)
-            for i in xrange(1, len(val)+1):
-                setattr(item, 'cat%i' % i, val[i-1])
+            for i in xrange(1, len(val) + 1):
+                setattr(item, 'cat%i' % i, val[i - 1])
             items.append(item)
 
         return items

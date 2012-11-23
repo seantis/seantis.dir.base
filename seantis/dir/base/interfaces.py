@@ -25,101 +25,101 @@ class IDirectoryBase(IDirectoryRoot):
     """Container for all directory items."""
 
     title = TextLine(
-            title=_(u'Name'),
-        )
+        title=_(u'Name'),
+    )
 
     subtitle = TextLine(
-            title=_(u'Subtitle'),
-            required=False
-        )
+        title=_(u'Subtitle'),
+        required=False
+    )
 
     description = Text(
-            title=_(u'Description'),
-            required=False,
-            default=u''
-        )
+        title=_(u'Description'),
+        required=False,
+        default=u''
+    )
 
     cat1 = TextLine(
-            title=_(u'1st Category Name'),
-            required=False,
-            default=u''
-        )
+        title=_(u'1st Category Name'),
+        required=False,
+        default=u''
+    )
 
     cat1_suggestions = List(
-            title=_(u'Suggested Values for the 1st Category'),
-            required=False,
-            description=_(
-                u'These values are suggested when typing category values in the '
-                u'category items, in addition to values found in other items.'
-            ),
-            value_type=TextLine(),
-        )
+        title=_(u'Suggested Values for the 1st Category'),
+        required=False,
+        description=_(
+            u'These values are suggested when typing category values in the '
+            u'category items, in addition to values found in other items.'
+        ),
+        value_type=TextLine(),
+    )
 
     cat2 = TextLine(
-            title=_(u'2nd Category Name'),
-            required=False,
-            default=u''
-        )
+        title=_(u'2nd Category Name'),
+        required=False,
+        default=u''
+    )
 
     cat2_suggestions = List(
-            title=_(u'Suggested Values for the 2nd Category'),
-            required=False,
-            description=_(
-                u'These values are suggested when typing category values in the '
-                u'category items, in addition to values found in other items.'
-            ),
-            value_type=TextLine(),
-        )
+        title=_(u'Suggested Values for the 2nd Category'),
+        required=False,
+        description=_(
+            u'These values are suggested when typing category values in the '
+            u'category items, in addition to values found in other items.'
+        ),
+        value_type=TextLine(),
+    )
 
     cat3 = TextLine(
-            title=_(u'3rd Category Name'),
-            required=False,
-            default=u''
-        )
+        title=_(u'3rd Category Name'),
+        required=False,
+        default=u''
+    )
 
     cat3_suggestions = List(
-            title=_(u'Suggested Values for the 3rd Category'),
-            required=False,
-            description=_(
-                u'These values are suggested when typing category values in the '
-                u'category items, in addition to values found in other items.'
-            ),
-            value_type=TextLine(),
-        )
+        title=_(u'Suggested Values for the 3rd Category'),
+        required=False,
+        description=_(
+            u'These values are suggested when typing category values in the '
+            u'category items, in addition to values found in other items.'
+        ),
+        value_type=TextLine(),
+    )
 
     cat4 = TextLine(
-            title=_(u'4th Category Name'),
-            required=False,
-            default=u''
-        )
+        title=_(u'4th Category Name'),
+        required=False,
+        default=u''
+    )
 
     cat4_suggestions = List(
-            title=_(u'Suggested Values for the 4th Category'),
-            required=False,
-            description=_(
-                u'These values are suggested when typing category values in the '
-                u'category items, in addition to values found in other items.'
-            ),
-            value_type=TextLine(),
-        )
+        title=_(u'Suggested Values for the 4th Category'),
+        required=False,
+        description=_(
+            u'These values are suggested when typing category values in the '
+            u'category items, in addition to values found in other items.'
+        ),
+        value_type=TextLine(),
+    )
 
     child_modified = Datetime(
-            title=_(u'Last time a DirectoryItem was modified'),
-            required=False,
-            readonly=True
-        )
+        title=_(u'Last time a DirectoryItem was modified'),
+        required=False,
+        readonly=True
+    )
 
     enable_filter = Bool(
-            title=_(u'Enable filtering'),
-            required=True,
-            default=True
-        )
+        title=_(u'Enable filtering'),
+        required=True,
+        default=True
+    )
 
     enable_search = Bool(
-            title=_(u'Enable searching'),
-            required=True,
-            default=True
-        )
+        title=_(u'Enable searching'),
+        required=True,
+        default=True
+    )
 
 
 class IDirectory(IDirectoryBase):
@@ -134,48 +134,52 @@ class IDirectoryItemBase(IDirectoryRoot):
 
     searchable('title')
     title = TextLine(
-            title=_(u'Name'),
-        )
+        title=_(u'Name'),
+    )
 
     searchable('description')
     description = Text(
-            title=_(u'Description'),
-            required=False,
-            default=u'',
-            missing_value=u''
-        )
+        title=_(u'Description'),
+        required=False,
+        default=u'',
+        missing_value=u''
+    )
 
     searchable('cat1')
     cat1 = List(
-            title=_(u'1st Category Name'),
-            description=_(u'Start typing and select a category. To add a new category write the name and hit enter.'),
-            value_type=TextLine(),
-            required=False,
-        )
+        title=_(u'1st Category Name'),
+        description=_(u'Start typing and select a category. '
+                      u'To add a new category write the name and hit enter.'),
+        value_type=TextLine(),
+        required=False,
+    )
 
     searchable('cat2')
     cat2 = List(
-            title=_(u'2nd Category Name'),
-            description=_(u'Start typing and select a category. To add a new category write the name and hit enter.'),
-            value_type=TextLine(),
-            required=False,
-        )
+        title=_(u'2nd Category Name'),
+        description=_(u'Start typing and select a category. '
+                      u'To add a new category write the name and hit enter.'),
+        value_type=TextLine(),
+        required=False,
+    )
 
     searchable('cat3')
     cat3 = List(
-            title=_(u'3rd Category Name'),
-            description=_(u'Start typing and select a category. To add a new category write the name and hit enter.'),
-            value_type=TextLine(),
-            required=False,
-        )
+        title=_(u'3rd Category Name'),
+        description=_(u'Start typing and select a category. '
+                      u'To add a new category write the name and hit enter.'),
+        value_type=TextLine(),
+        required=False,
+    )
 
     searchable('cat4')
     cat4 = List(
-            title=_(u'4th Category Name'),
-            description=_(u'Start typing and select a category. To add a new category write the name and hit enter.'),
-            value_type=TextLine(),
-            required=False,
-        )
+        title=_(u'4th Category Name'),
+        description=_(u'Start typing and select a category. '
+                      u'To add a new category write the name and hit enter.'),
+        value_type=TextLine(),
+        required=False,
+    )
 
 
 class IDirectoryItem(IDirectoryItemBase):

@@ -140,7 +140,7 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
 
         self.values = dict(cat1=self.all_values['cat1'])
         self.values.update(catalog.grouped_possible_values_counted(
-                self.items, categories=['cat2', 'cat3', 'cat4']
+            self.items, categories=['cat2', 'cat3', 'cat4']
         ))
 
         self.labels = self.directory.labels()
@@ -181,7 +181,7 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
             if self.view.hide_search_viewlet:
                 return False
 
-        return self.directory != None
+        return self.directory is not None
 
 
 class View(core.View, DirectoryCatalogMixin):
