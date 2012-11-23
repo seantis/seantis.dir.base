@@ -11,7 +11,10 @@ setup(name='seantis.dir.base',
       # Get more strings from
       # http://pypi.python.org/pypi?:action=list_classifiers
       classifiers=[
-        "Framework :: Plone",
+        'Framework :: Plone',
+        'Framework :: Plone :: 4.2',
+        'Intended Audience :: Developers',
+        'Topic :: Software Development :: Libraries :: Python Modules',
         "Programming Language :: Python",
         ],
       keywords='directory plone dexterity',
