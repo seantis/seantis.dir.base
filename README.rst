@@ -5,8 +5,7 @@ seantis.dir.base allows to put dexterity objects into 1-4 categories, showing th
 
 The idea of this plone module is to provide all basic functionality needed to categorize, search and filter objects. These objects may be extended with custom fields using dexterity.
 
-An example, offering a directory of contacts can be found here:
-[https://github.com/seantis/seantis.dir.contacts](https://github.com/seantis/seantis.dir.contacts)
+An example, offering a directory of contacts can be found here: https://github.com/seantis/seantis.dir.contacts
 
 This module is probably only really useful for anyone if used as a base to build on. By itself it only offers the categorization and search functionalities.
 
@@ -14,7 +13,7 @@ Build Status
 ============
 
 .. image:: https://secure.travis-ci.org/seantis/seantis.dir.base.png
-   target: https://travis-ci.org/seantis/seantis.dir.base
+   :target: https://travis-ci.org/seantis/seantis.dir.base
 
 Installation
 ============
