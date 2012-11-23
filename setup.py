@@ -3,6 +3,10 @@ import os
 
 version = '1.2b1'
 
+tests_require = [
+    'collective.testcaselayer',
+    ]
+
 setup(name='seantis.dir.base',
       version=version,
       description="Directory module for Plone using Dexterity",
@@ -28,7 +32,6 @@ setup(name='seantis.dir.base',
           'Plone',
           'plone.app.dexterity',
           'collective.autopermission',
-          'collective.testcaselayer',
           'plone.behavior',
           'plone.directives.form',
           'collective.dexteritytextindexer',
@@ -41,6 +44,8 @@ setup(name='seantis.dir.base',
           'collective.geo.openlayers',
           'collective.geo.kml',
       ],
+      tests_require=tests_require,
+      extras_require=dict(tests=tests_require),
       entry_points="""
       [z3c.autoinclude.plugin]
       target = plone
