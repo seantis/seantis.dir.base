@@ -13,7 +13,8 @@ This module is probably only really useful for anyone if used as a base to build
 Build Status
 ============
 
-[![Build Status](https://secure.travis-ci.org/seantis/seantis.dir.base.png)](https://travis-ci.org/seantis/seantis.dir.base)
+.. image:: https://secure.travis-ci.org/seantis/seantis.dir.base.png
+   target: https://travis-ci.org/seantis/seantis.dir.base
 
 Installation
 ============
