@@ -13,23 +13,13 @@ This module is probably only really useful for anyone if used as a base to build
 
 [![Build Status](https://secure.travis-ci.org/seantis/seantis.dir.base.png)](https://travis-ci.org/seantis/seantis.dir.base)
 
-# Dependencies
-
-seantis.dir.base relies on Plone 4.0+ with the following modules:
-    plone.app.dexterity
-    plone.behavior
-    plone.directives.form
-    collective.dexteritytextindexer
-    xlrd
-    xlwt
-
 # Installation
 
 1. Add dexterity to Plone by adding the following Known Good Set to your buildout.cfg:
 
         extends =
             ...
-            http://good-py.appspot.com/release/dexterity/1.1?plone=4.1.2
+            http://dist.plone.org/release/4.2/versions.cfg
 
 2. Add the module to your instance eggs
 
@@ -49,6 +39,13 @@ seantis.dir.base relies on Plone 4.0+ with the following modules:
             zope_i18n_compile_mo_files true
 
 4. Install dexterity and seantis.dir.base using portal_quickinstaller
+
+# Links
+
+- Main github project repository: https://github.com/seantis/seantis.dir.base
+- Issue tracker: https://github.com/seantis/seantis.dir.base/issues
+- Package on pypi: http://pypi.python.org/pypi/seantis.dir.base
+- Continuous integration: https://travis-ci.org/seantis/seantis.dir.base
 
 # License
 
