@@ -1,4 +1,4 @@
-import collections
+from collections import Iterable
 from time import time
 from itertools import tee, islice, chain, izip
 from os import path
@@ -13,19 +13,20 @@ import pyuca
 allkeys = path.join('/'.join(path.split(pyuca.__file__)[:-1]), 'allkeys.txt')
 collator = pyuca.Collator(allkeys)
 
-print 'loaded collator'
 
 def flatten(l):
     """Generator for flattening irregularly nested lists. 'Borrowed' from here:
-    http://stackoverflow.com/questions/2158395/flatten-an-irregular-list-of-lists-in-python
+    http://stackoverflow.com
+    /questions/2158395/flatten-an-irregular-list-of-lists-in-python
 
     """
     for el in l:
-        if isinstance(el, collections.Iterable) and not isinstance(el, basestring):
+        if isinstance(el, Iterable) and not isinstance(el, basestring):
             for sub in flatten(el):
                 yield sub
         else:
             yield el
+
 
 def get_interface_fields(interface):
     """ Retrieve the field values from a schema interface. Returns a dictionary
@@ -34,6 +35,7 @@ def get_interface_fields(interface):
     """
     return dict(getFieldsInOrder(interface))
 
+
 def anonymousHasRight(folder, right='View'):
     """
     For a given Plone folder, determine whether Anonymous has the right
@@ -41,7 +43,8 @@ def anonymousHasRight(folder, right='View'):
     'Acquire' is checked.
     Returns 1 if Anonymous has the right, 0 otherwise.
 
-    via http://plone.org/documentation/kb/show-context-dependent-folder-icons-in-navigation-portlet
+    http://plone.org/
+    documentation/kb/show-context-dependent-folder-icons-in-navigation-portlet
     """
     ps = folder.permission_settings()
     for p in ps:
@@ -58,15 +61,20 @@ def anonymousHasRight(folder, right='View'):
                 selected = not not p['selected']
                 return selected
 
+
 def get_current_language(context, request):
     """Returns the current language"""
     context = aq_inner(context)
-    portal_state = getMultiAdapter((context, request), name=u'plone_portal_state')
+    portal_state = getMultiAdapter(
+        (context, request), name=u'plone_portal_state'
+    )
     return portal_state.language()
+
 
 def add_count(text, count):
     """Adds a count to a text."""
     return '%s (%i)' % (text, count)
+
 
 def remove_count(text):
     """Removes the count from with_count from a text."""
@@ -76,18 +84,21 @@ def remove_count(text):
     else:
         return text[:pos]
 
+
 def translate(context, request, text):
     lang = get_current_language(context, request)
     return i18n.translate(text, target_language=lang)
 
+
 def unicode_collate_sortkey():
     """ Returns a sort function to sanely sort unicode values.
-    
+
     A more exact solution would be to use pyUCA but that relies on an external
     C Library and is more complicated
 
     See:
-    http://stackoverflow.com/questions/1097908/how-do-i-sort-unicode-strings-alphabetically-in-python
+    http://stackoverflow.com
+    /questions/1097908/how-do-i-sort-unicode-strings-alphabetically-in-python
     http://en.wikipedia.org/wiki/ISO_14651
     http://unicode.org/reports/tr10/
     http://pypi.python.org/pypi/PyICU
@@ -97,6 +108,7 @@ def unicode_collate_sortkey():
     """
 
     return collator.sort_key
+
 
 def get_marker_url(item, letter=None):
     baseurl = item.absolute_url()
@@ -108,12 +120,14 @@ def get_marker_url(item, letter=None):
 
     return baseurl + imagedir + image + '.png'
 
+
 # loving this: http://stackoverflow.com/a/1012089/138103
 def previous_and_next(some_iterable):
     prevs, items, nexts = tee(some_iterable, 3)
     prevs = chain([None], prevs)
     nexts = chain(islice(nexts, 1, None), [None])
     return izip(prevs, items, nexts)
+
 
 def naive_time(fn):
     def wrapper(*args, **kwargs):
@@ -123,3 +137,21 @@ def naive_time(fn):
         return result
 
     return wrapper
+
+
+class cached_property(object):
+    """A read-only @property that is only evaluated once. The value is cached
+    on the object itself rather than the function or class; this should prevent
+    memory leakage."""
+
+    def __init__(self, fget, doc=None):
+        self.fget = fget
+        self.__doc__ = doc or fget.__doc__
+        self.__name__ = fget.__name__
+        self.__module__ = fget.__module__
+
+    def __get__(self, obj, cls):
+        if obj is None:
+            return self
+        obj.__dict__[self.__name__] = result = self.fget(obj)
+        return result
