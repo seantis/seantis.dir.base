@@ -3,15 +3,22 @@ import os
 
 version = '1.2b1'
 
+tests_require = [
+    'collective.testcaselayer',
+    ]
+
 setup(name='seantis.dir.base',
       version=version,
       description="Directory module for Plone using Dexterity",
-      long_description=open("README.md").read() + "\n" +
+      long_description=open("README.rst").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from
       # http://pypi.python.org/pypi?:action=list_classifiers
       classifiers=[
-        "Framework :: Plone",
+        'Framework :: Plone',
+        'Framework :: Plone :: 4.2',
+        'Intended Audience :: Developers',
+        'Topic :: Software Development :: Libraries :: Python Modules',
         "Programming Language :: Python",
         ],
       keywords='directory plone dexterity',
@@ -28,7 +35,6 @@ setup(name='seantis.dir.base',
           'Plone',
           'plone.app.dexterity',
           'collective.autopermission',
-          'collective.testcaselayer',
           'plone.behavior',
           'plone.directives.form',
           'collective.dexteritytextindexer',
@@ -41,6 +47,8 @@ setup(name='seantis.dir.base',
           'collective.geo.openlayers',
           'collective.geo.kml',
       ],
+      tests_require=tests_require,
+      extras_require=dict(tests=tests_require),
       entry_points="""
       [z3c.autoinclude.plugin]
       target = plone

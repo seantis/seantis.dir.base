@@ -2,6 +2,7 @@ from five import grok
 from zope.interface import Interface
 from seantis.dir.base import core
 
+
 class View(core.View):
     """A numer of macros for use with seantis.dir.base"""
 

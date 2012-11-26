@@ -8,12 +8,13 @@ from plone.portlets.constants import GROUP_CATEGORY
 from plone.portlets.constants import CONTENT_TYPE_CATEGORY
 from plone.portlets.constants import CONTEXT_CATEGORY
 
+
 def block_portlets_on_creation(context, event):
     """ Block the portlets when an item is created. They may be added later. """
 
-    for manager_name in ('plone.leftcolumn','plone.rightcolumn'):
+    for manager_name in ('plone.leftcolumn', 'plone.rightcolumn'):
         manager = getUtility(IPortletManager, name=manager_name)
-        
+
         try:
             assignable = getMultiAdapter(
                 (context, manager,), ILocalPortletAssignmentManager
@@ -22,8 +23,8 @@ def block_portlets_on_creation(context, event):
             pass
 
         categories = (
-            GROUP_CATEGORY, CONTENT_TYPE_CATEGORY,CONTEXT_CATEGORY,USER_CATEGORY
+            GROUP_CATEGORY, CONTENT_TYPE_CATEGORY, CONTEXT_CATEGORY, USER_CATEGORY
         )
-        
+
         for category in categories:
             assignable.setBlacklistStatus(category, 1)

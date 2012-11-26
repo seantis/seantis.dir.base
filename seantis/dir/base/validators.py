@@ -5,6 +5,7 @@ from Products.CMFDefault.exceptions import EmailAddressInvalid
 
 from seantis.dir.base import _
 
+
 def validate_email(value):
     try:
         if value:

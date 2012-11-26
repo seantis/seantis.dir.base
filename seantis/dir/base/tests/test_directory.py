@@ -1,6 +1,7 @@
 from seantis.dir.base.tests import IntegrationTestCase
 from seantis.dir.base.interfaces import IDirectory
 
+
 class TestDirectory(IntegrationTestCase):
 
     def test_add(self):

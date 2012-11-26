@@ -18,6 +18,7 @@ from seantis.dir.base.interfaces import (
     IDirectoryItemBase, IDirectoryBase, IDirectoryCatalog
 )
 
+
 class Directory(Container):
     """Represents objects created using IDirectory."""
 
@@ -28,14 +29,14 @@ class Directory(Container):
     def used_categories(self):
         """Return names of all used (non-empty) category attributes."""
         return [c for c in self.all_categories() if getattr(self, c)]
-    
+
     def unused_categories(self):
         """Return names of all unused (empty) category attributes."""
         return [c for c in self.all_categories() if not getattr(self, c)]
 
     def suggested_values(self, category):
         """Returns a list of suggested values defined on the directory.
-        Will always return a list, thought the list may be empty. 
+        Will always return a list, thought the list may be empty.
 
         """
 
@@ -62,6 +63,7 @@ class Directory(Container):
         """Returns the description with newlines replaced by <br/> tags"""
         return self.description and self.description.replace('\n', '<br />') or ''
 
+
 class DirectoryCatalogMixin(object):
     _catalog = None
 
@@ -78,8 +80,9 @@ class DirectoryCatalogMixin(object):
         elif IDirectoryItemBase.providedBy(self.context):
             if hasattr(IDirectoryItemBase(self.context), 'parent'):
                 return self.context.parent()
-        
+
         return None
+
 
 class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
 
@@ -99,7 +102,7 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
         return self.directory.absolute_url() + '?reset=true'
 
     def remove_count(self, text):
-        return utils.remove_count(text);
+        return utils.remove_count(text)
 
     @property
     def widths(self):
@@ -120,10 +123,10 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
     def filterstyle(self):
         return 'width: %s%%' % self.widths[1]
 
-    def update(self, **kwargs):        
+    def update(self, **kwargs):
         if not self.available():
             return
-        
+
         if hasattr(self.view, 'catalog'):
             catalog = self.view.catalog
             self.items = self.view.items
@@ -137,7 +140,7 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
 
         self.values = dict(cat1=self.all_values['cat1'])
         self.values.update(catalog.grouped_possible_values_counted(
-                self.items, categories=['cat2', 'cat3', 'cat4']
+            self.items, categories=['cat2', 'cat3', 'cat4']
         ))
 
         self.labels = self.directory.labels()
@@ -150,12 +153,12 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
         return json.dumps(self.all_values[cat])
 
     @property
-    def show_filter_reset(self):       
+    def show_filter_reset(self):
         show_reset = bool(len([v for v in self.select.values() if v != '!empty']))
 
         if not show_reset and not self.context.enable_search:
             show_reset = self.show_search_reset
-            
+
         return show_reset
 
     @property
@@ -178,7 +181,7 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
             if self.view.hide_search_viewlet:
                 return False
 
-        return self.directory != None
+        return self.directory is not None
 
 
 class View(core.View, DirectoryCatalogMixin):
@@ -186,9 +189,9 @@ class View(core.View, DirectoryCatalogMixin):
 
     grok.context(IDirectoryBase)
     grok.require('zope2.View')
-    
+
     template = grok.PageTemplateFile('templates/directory.pt')
-    
+
     categories, items, values = None, None, None
 
     def filter(self, terms):
@@ -224,10 +227,10 @@ class View(core.View, DirectoryCatalogMixin):
             elif terms:
                 action = self.filter
                 param = terms
-        
+
         if not action:
             action = lambda param: None
-            
+
         return action, param
 
     def filter_url(self, category, value):
@@ -247,7 +250,7 @@ class View(core.View, DirectoryCatalogMixin):
         super(View, self).update(**kwargs)
 
     def category_values(self, category, filtered=True):
-        """ Returns all possible values of the given category (cat1-cat4). 
+        """ Returns all possible values of the given category (cat1-cat4).
         If filtered is True, only the items matching the current filter/search
         are considered.
         """
@@ -266,6 +269,7 @@ class View(core.View, DirectoryCatalogMixin):
         start = int(self.request.get('b_start') or 0)
         return Batch(self.items, ITEMSPERPAGE, start, orphan=1)
 
+
 class JsonFilterView(core.View, DirectoryCatalogMixin):
     """View to filter the catalog with ajax."""
 
@@ -281,10 +285,10 @@ class JsonFilterView(core.View, DirectoryCatalogMixin):
 
         if self.request.get('replay'):
             results = []
-            
-            for i in xrange(1, len(terms.keys())+1):
+
+            for i in xrange(1, len(terms.keys()) + 1):
                 cats = const.CATEGORIES[:i]
-                term = dict([(k,v) for k , v in terms.items() if k in cats])
+                term = dict([(k, v) for k, v in terms.items() if k in cats])
 
                 items = self.catalog.filter(term)
                 result = self.catalog.grouped_possible_values_counted(items)
@@ -295,8 +299,9 @@ class JsonFilterView(core.View, DirectoryCatalogMixin):
 
         items = self.catalog.filter(terms)
         result = self.catalog.grouped_possible_values_counted(items)
-        
+
         return json.dumps(result)
+
 
 class JsonSearch(core.View, DirectoryCatalogMixin):
     """View to search for a category using the jquery tokenizer plugin."""
@@ -323,8 +328,9 @@ class JsonSearch(core.View, DirectoryCatalogMixin):
         searchtext = unicode(query.lower().decode('utf-8'))
         filterfn = lambda item: searchtext in item.lower()
         filtered = filter(filterfn, possible)
-        
+
         return json.dumps([dict(id=val, name=val) for val in filtered])
+
 
 class DirectoryViewletManager(grok.ViewletManager):
     grok.context(Interface)

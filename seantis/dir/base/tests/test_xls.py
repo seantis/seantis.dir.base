@@ -7,6 +7,7 @@ from seantis.dir.base.xlsimport import import_xls
 from seantis.dir.base.xlsexport import export_xls
 from seantis.dir.base.tests import IntegrationTestCase
 
+
 class TempXLS(object):
 
     def __init__(self):
@@ -92,15 +93,21 @@ class TestXLS(IntegrationTestCase):
         sheet = wb.add_sheet('test')
 
         # These should end up grouped into one
-        self.write_row(sheet, 1, 
-            ['First', 'Description', 'Cat1', 'Cat2', 'Cat3', 'Cat4', '' ,'Url']
+        self.write_row(
+            sheet,
+            1,
+            ['First', 'Description', 'Cat1', 'Cat2', 'Cat3', 'Cat4', '', 'Url']
         )
-        self.write_row(sheet, 2, 
+        self.write_row(
+            sheet,
+            2,
             ['First', 'Description', 'Cat1', 'Cat2', 'Cat3', 'Cat4', '', 'Url']
         )
 
         # Another one
-        self.write_row(sheet, 3,
+        self.write_row(
+            sheet,
+            3,
             ['Second', 'Description', 'Cat1', 'Cat2', 'Cat3', 'Cat4', '', 'Url']
         )
 
@@ -111,7 +118,7 @@ class TestXLS(IntegrationTestCase):
         # necessary to write the workbook and reopen it using TempXLS
         xls = TempXLS()
         xls.save(wb)
-        
+
         error = lambda err: errors.append(err)
         results = import_xls(directory, xls.load(), error=error)
 
@@ -131,10 +138,14 @@ class TestXLS(IntegrationTestCase):
         wb = Workbook()
         sheet = wb.add_sheet('test')
 
-        self.write_row(sheet, 1,
+        self.write_row(
+            sheet,
+            1,
             [' ', ' ', ' ', ' ', ' ', ' ']
         )
-        self.write_row(sheet, 2,
+        self.write_row(
+            sheet,
+            2,
             [' ', ' ', ' ', ' ', ' ', ' ']
         )
 

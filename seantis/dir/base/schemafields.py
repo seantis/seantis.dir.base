@@ -1,6 +1,7 @@
 from zope.schema import TextLine
 from seantis.dir.base.validators import validate_email
 
+
 class Email(TextLine):
 
     def __init__(self, *args, **kwargs):

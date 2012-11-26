@@ -5,6 +5,6 @@ graft */*/*/locales
 graft */*/*/profiles
 graft */*/*/templates
 global-include *.zcml
-global-include README.md
+global-include README.rst
 global-include docs/*
 global-include allkeys.txt

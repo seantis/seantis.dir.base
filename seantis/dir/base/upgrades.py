@@ -3,11 +3,13 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 
 from seantis.dir.base.interfaces import IDirectoryItemBase
 
+
 def get_site(context):
     if IPloneSiteRoot.providedBy(context):
         return context
 
     return get_site(context.aq_parent)
+
 
 def upgrade_to_2012110201(context):
     """ Get rid of the implementedBy leftovers as outlined here:
@@ -21,7 +23,7 @@ def upgrade_to_2012110201(context):
     path = '/'.join(site.getPhysicalPath())
 
     items = [i.getObject() for i in catalog(
-        path={'query': path}, 
+        path={'query': path},
         object_provides=IDirectoryItemBase.__identifier__
     )]
 

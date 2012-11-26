@@ -6,25 +6,26 @@ from seantis.dir.base.interfaces import IFieldMapExtender
 
 from seantis.dir.base import _
 
+
 class FieldMap(object):
     """ Hierarchically maps columns in a row to objects. Each Fieldmap
     defines one object. Each child is another Fieldmap (and so on.)
 
     """
     def __init__(self):
-        self.keyfields = None  # Keyfields define the way the rows are grouped
-        self.typename = None   # The type of the object
-        self.fieldmap = dict() # A list with fieldnames -> indexes
-        self.indexmap = dict() # A list with indexes -> fieldnames
-        self.children = []     # A list of child Fieldmaps
-        self.wrapper = dict()  # A list of wrappers for field values
-        self.unwrapper = dict()# A list of unwrappers for field values
-        self.root = False      # True when there is no parent fieldmap
-        self.titles = dict()   # A list of custom titles
-        self.readonly = set()  # A list of readonly fieldnames
+        self.keyfields = None    # Keyfields define the way the rows are grouped
+        self.typename = None     # The type of the object
+        self.fieldmap = dict()   # A list with fieldnames -> indexes
+        self.indexmap = dict()   # A list with indexes -> fieldnames
+        self.children = []       # A list of child Fieldmaps
+        self.wrapper = dict()    # A list of wrappers for field values
+        self.unwrapper = dict()  # A list of unwrappers for field values
+        self.root = False        # True when there is no parent fieldmap
+        self.titles = dict()     # A list of custom titles
+        self.readonly = set()    # A list of readonly fieldnames
 
         # Interface containg the fields used in the fieldmap
-        self.baseinterface = self.interface = IDirectoryItemBase 
+        self.baseinterface = self.interface = IDirectoryItemBase
 
     def __len__(self):
         return len(self.fieldmap)
@@ -42,7 +43,7 @@ class FieldMap(object):
         self.readonly.add(fieldname)
 
     def get_field(self, index, including_children):
-        """ Returns the fieldname of an index (optionally looking up the 
+        """ Returns the fieldname of an index (optionally looking up the
         children as well).
 
         """
@@ -53,7 +54,7 @@ class FieldMap(object):
                 field = child.get_field(index, True)
                 if field:
                     return field
-        
+
         return None
 
     def indexes(self):
@@ -102,7 +103,7 @@ class FieldMap(object):
     def bind_wrapper(self, field, wrapperfn):
         """ Binds a wrapper function to the given field. The wrapper function
         is called when the value is read from the XLS with the value of the
-        cell. 
+        cell.
 
         """
         self.wrapper[field] = wrapperfn
@@ -112,7 +113,7 @@ class FieldMap(object):
         assert(field or (ix or ix >= 0))
 
         field = field or self.get_field(ix, including_children=True)
-        
+
         if field and field in self.wrapper:
             return self.wrapper[field]
         else:
@@ -132,15 +133,16 @@ class FieldMap(object):
         else:
             return lambda value: value
 
+
 def get_map(context):
     itemfields = (
         'title',
         'description',
-        'cat1','cat2','cat3','cat4', 
+        'cat1', 'cat2', 'cat3', 'cat4',
         'coordinates_json',
         'absolute_url'
     )
-    
+
     itemmap = FieldMap()
     itemmap.root = True
     itemmap.keyfields = ('title',)
