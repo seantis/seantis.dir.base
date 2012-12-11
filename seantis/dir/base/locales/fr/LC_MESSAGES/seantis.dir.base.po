@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2012-11-12 11:21+0000\n"
-"PO-Revision-Date: 2012-09-18 11:43+0100\n"
+"PO-Revision-Date: 2012-12-11 20:17+0100\n"
 "Last-Translator: Fabian Reinhard <fabian.reinhard@seantis.ch>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -13,133 +13,147 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"X-Generator: Poedit 1.5.3\n"
+"X-Generator: Poedit 1.5.4\n"
 
-#: ./interfaces.py:37
+#: interfaces.py:37
 msgid "1st Category Name"
 msgstr "Nom de 1ère catégorie"
 
-#: ./interfaces.py:53
+#: interfaces.py:53
 msgid "2nd Category Name"
 msgstr "Nom de 2ème catégorie"
 
-#: ./interfaces.py:69
+#: interfaces.py:69
 msgid "3rd Category Name"
 msgstr "Nom de 3ème catégorie"
 
-#: ./interfaces.py:85
+#: interfaces.py:85
 msgid "4th Category Name"
 msgstr "Nom de 4ème catégorie"
 
-#: ./fieldmap.py:149
+#: fieldmap.py:149
 msgid "Coordinates (JSON)"
-msgstr ""
+msgstr "Coordonnées (JSON)"
 
-#: ./interfaces.py:31
+#: interfaces.py:31
 msgid "Description"
 msgstr "Déscription"
 
-#: ./profiles/basetype/types/seantis.dir.base.directory.xml
+#: profiles/basetype/types/seantis.dir.base.directory.xml
 msgid "Directory"
 msgstr "Dossier"
 
-#: ./profiles/basetype/types/seantis.dir.base.item.xml
+#: profiles/basetype/types/seantis.dir.base.item.xml
 msgid "Directory Item"
 msgstr "Dossier d'article"
 
-#: ./interfaces.py:107
+#: interfaces.py:107
 msgid "Enable filtering"
 msgstr "Activer le filtrage"
 
-#: ./interfaces.py:113
+#: interfaces.py:113
 msgid "Enable searching"
 msgstr "Activer la recherche"
 
-#: ./templates/search.pt:7
+#: templates/search.pt:7
 msgid "Filter"
 msgstr "Recherche avancée"
 
-#: ./templates/search.pt:53
+#: templates/search.pt:53
 msgid "Fulltext search"
 msgstr "Recherche de texte complet"
 
-#: ./xlsimport.py:85
+#: xlsimport.py:85
 msgid "Import"
 msgstr "Importation"
 
-#: ./xlsimport.py:40
+#: xlsimport.py:40
 msgid "Import directory items"
 msgstr "Importation des éléments de dossier"
 
-#: ./xlsimport.py:37
-msgid "Import directory items using xls. The xls is expected to have the format defined in the template which you can <a href='#xlstemplate'>download here</a>"
-msgstr "Importation des éléments d'annuaire à l'aide xls. Les xls devrait avoir le format défini dans le modèle que vous pouvez télécharger ici href='#xlstemplate'> <a </ a>"
+#: xlsimport.py:37
+msgid ""
+"Import directory items using xls. The xls is expected to have the format "
+"defined in the template which you can <a href='#xlstemplate'>download here</"
+"a>"
+msgstr ""
+"Importation des éléments d'annuaire à l'aide xls. Les xls devrait avoir le "
+"format défini dans le modèle que vous pouvez télécharger ici "
+"href='#xlstemplate'> <a </ a>"
 
-#: ./xlsimport.py:110
+#: xlsimport.py:110
 msgid "Imported ${number} items"
-msgstr "Importé $ {numéro} articles"
+msgstr "Importé ${numéro} articles"
 
-#: ./xlsimport.py:99
+#: xlsimport.py:99
 msgid "Invalid XLS file"
 msgstr "Invalid fichier XLS"
 
-#: ./validators.py:13
+#: validators.py:13
 msgid "Invalid email address"
 msgstr "Adresse e-mail non valide"
 
-#: ./interfaces.py:101
+#: interfaces.py:101
 msgid "Last time a DirectoryItem was modified"
 msgstr "La dernière fois, un DirectoryItem a été modifié"
 
-#: ./interfaces.py:22
+#: interfaces.py:22
 msgid "Name"
 msgstr "Nom"
 
-#: ./templates/macros.pt:59
+#: templates/macros.pt:59
 msgid "No Results"
-msgstr ""
+msgstr "Pas de résultat"
 
-#: ./xlsimport.py:187
+#: xlsimport.py:187
 msgid "Not all required fields have a value"
 msgstr "Pas tous les champs obligatoires ont une valeur"
 
-#: ./templates/search.pt:39
+#: templates/search.pt:39
 msgid "Reset"
-msgstr ""
+msgstr "Reset"
 
-#: ./templates/search.pt:50
+#: templates/search.pt:50
 msgid "Search"
 msgstr "Recherche"
 
-#: ./interfaces.py:143
-msgid "Start typing and select a category. To add a new category write the name and hit enter."
-msgstr "Commencez à taper et sélectionnez une catégorie. Pour ajouter une nouvelle catégorie d'écrire le nom et appuyez sur entrée."
+#: interfaces.py:143
+msgid ""
+"Start typing and select a category. To add a new category write the name and "
+"hit enter."
+msgstr ""
+"Commencez à taper et sélectionnez une catégorie. Pour ajouter une nouvelle "
+"catégorie d'écrire le nom et appuyez sur entrée."
 
-#: ./interfaces.py:26
+#: interfaces.py:26
 msgid "Subtitle"
 msgstr "Sous-titre"
 
-#: ./interfaces.py:43
+#: interfaces.py:43
 msgid "Suggested Values for the 1st Category"
-msgstr ""
+msgstr "Valeurs suggérées pour la 2ème catégorie"
 
-#: ./interfaces.py:59
+#: interfaces.py:59
 msgid "Suggested Values for the 2nd Category"
-msgstr ""
+msgstr "Valeurs suggérées pour la 1ère catégorie"
 
-#: ./interfaces.py:75
+#: interfaces.py:75
 msgid "Suggested Values for the 3rd Category"
-msgstr ""
+msgstr "Valeurs suggérées pour la 3ème catégorie"
 
-#: ./interfaces.py:91
+#: interfaces.py:91
 msgid "Suggested Values for the 4th Category"
-msgstr ""
+msgstr "Valeurs suggérées pour la 4ème catégorie"
 
-#: ./interfaces.py:45
-msgid "These values are suggested when typing category values in the category items, in addition to values found in other items."
+#: interfaces.py:45
+msgid ""
+"These values are suggested when typing category values in the category "
+"items, in addition to values found in other items."
 msgstr ""
+"Ces valeurs sont suggérées lors de la saisie des valeurs de catégories dans "
+"les éléments de catégorie, en plus des valeurs trouvées dans d'autres "
+"articles."
 
-#: ./xlsimport.py:35
+#: xlsimport.py:35
 msgid "XLS file"
 msgstr "fichier XLS"
-
