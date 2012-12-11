@@ -156,7 +156,7 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
     @property
     def directory(self):
         if IDirectoryItemBase.providedBy(self.content):
-            return self.content.parent()
+            return self.content.get_parent()
         else:
             return self.content
 
@@ -315,7 +315,7 @@ class View(grok.View):
     @property
     def filtered(self):
         if self.is_itemview:
-            directory = self.context.parent()
+            directory = self.context.get_parent()
             return any((
                 session.get_last_search(directory),
                 session.get_last_filter(directory)

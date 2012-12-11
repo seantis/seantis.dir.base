@@ -79,7 +79,7 @@ class DirectoryCatalogMixin(object):
             return self.context
         elif IDirectoryItemBase.providedBy(self.context):
             if hasattr(IDirectoryItemBase(self.context), 'parent'):
-                return self.context.parent()
+                return self.context.get_parent()
 
         return None
 

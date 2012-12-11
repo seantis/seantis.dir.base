@@ -39,13 +39,13 @@ def onMovedItem(item, event):
 @grok.subscribe(IDirectoryItemBase, IObjectModifiedEvent)
 def onModifiedItem(item, event):
     if hasattr(item, 'changed'):
-        item.changed(item.parent())
+        item.changed(item.get_parent())
 
 
 @grok.subscribe(IDirectoryItemBase, IActionSucceededEvent)
 def onChangedWorkflowState(item, event):
     if hasattr(item, 'changed'):
-        item.changed(item.parent())
+        item.changed(item.get_parent())
 
 
 class DirectoryItem(Container):
@@ -66,7 +66,7 @@ class DirectoryItem(Container):
 
     description = property(get_description, set_description)
 
-    def parent(self):
+    def get_parent(self):
         #I tried to use @property here, but this screws with the acquisition
         #context, which apparently is a known sideffect in this case
         return self.aq_inner.aq_parent
@@ -86,7 +86,7 @@ class DirectoryItem(Container):
 
         """
         items = []
-        labels = self.parent().labels()
+        labels = self.get_parent().labels()
         for cat in labels.keys():
             value = hasattr(self, cat) and getattr(self, cat) or u''
             items.append((cat, labels[cat], value))
@@ -99,7 +99,7 @@ class DirectoryItem(Container):
         specifically passed.
 
         """
-        categories = categories or self.parent().all_categories()
+        categories = categories or self.get_parent().all_categories()
         values = []
         for cat in categories:
             values.append(getattr(self, cat))
