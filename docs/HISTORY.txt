@@ -7,6 +7,7 @@
 - Makes catalog adaptable for better customization
 - Adds maps to items using collective.geo
 - Refactors design. Base does no longer hold it's own type.
+- Resolve name clash breaking absolute_url()
 
 1.1
 ---
