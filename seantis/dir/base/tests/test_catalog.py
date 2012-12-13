@@ -1,3 +1,4 @@
+from Acquisition import aq_parent
 from zope.component import getAdapter
 
 from seantis.dir.base.tests import IntegrationTestCase
@@ -39,7 +40,18 @@ class TestCatalog(IntegrationTestCase):
 
         return directory
 
-    def test_category_filter(self):
+    def test_get_object(self):
+        directory = self.add_directory()
+        item = self.add_item(directory)
+        item._p_changed = False
+        catalog = get_catalog(directory)
+        brains = catalog.query()
+        result = catalog.get_object(brains[0])
+        self.assertEqual(item, result)
+        self.assertEqual(directory, aq_parent(item))
+        self.assertFalse(result._p_changed)
+
+    def test_filter(self):
 
         directory = self.toy_data()
         catalog = get_catalog(directory)

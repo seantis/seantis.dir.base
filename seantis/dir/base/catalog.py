@@ -103,7 +103,11 @@ class DirectoryCatalog(grok.Adapter):
         return lambda i: uca_sortkey(i.title)
 
     def get_object(self, brain):
-        return get_object(self.directory, brain)
+        obj = get_object(self.directory, brain)
+        # Set directory as parent of directory item which comes from the RAM
+        # cache (makes absolute_url() work correctly).
+        obj.__parent__ = self.directory
+        return obj
 
     def items(self):
         result = map(self.get_object, self.query())
