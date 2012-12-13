@@ -40,6 +40,14 @@ class TestCatalog(IntegrationTestCase):
 
         return directory
 
+    def test_query(self):
+        directory = self.add_directory()
+        catalog = get_catalog(directory)
+        self.assertEqual(0, len(catalog.query()))
+
+        self.add_item(directory)
+        self.assertEqual(1, len(catalog.query()))
+
     def test_get_object(self):
         directory = self.add_directory()
         item = self.add_item(directory)
@@ -50,6 +58,14 @@ class TestCatalog(IntegrationTestCase):
         self.assertEqual(item, result)
         self.assertEqual(directory, aq_parent(item))
         self.assertFalse(result._p_changed)
+
+    def test_items(self):
+        directory = self.add_directory()
+        catalog = get_catalog(directory)
+        self.assertEqual([], catalog.items())
+
+        item = self.add_item(directory)
+        self.assertEqual([item], catalog.items())
 
     def test_filter(self):
 
