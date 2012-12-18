@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2012-11-12 11:21+0000\n"
-"PO-Revision-Date: 2012-12-11 20:17+0100\n"
+"PO-Revision-Date: 2012-12-18 13:47+0100\n"
 "Last-Translator: Fabian Reinhard <fabian.reinhard@seantis.ch>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -83,7 +83,7 @@ msgstr ""
 
 #: xlsimport.py:110
 msgid "Imported ${number} items"
-msgstr "Importé ${numéro} articles"
+msgstr "Importé ${number} articles"
 
 #: xlsimport.py:99
 msgid "Invalid XLS file"
