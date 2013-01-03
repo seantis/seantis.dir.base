@@ -9,6 +9,14 @@ An example, offering a directory of contacts can be found here: https://github.c
 
 This module is probably only really useful for anyone if used as a base to build on. By itself it only offers the categorization and search functionalities.
 
+
+.. figure:: http://onegov.ch/approved.png/image
+   :align: right
+   :target: http://onegov.ch/community/zertifizierte-module/seantis.dir.base
+
+   Certified: 01/2013
+
+
 Build Status
 ============
 
