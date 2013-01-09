@@ -1,7 +1,7 @@
 
 # Changelog
 
-1.2 (beta)
+1.2
 ---
 
 - onegov.ch approved: add badge to readme.
