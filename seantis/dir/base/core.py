@@ -356,7 +356,7 @@ class View(grok.View):
             self.lettermap.clear()
             mapwidget._layers = list()
 
-            for item in sorted(self.batch, key=lambda i: i.title):
+            for item in self.batch:
 
                 if not item.id in self.lettermap and item.has_mapdata():
 
