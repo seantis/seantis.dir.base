@@ -4,6 +4,7 @@ from itertools import tee, islice, chain, izip
 from os import path
 
 from Acquisition import aq_inner
+from Products.PortalTransforms.transforms.safe_html import scrubHTML
 from zope.component import getMultiAdapter
 from zope.schema import getFieldsInOrder
 from zope import i18n
@@ -12,6 +13,10 @@ import pyuca
 
 allkeys = path.join('/'.join(path.split(pyuca.__file__)[:-1]), 'allkeys.txt')
 collator = pyuca.Collator(allkeys)
+
+
+def safe_html(html):
+        return scrubHTML(html, raise_error=False)
 
 
 def flatten(l):

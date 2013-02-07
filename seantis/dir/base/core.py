@@ -277,6 +277,9 @@ class View(grok.View):
     def current_language(self):
         return get_current_language(self.context, self.request)
 
+    def safe_html(self, html):
+        return utils.safe_html(html)
+
     @property
     @view.memoize
     def show_map(self):
