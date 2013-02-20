@@ -61,7 +61,10 @@ class Directory(Container):
 
     def html_description(self):
         """Returns the description with newlines replaced by <br/> tags"""
-        return self.description and self.description.replace('\n', '<br />') or ''
+        if self.description:
+            return self.description.replace('\n', '<br />')
+        else:
+            return ''
 
 
 class DirectoryCatalogMixin(object):
@@ -154,7 +157,7 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
 
     @property
     def show_filter_reset(self):
-        show_reset = bool(len([v for v in self.select.values() if v != '!empty']))
+        show_reset = bool([v for v in self.select.values() if v != '!empty'])
 
         if not show_reset and not self.context.enable_search:
             show_reset = self.show_search_reset
