@@ -3,44 +3,12 @@ from five import grok
 from itertools import groupby, imap, ifilter
 from Products.CMFCore.utils import getToolByName
 
-from zope.ramcache.ram import RAMCache
-
 from seantis.dir.base.interfaces import (
     IDirectoryItemBase,
     IDirectoryBase,
     IDirectoryCatalog
 )
 from seantis.dir.base import utils
-
-item_cache = RAMCache()
-item_cache.update(maxAge=0, maxEntries=10000)
-
-uncached = object()
-
-
-def directory_cachekey(directory):
-    return ''.join(map(str, (
-        directory.id,
-        directory.modified(),
-        directory.child_modified
-    )))
-
-
-def directory_item_cachekey(directory, item):
-    return directory_cachekey(directory) + str(item.getRID())
-
-
-def get_object(directory, result):
-
-    cachekey = directory_item_cachekey(directory, result)
-
-    obj = item_cache.query(cachekey, default=uncached)
-
-    if obj is uncached:
-        obj = result.getObject()
-        item_cache.set(obj, cachekey)
-
-    return obj
 
 
 def is_exact_match(item, term):
@@ -103,11 +71,7 @@ class DirectoryCatalog(grok.Adapter):
         return lambda i: uca_sortkey(i.title)
 
     def get_object(self, brain):
-        obj = get_object(self.directory, brain)
-        # Set directory as parent of directory item which comes from the RAM
-        # cache (makes absolute_url() work correctly).
-        obj.__parent__ = self.directory
-        return obj
+        return brain.getObject()
 
     def items(self):
         result = map(self.get_object, self.query())
