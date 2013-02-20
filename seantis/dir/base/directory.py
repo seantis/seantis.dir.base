@@ -249,21 +249,6 @@ class View(core.View, DirectoryCatalogMixin):
 
         super(View, self).update(**kwargs)
 
-    def category_values(self, category, filtered=True):
-        """ Returns all possible values of the given category (cat1-cat4).
-        If filtered is True, only the items matching the current filter/search
-        are considered.
-        """
-
-        assert category in const.CATEGORIES
-
-        items = filtered and self.items or self.catalog.items()
-        values = self.catalog.grouped_possible_values_counted(
-            items, categories=[category]
-        )
-
-        return values[category]
-
     @property
     def batch(self):
         start = int(self.request.get('b_start') or 0)

@@ -38,16 +38,6 @@
       </div>
     </metal:define>
 
-    <metal:define define-macro="categorylist">
-      <div class="directoryCategoryList">
-        <ul>
-          <li tal:repeat="value python: view.category_values(category, filtered=False)">
-            <a tal:content="value" tal:attributes="href python: view.filter_url(category, value)"></a>
-          </li>
-        </ul>
-      </div>
-    </metal:define>
-
     <metal:define define-macro="resultlist">
       <div id="directoryResultList">
         <div class="directoryResult" tal:repeat="item items">
