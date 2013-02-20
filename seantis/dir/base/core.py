@@ -1,5 +1,5 @@
 import logging
-logger = logging.getLogger('seantis.dir.base')
+log = logging.getLogger('seantis.dir.base')
 
 from five import grok
 
@@ -293,7 +293,7 @@ class View(grok.View):
             settings = getUtility(IRegistry).forInterface(IGeoSettings)
             return self.context.portal_type in settings.geo_content_types
         except:
-            logger.warn('collective.geo could not be loaded', exc_info=True)
+            log.warn('collective.geo could not be loaded', exc_info=True)
             return False
 
     def get_filter_terms(self):
@@ -333,7 +333,7 @@ class View(grok.View):
     @property
     @view.memoize
     def mapfields(self):
-        """ Returns the mapwidgets to be shown on in the directory and item view."""
+        "Returns the mapwidgets to be shown on in the directory and item view."
 
         if not self.show_map:
             return tuple()
@@ -349,9 +349,10 @@ class View(grok.View):
         else:
 
             # in a directory view we can expect a batch
-            # (only items in the shown batch are painted on the map as performance
-            # is going to be a problem otherwise)
-            assert hasattr(self, 'batch')
+            # (only items in the shown batch are painted on the map as
+            # performance is going to be a problem otherwise)
+            if not hasattr(self, 'batch'):
+                log.error('%s view has no batch attribute' % type(self))
 
             index = 0
             maxindex = len(letters) - 1
