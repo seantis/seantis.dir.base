@@ -223,15 +223,15 @@ class IDirectoryCatalog(Interface):
 
     def sortkey(self):
         """Returns a sort keyfunction to sort the items of the catalog.
-        The items, filter and search functions return the items roted
+        The items, filter and search functions return the items sorted
         by this key.
 
-        """
+        Note that the object will not be loaded using getObject before it is
+        passed to the sortkey, so the sortkey has to do that (slow!) or
+        get the values from the ZCatalog Metadata (fast).
 
-    def get_object(self, result):
-        """Returns the result of getObject of the given brain. Use this
-        to cache getObject results. If another backend than zodb is used
-        this function may return the result without alteration.
+        See seantis.dir.base.catalog.sortkey for a good example.
+
         """
 
     def possible_values(self, items=None, categories=None):

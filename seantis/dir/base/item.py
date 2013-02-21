@@ -108,7 +108,10 @@ class DirectoryItem(Container):
 
     def html_description(self):
         """Returns the description with newlines replaced by <br/> tags"""
-        return self.description and self.description.replace('\n', '<br />') or ''
+        if self.description:
+            return self.description.replace('\n', '<br />')
+        else:
+            return ''
 
     def has_mapdata(self):
         return IGeoreferenced(self).type is not None
