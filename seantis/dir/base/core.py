@@ -328,10 +328,10 @@ class View(grok.View):
     def filtered(self):
         if self.is_itemview:
             directory = self.context.get_parent()
-            return any((
-                session.get_last_search(directory),
-                session.get_last_filter(directory)
-            ))
+
+            return session.has_last_search(directory) \
+                or session.has_last_filter(directory)
+
         else:
             return self.filtered
 
