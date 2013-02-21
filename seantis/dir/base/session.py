@@ -23,10 +23,18 @@ def set_session(context, key, value):
     session[key] = value
 
 
+def has_last_search(directory):
+    return get_last_search(directory) != u''
+
+
 def get_last_search(directory):
     """Returns the most recently used search text."""
     sid = directory.id + 'searchtext'
     return get_session(directory, sid) or u''
+
+
+def has_last_filter(directory):
+    return get_last_filter().values() != ['!empty'] * 4
 
 
 def get_last_filter(directory):
