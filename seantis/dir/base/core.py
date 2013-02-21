@@ -53,7 +53,11 @@ class DirectoryMapLayer(MapLayer):
             context_url += '/'
 
         js = """
-        function() {return seantis.maplayer('%(id)s', '%(url)s', '%(title)s', '%(letter)s', %(zoom)s);}
+        function() {
+            return seantis.maplayer(
+                '%(id)s', '%(url)s', '%(title)s', '%(letter)s', %(zoom)s
+            );
+        }
         """
 
         return js % dict(
@@ -124,15 +128,17 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
 
     @property
     def update_category_widgets(self):
-        """ Return true if the category widgets need to be removed / renamed. """
+        " Return true if the category widgets need to be removed / renamed. "
 
         return '.item' in self.form.portal_type
 
     @property
     def omitted_fields(self):
-        """ Gets the omitted fields from the schema. May be specified like this:
+        """ Gets the omitted fields from the schema. Specify as follows:
 
-        ISchema.setTaggedValue('seantis.dir.base.omitted', ['field1', 'field2'])
+        ISchema.setTaggedValue(
+            'seantis.dir.base.omitted', ['field1', 'field2']
+        )
         """
         iface = SCHEMA_CACHE.get(self.form.portal_type)
         return iface.queryTaggedValue('seantis.dir.base.omitted', [])
@@ -191,11 +197,11 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
             del self.form.widgets[key]
 
     def reorder_widgets(self):
-        """ Reorders the widgets of the form. Must be called before the parent's
-        __init__ method. The field order is a list of fields. Fields present
-        in the list are put in the order of the list. Fields not present in the
-        list are put at the location of the asterisk (*) which must be present
-        in the list.
+        """ Reorders the widgets of the form. Must be called before the
+        parent's __init__ method. The field order is a list of fields. Fields
+        present in the list are put in the order of the list. Fields not
+        present in the list are put at the location of the asterisk (*) which
+        must be present in the list.
 
         Example:
         class ISchema(Interface):
@@ -215,12 +221,14 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         order = self.field_order
         default = order.index('*')
 
+        previous_and_next = utils.previous_and_next
+
         # move fields before the star
-        for prev, curr, next in utils.previous_and_next(reversed(order[:default])):
+        for prev, curr, next in previous_and_next(reversed(order[:default])):
             move(self.form, curr, before=prev or '*')
 
         # move fields after the star
-        for prev, curr, next in utils.previous_and_next(order[default + 1:]):
+        for prev, curr, next in previous_and_next(order[default + 1:]):
             move(self.form, curr, after=prev or '*')
 
     def label_widgets(self):
