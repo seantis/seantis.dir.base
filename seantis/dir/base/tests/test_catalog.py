@@ -14,9 +14,11 @@ def get_catalog(directory):
 class TestCatalog(IntegrationTestCase):
 
     def toy_data(self):
-        # It is not necessary to define any categories on the directory,
-        # as they play no role in the filter
         directory = self.add_directory()
+        directory.cat1 = 'Target-Group'
+        directory.cat2 = 'Type'
+        directory.cat3 = 'Name'
+        directory.reindexObject()
 
         values = (
             ['For Kids', 'Cartoons', 'Mickey Mouse'],
@@ -38,6 +40,10 @@ class TestCatalog(IntegrationTestCase):
         # one directory is filtered at a time
         other_dir = self.add_directory('Some other directory')
         self.add_item_bulk(other_dir, values)
+
+        catalog = get_catalog(directory)
+        for item in catalog.query():
+            item.getObject().reindexObject()
 
         return directory
 
