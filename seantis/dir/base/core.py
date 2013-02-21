@@ -364,7 +364,7 @@ class View(grok.View):
             self.lettermap.clear()
             mapwidget._layers = list()
 
-            for item in self.batch:
+            for item in (i.getObject() for i in self.batch):
 
                 if not item.id in self.lettermap and item.has_mapdata():
 
