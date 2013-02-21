@@ -313,7 +313,8 @@ class View(grok.View):
     @property
     def is_itemview(self):
         # if no items are found it must be a single item view
-        return not hasattr(self, 'items')
+        # (not done using hasattr because that triggers descriptors)
+        return 'items' not in self.__dict__
 
     @property
     def filtered(self):
@@ -324,11 +325,7 @@ class View(grok.View):
                 session.get_last_filter(directory)
             ))
         else:
-            if 'search' in self.request.keys():
-                return True
-            if 'filter' in self.request.keys():
-                return True
-            return len(self.items) != self.unfiltered_count
+            return self.filtered
 
     @property
     @view.memoize

@@ -132,7 +132,7 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
 
         if hasattr(self.view, 'catalog'):
             catalog = self.view.catalog
-            self.items = self.view.items
+            self.items = self.view.items()
         else:
             catalog = self.catalog
             self.items = self.catalog.items()
@@ -196,18 +196,22 @@ class View(core.View, DirectoryCatalogMixin):
     template = grok.PageTemplateFile('templates/directory.pt')
 
     categories, items, values = None, None, None
+    filtered = False
 
     def filter(self, terms):
         if terms:
             self.items = self.catalog.filter(terms)
+            self.filtered = True
         session.set_last_filter(self.context, terms)
 
     def search(self, searchtext):
         if searchtext:
             self.items = self.catalog.search(searchtext)
+            self.filtered = True
         session.set_last_search(self.context, searchtext)
 
     def reset(self, *args):
+        self.filtered = False
         session.reset_search_filter(self.context)
 
     def primary_action(self):
@@ -227,7 +231,7 @@ class View(core.View, DirectoryCatalogMixin):
             if searchtext:
                 action = self.search
                 param = searchtext
-            elif terms:
+            elif terms and terms.values() != ['!empty'] * 4:
                 action = self.filter
                 param = terms
 
@@ -241,12 +245,18 @@ class View(core.View, DirectoryCatalogMixin):
         base += '?filter=true&%s=%s' % (category, utils.remove_count(value))
         return base
 
-    def update(self, **kwargs):
-        self.items = self.catalog.items()
-        self.unfiltered_count = len(self.items)
-        self.values = self.catalog.grouped_possible_values_counted(self.items)
-        self.labels = self.context.labels()
+    @utils.cached_property
+    def values(self):
+        return self.catalog.grouped_possible_values_counted(self.items)
 
+    def items(self):
+        return self.catalog.items()
+
+    @property
+    def labels(self):
+        return self.context.labels()
+
+    def update(self, **kwargs):
         action, param = self.primary_action()
         action(param)
 
