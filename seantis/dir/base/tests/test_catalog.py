@@ -48,17 +48,6 @@ class TestCatalog(IntegrationTestCase):
         self.add_item(directory)
         self.assertEqual(1, len(catalog.query()))
 
-    def test_get_object(self):
-        directory = self.add_directory()
-        item = self.add_item(directory)
-        item._p_changed = False
-        catalog = get_catalog(directory)
-        brains = catalog.query()
-        result = catalog.get_object(brains[0])
-        self.assertEqual(item, result)
-        self.assertEqual(directory, aq_parent(item))
-        self.assertFalse(result._p_changed)
-
     def test_items(self):
         directory = self.add_directory()
         catalog = get_catalog(directory)
