@@ -104,15 +104,22 @@ class DirectoryCatalog(grok.Adapter):
         resulting list.
 
         """
-        items = items or self.items()
-
+        items = items or self.query()
         categories = categories or self.directory.all_categories()
-        values = dict([(cat, list()) for cat in categories])
 
+        values = dict([(c, list()) for c in categories])
         for item in items:
-            for cat in values.keys():
-                for word in item.keywords(categories=(cat,)):
-                    word and values[cat].append(word)
+            for key, label, value in item.categories:
+                if not key in categories:
+                    continue
+
+                if not value:
+                    continue
+
+                if isinstance(value, basestring):
+                    values[key].append(value)
+                else:
+                    map(values[key].append, utils.flatten(value))
 
         return values
 
