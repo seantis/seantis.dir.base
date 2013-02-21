@@ -1,6 +1,6 @@
 from five import grok
 
-from itertools import groupby, imap, ifilter
+from itertools import groupby, ifilter
 from Products.CMFCore.utils import getToolByName
 
 from seantis.dir.base.interfaces import (
@@ -70,11 +70,8 @@ class DirectoryCatalog(grok.Adapter):
         uca_sortkey = utils.unicode_collate_sortkey()
         return lambda i: uca_sortkey(i.title)
 
-    def get_object(self, brain):
-        return brain.getObject()
-
     def items(self):
-        result = map(self.get_object, self.query())
+        result = [b.getObject() for b in self.query()]
         result.sort(key=self.sortkey())
 
         return result
@@ -86,7 +83,7 @@ class DirectoryCatalog(grok.Adapter):
         filter_key = lambda item: is_exact_match(item, term)
 
         return sorted(
-            ifilter(filter_key, imap(self.get_object, results)),
+            ifilter(filter_key, (b.getObject() for b in results)),
             key=self.sortkey()
         )
 
@@ -97,7 +94,7 @@ class DirectoryCatalog(grok.Adapter):
             text += '*'
 
         return sorted(
-            imap(self.get_object, self.query(SearchableText=text)),
+            (b.getObject() for b in self.query(SearchableText=text)),
             key=self.sortkey()
         )
 
