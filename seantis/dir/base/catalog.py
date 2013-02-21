@@ -1,6 +1,10 @@
-from five import grok
+import string
 
-from itertools import groupby, ifilter
+from functools import partial
+from collections import defaultdict
+from itertools import groupby
+
+from five import grok
 from Products.CMFCore.utils import getToolByName
 
 from seantis.dir.base.interfaces import (
@@ -11,35 +15,36 @@ from seantis.dir.base.interfaces import (
 from seantis.dir.base import utils
 
 
-def is_exact_match(item, term):
+def is_exact_match(item, terms):
     """Returns true if a given item is an exact match of term. Term is the same
     as in category_search.
 
     """
 
-    for key in term.keys():
-        # empty keys are like missing keys
-        if term[key] == '!empty':
+    categories = defaultdict(list)
+
+    for category, label, value in item.categories:
+        # category values should be lists
+        if isinstance(value, basestring):
+            categories[category].append((value.strip(), ))
+        else:
+            categories[category].append(map(string.strip, value))
+
+    for key, term in terms.items():
+
+        # empty keys are like missing keys -> ignore
+        if term == '!empty':
             continue
 
-        # categories can be lists or strings, but we want a list in any case
-        attrlist = getattr(item, key) or (u'', )
-        if not hasattr(attrlist, '__iter__'):
-            attrlist = (attrlist, )
+        if isinstance(term, basestring):
+            term = (term, )
 
-        # also use a stripped attribute list as some users will end up adding
-        # unused spaces
-        striplist = [attr.strip() for attr in attrlist]
+        #import pdb; pdb.set_trace()
 
-        # same goes for terms
-        termlist = term[key]
-        if not hasattr(termlist, '__iter__'):
-            termlist = (termlist, )
-
-        # if there is any term which is not matching, it's not an exact match
-        matching_term = lambda term: term in attrlist or term in striplist
-        if any([True for t in termlist if not matching_term(t)]):
-            return False
+        for t in term:
+            for category_values in categories[key]:
+                if not t in category_values:
+                    return False  # any non-matching => not exact match
 
     return True
 
@@ -68,24 +73,18 @@ class DirectoryCatalog(grok.Adapter):
     def sortkey(self):
         """Returns the default sortkey."""
         uca_sortkey = utils.unicode_collate_sortkey()
-        return lambda i: uca_sortkey(i.title)
+        return lambda b: uca_sortkey(b.Title.decode('utf-8'))
 
     def items(self):
-        result = [b.getObject() for b in self.query()]
-        result.sort(key=self.sortkey())
-
-        return result
+        return sorted(self.query(), key=self.sortkey())
 
     def filter(self, term):
         results = self.query(
             categories={'query': term.values(), 'operator': 'and'}
         )
-        filter_key = lambda item: is_exact_match(item, term)
+        filter_key = partial(is_exact_match, term=term)
 
-        return sorted(
-            ifilter(filter_key, (b.getObject() for b in results)),
-            key=self.sortkey()
-        )
+        return sorted(filter(filter_key, results), key=self.sortkey())
 
     def search(self, text):
 
@@ -93,10 +92,7 @@ class DirectoryCatalog(grok.Adapter):
         if not text.endswith('*'):
             text += '*'
 
-        return sorted(
-            (b.getObject() for b in self.query(SearchableText=text)),
-            key=self.sortkey()
-        )
+        return sorted(self.query(SearchableText=text), key=self.sortkey())
 
     def possible_values(self, items=None, categories=None):
         """Returns a dictionary with the keys being the categories of the

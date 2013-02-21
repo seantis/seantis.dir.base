@@ -1,4 +1,5 @@
-from Acquisition import aq_parent
+# -*- coding: utf-8 -*-
+
 from zope.component import getAdapter
 
 from seantis.dir.base.tests import IntegrationTestCase
@@ -39,6 +40,26 @@ class TestCatalog(IntegrationTestCase):
         self.add_item_bulk(other_dir, values)
 
         return directory
+
+    def test_sorting(self):
+        directory = self.add_directory()
+        self.add_item(directory, name='last').title = u'ööö'
+        self.add_item(directory, name='second').title = u'äää'
+        self.add_item(directory, name='third').title = u'bbb'
+        self.add_item(directory, name='first').title = u'aaa'
+
+        catalog = get_catalog(directory)
+
+        for i in catalog.items():
+            i.getObject().reindexObject()
+
+        items = catalog.items()
+
+        self.assertEqual(len(items), 4)
+        self.assertEqual(items[0].getObject().title, u'aaa')
+        self.assertEqual(items[1].getObject().title, u'äää')
+        self.assertEqual(items[2].getObject().title, u'bbb')
+        self.assertEqual(items[3].getObject().title, u'ööö')
 
     def test_query(self):
         directory = self.add_directory()
@@ -100,14 +121,14 @@ class TestCatalog(IntegrationTestCase):
         self.assertEqual(directory.all_categories(), possible.keys())
 
         self.assertEqual(len(possible['cat1']), 9)
-        self.assertEqual(len(possible['cat2']), 7)  # Empty values are not counted
-        self.assertEqual(len(possible['cat3']), 7)  # Empty values are not counted
+        self.assertEqual(len(possible['cat2']), 7)  # Empty values not counted
+        self.assertEqual(len(possible['cat3']), 7)  # Empty values not counted
         self.assertEqual(len(possible['cat4']), 0)
 
         found = catalog.filter(dict(cat2='Toys'))
         possible = catalog.possible_values(found)
 
-        self.assertEqual(len(possible['cat1']), 4)  # Lists in items are flattend
+        self.assertEqual(len(possible['cat1']), 4)  # Item lists are flattend
         self.assertEqual(len(possible['cat2']), 3)
         self.assertEqual(len(possible['cat3']), 3)
         self.assertEqual(len(possible['cat4']), 0)
@@ -144,12 +165,27 @@ class TestCatalog(IntegrationTestCase):
         values = (
             ['far'],
             ['faraway'],
-            [('far', 'faraway')]
+            [('far', 'faraway')],
+            ['far ']
         )
 
-        items = self.add_item_bulk(self.add_directory(), values)
+        directory = self.add_directory()
+        directory.cat1 = 'Test'
+        directory.reindexObject()
+
+        self.add_item_bulk(directory, values)
+
+        catalog = get_catalog(directory)
+        items = catalog.query()
+
+        for item in items:
+            item.getObject().reindexObject()
+
+        items = catalog.query()
+
         term = dict(cat1='far')
 
         self.assertTrue(is_exact_match(items[0], term))
         self.assertFalse(is_exact_match(items[1], term))
         self.assertTrue(is_exact_match(items[2], term))
+        self.assertTrue(is_exact_match(items[3], term))
