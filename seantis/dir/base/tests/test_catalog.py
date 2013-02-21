@@ -81,7 +81,7 @@ class TestCatalog(IntegrationTestCase):
         self.assertEqual([], catalog.items())
 
         item = self.add_item(directory)
-        self.assertEqual([item], catalog.items())
+        self.assertEqual([item], [i.getObject() for i in catalog.items()])
 
     def test_filter(self):
 
