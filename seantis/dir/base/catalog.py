@@ -15,7 +15,7 @@ from seantis.dir.base.interfaces import (
 from seantis.dir.base import utils
 
 
-def is_exact_match(item, terms):
+def is_exact_match(item, term):
     """Returns true if a given item is an exact match of term. Term is the same
     as in category_search.
 
@@ -30,18 +30,20 @@ def is_exact_match(item, terms):
         else:
             categories[category].append(map(string.strip, value))
 
-    for key, term in terms.items():
+    for key, term_values in term.items():
 
         # empty keys are like missing keys -> ignore
-        if term == '!empty':
+        if term_values == '!empty':
             continue
 
-        if isinstance(term, basestring):
-            term = (term, )
+        if isinstance(term_values, basestring):
+            term_values = (term_values, )
 
-        #import pdb; pdb.set_trace()
+        if not categories[key]:
+            if ''.join(term_values) != '':
+                return False
 
-        for t in term:
+        for t in term_values:
             for category_values in categories[key]:
                 if not t in category_values:
                     return False  # any non-matching => not exact match
