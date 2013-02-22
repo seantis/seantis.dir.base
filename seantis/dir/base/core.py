@@ -320,9 +320,7 @@ class View(grok.View):
 
     @property
     def is_itemview(self):
-        # if no items are found it must be a single item view
-        # (not done using hasattr because that triggers descriptors)
-        return 'items' not in self.__dict__
+        return IDirectoryItemBase.providedBy(self.context)
 
     @property
     def filtered(self):
@@ -369,7 +367,10 @@ class View(grok.View):
             self.lettermap.clear()
             mapwidget._layers = list()
 
-            for item in (i.getObject() for i in self.batch):
+            for item in self.batch:
+
+                if hasattr(item, 'getObject'):
+                    item = item.getObject()
 
                 if not item.id in self.lettermap and item.has_mapdata():
 
