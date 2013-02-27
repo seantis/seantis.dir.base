@@ -132,10 +132,12 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
 
         if hasattr(self.view, 'catalog'):
             catalog = self.view.catalog
-            self.items = self.view.items()
+            items = self.view.items
         else:
             catalog = self.catalog
-            self.items = self.catalog.items()
+            items = self.catalog.items
+        
+        self.items = items() if callable(items) else items
 
         # for the first category, count all items, for the others
         # count the ones in the current filter (might also be all)
@@ -274,6 +276,8 @@ class JsonFilterView(core.View, DirectoryCatalogMixin):
     grok.context(IDirectoryBase)
     grok.require('zope2.View')
     grok.name('filter')
+
+    mapfields = None
 
     def render(self, **kwargs):
         terms = self.get_filter_terms()
