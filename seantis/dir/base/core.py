@@ -331,6 +331,10 @@ class View(grok.View):
             return len(self.items) != self.unfiltered_count
 
     @property
+    def show_banner(self):
+        return ('banner' in self.request) or not self.filtered
+
+    @property
     @view.memoize
     def mapfields(self):
         "Returns the mapwidgets to be shown on in the directory and item view."
