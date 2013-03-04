@@ -136,7 +136,7 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
         else:
             catalog = self.catalog
             items = self.catalog.items
-        
+
         self.items = items() if callable(items) else items
 
         # for the first category, count all items, for the others
@@ -197,7 +197,7 @@ class View(core.View, DirectoryCatalogMixin):
 
     template = grok.PageTemplateFile('templates/directory.pt')
 
-    categories, items, values = None, None, None
+    categories, items = None, None
     filtered = False
 
     def filter(self, terms):
@@ -246,10 +246,6 @@ class View(core.View, DirectoryCatalogMixin):
         base = self.context.absolute_url()
         base += '?filter=true&%s=%s' % (category, utils.remove_count(value))
         return base
-
-    @utils.cached_property
-    def values(self):
-        return self.catalog.grouped_possible_values_counted(self.items)
 
     def items(self):
         return self.catalog.items()
