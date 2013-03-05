@@ -181,6 +181,9 @@ def generate_object(folder, fieldmap, key, objvalues, error):
     # Only really works with dexterity types.. might change that if needed
     obj = createContentInContainer(folder, fieldmap.typename, **attributes)
 
+    if hasattr(fieldmap, 'on_object_add'):
+        fieldmap.on_object_add(obj, objvalues)
+
     # If the verification doesn't check it will grigger a rollback later
     return verify(obj, fieldmap, error) and obj or None
 
