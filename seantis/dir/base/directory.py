@@ -200,6 +200,8 @@ class View(core.View, DirectoryCatalogMixin):
     categories, items = None, None
     filtered = False
 
+    itemsperpage = ITEMSPERPAGE
+
     def filter(self, terms):
         if terms:
             self.items = self.catalog.filter(terms)
@@ -265,7 +267,7 @@ class View(core.View, DirectoryCatalogMixin):
         start = int(self.request.get('b_start') or 0)
         items = self.items() if callable(self.items) else self.items
 
-        return Batch(items, ITEMSPERPAGE, start, orphan=1)
+        return Batch(items, self.itemsperpage, start, orphan=1)
 
 
 class JsonFilterView(core.View, DirectoryCatalogMixin):
