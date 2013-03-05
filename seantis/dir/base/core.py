@@ -301,7 +301,6 @@ class View(grok.View):
             settings = getUtility(IRegistry).forInterface(IGeoSettings)
             return self.context.portal_type in settings.geo_content_types
         except:
-            log.warn('collective.geo could not be loaded', exc_info=True)
             return False
 
     def get_filter_terms(self):
