@@ -13,7 +13,7 @@ class FieldMap(object):
 
     """
     def __init__(self):
-        self.keyfields = None    # Keyfields define the way the rows are grouped
+        self.keyfields = None    # Keyfields define the way rows are grouped
         self.typename = None     # The type of the object
         self.fieldmap = dict()   # A list with fieldnames -> indexes
         self.indexmap = dict()   # A list with indexes -> fieldnames
@@ -89,14 +89,18 @@ class FieldMap(object):
         return indexes
 
     def maxindex(self):
-        """ Returns the topmost index of the Fieldmap including the children."""
-        childmax = self.children and max([c.maxindex() for c in self.children]) or 0
+        """Returns the topmost index of the Fieldmap including the children."""
+        childmax = self.children and max(
+            [c.maxindex() for c in self.children]
+        ) or 0
         selfmax = max(self.indexes())
         return max(childmax, selfmax)
 
     def minindex(self):
         """ Opposite of maxindex."""
-        childmin = self.children and min([c.minindex() for c in self.children]) or 0
+        childmin = self.children and min(
+            [c.minindex() for c in self.children]
+        ) or 0
         selfmin = min(self.indexes())
         return min(childmin, selfmin)
 
@@ -109,7 +113,7 @@ class FieldMap(object):
         self.wrapper[field] = wrapperfn
 
     def get_wrapper(self, field=None, ix=None):
-        """ Returns a bound wrapper or a function returning the value itself."""
+        """Returns a bound wrapper or a function returning the value itself."""
         assert(field or (ix or ix >= 0))
 
         field = field or self.get_field(ix, including_children=True)
@@ -153,7 +157,7 @@ def get_map(context):
     itemmap.mark_readonly('absolute_url')
 
     listwrap = lambda val: ','.join(val)
-    listunwrap = lambda val: [v.strip() for v in val.split(',')]
+    listunwrap = lambda val: [v.strip() for v in val.split(',') if v.strip()]
 
     for cat in CATEGORIES:
         itemmap.bind_wrapper(cat, listwrap)
