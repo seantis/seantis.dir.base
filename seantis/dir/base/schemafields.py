@@ -1,4 +1,9 @@
-from zope.schema import TextLine
+import logging
+log = logging.getLogger('seantis.dir.base')
+
+from urlparse import urlparse
+from zope.schema import TextLine, URI
+from zope.schema.interfaces import InvalidURI
 from seantis.dir.base.validators import validate_email
 
 
@@ -10,3 +15,19 @@ class Email(TextLine):
     def _validate(self, value):
         super(TextLine, self)._validate(value)
         validate_email(value)
+
+
+class AutoProtocolURI(URI):
+    """URI field which assumes http:// if no protocol is specified."""
+
+    def fromUnicode(self, value):
+        value = str(value.strip())
+
+        try:
+            if not urlparse(value).scheme:
+                value = 'http://' + value
+        except:
+            log.exception('invalid url %s' % value)
+            raise InvalidURI(value)
+
+        return super(AutoProtocolURI, self).fromUnicode(value)
