@@ -37,6 +37,10 @@ def parse_category_description(description):
     """
 
     result = dict()
+
+    if not description:
+        return result
+
     clean = lambda s: re.sub(double_space_exp, u' ', s).strip(u' \n')
     split = lambda expr, text: (clean(t) for t in re.split(expr, text))
 
@@ -63,9 +67,6 @@ def parse_category_description(description):
 
 
 def valid_category_description(description):
-    if not description:
-        return True
-
     try:
         parse_category_description(description)
     except ValueError:
