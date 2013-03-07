@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-11-12 11:21+0000\n"
+"POT-Creation-Date: 2013-03-07 09:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,29 +14,45 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./interfaces.py:37
+#: ./interfaces.py:52
 msgid "1st Category Name"
 msgstr "Kategorie 1"
 
-#: ./interfaces.py:53
+#: ./interfaces.py:75
 msgid "2nd Category Name"
 msgstr "Kategorie 2"
 
-#: ./interfaces.py:69
+#: ./interfaces.py:98
 msgid "3rd Category Name"
 msgstr "Kategorie 3"
 
-#: ./interfaces.py:85
+#: ./interfaces.py:121
 msgid "4th Category Name"
 msgstr "Kategorie 4"
 
-#: ./fieldmap.py:149
+#: ./fieldmap.py:155
 msgid "Coordinates (JSON)"
 msgstr "Koordinaten (JSON)"
 
-#: ./interfaces.py:31
+#: ./interfaces.py:46
 msgid "Description"
 msgstr "Beschreibung"
+
+#: ./interfaces.py:68
+msgid "Descriptions for Category 1"
+msgstr "Beschreibungen für Kategorie 1"
+
+#: ./interfaces.py:91
+msgid "Descriptions for Category 2"
+msgstr "Beschreibungen für Kategorie 2"
+
+#: ./interfaces.py:114
+msgid "Descriptions for Category 3"
+msgstr "Beschreibungen für Kategorie 3"
+
+#: ./interfaces.py:137
+msgid "Descriptions for Category 4"
+msgstr "Beschreibungen für Kategorie 4"
 
 #: ./profiles/basetype/types/seantis.dir.base.directory.xml
 msgid "Directory"
@@ -46,11 +62,11 @@ msgstr "Verzeichnis"
 msgid "Directory Item"
 msgstr "Verzeichnis-Eintrag"
 
-#: ./interfaces.py:107
+#: ./interfaces.py:150
 msgid "Enable filtering"
 msgstr "Filter zeigen"
 
-#: ./interfaces.py:113
+#: ./interfaces.py:156
 msgid "Enable searching"
 msgstr "Suche zeigen"
 
@@ -62,11 +78,11 @@ msgstr "Filtern"
 msgid "Fulltext search"
 msgstr "Volltext Suche"
 
-#: ./xlsimport.py:85
+#: ./xlsimport.py:86
 msgid "Import"
 msgstr "Importieren"
 
-#: ./xlsimport.py:40
+#: ./xlsimport.py:41
 msgid "Import directory items"
 msgstr "Verzeichniseinträge importieren"
 
@@ -74,31 +90,31 @@ msgstr "Verzeichniseinträge importieren"
 msgid "Import directory items using xls. The xls is expected to have the format defined in the template which you can <a href='#xlstemplate'>download here</a>"
 msgstr "Verzeichniseinträge mittels Excel(Xls) importieren. Die Excel Datei muss der Vorlage entsprechen welche Sie <a href='#xlstemplate'>hier herunterladen</a> können"
 
-#: ./xlsimport.py:110
+#: ./xlsimport.py:111
 msgid "Imported ${number} items"
 msgstr "${number} Verzeichniseinträge importiert"
 
-#: ./xlsimport.py:99
+#: ./xlsimport.py:100
 msgid "Invalid XLS file"
 msgstr "Ungültige XLS Datei"
 
-#: ./validators.py:13
+#: ./validators.py:14
 msgid "Invalid email address"
 msgstr "Ungültige Email Adresse"
 
-#: ./interfaces.py:101
+#: ./interfaces.py:144
 msgid "Last time a DirectoryItem was modified"
 msgstr "Letztes Änderungsdatum eines Verzeichniseintrages"
 
-#: ./interfaces.py:22
+#: ./interfaces.py:37
 msgid "Name"
 msgstr "Name"
 
-#: ./templates/macros.pt:59
+#: ./templates/macros.pt:49
 msgid "No Results"
 msgstr "Keine Resultate"
 
-#: ./xlsimport.py:187
+#: ./xlsimport.py:195
 msgid "Not all required fields have a value"
 msgstr "Nicht alle benötigten Felder haben einen Wert"
 
@@ -110,31 +126,31 @@ msgstr "Zurücksetzen"
 msgid "Search"
 msgstr "Suchen"
 
-#: ./interfaces.py:143
+#: ./interfaces.py:188
 msgid "Start typing and select a category. To add a new category write the name and hit enter."
 msgstr "Tippen und eine Kategorie wählen. Um eine neue Kategorie zu erstellen, Text eingeben und Enter drücken."
 
-#: ./interfaces.py:26
+#: ./interfaces.py:41
 msgid "Subtitle"
 msgstr "Untertitel"
 
-#: ./interfaces.py:43
+#: ./interfaces.py:58
 msgid "Suggested Values for the 1st Category"
 msgstr "Vorschläge für die erste Kategorie"
 
-#: ./interfaces.py:59
+#: ./interfaces.py:81
 msgid "Suggested Values for the 2nd Category"
 msgstr "Vorschläge für die zweite Kategorie"
 
-#: ./interfaces.py:75
+#: ./interfaces.py:104
 msgid "Suggested Values for the 3rd Category"
 msgstr "Vorschläge für die dritte Kategorie"
 
-#: ./interfaces.py:91
+#: ./interfaces.py:127
 msgid "Suggested Values for the 4th Category"
 msgstr "Vorschläge für die vierte Kategorie"
 
-#: ./interfaces.py:45
+#: ./interfaces.py:60
 msgid "These values are suggested when typing category values in the category items, in addition to values found in other items."
 msgstr "Diese Werte werden vorgeschlagen wenn Kategorie Werte im Eintrag eingegeben werden, zusätzlich zu den Werten die in anderen Einträgen gefunden werden."
 

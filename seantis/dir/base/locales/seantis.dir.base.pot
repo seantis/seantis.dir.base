@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-11-12 11:21+0000\n"
+"POT-Creation-Date: 2013-03-07 09:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,28 +17,44 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: seantis.dir.base\n"
 
-#: ./interfaces.py:37
+#: ./interfaces.py:52
 msgid "1st Category Name"
 msgstr ""
 
-#: ./interfaces.py:53
+#: ./interfaces.py:75
 msgid "2nd Category Name"
 msgstr ""
 
-#: ./interfaces.py:69
+#: ./interfaces.py:98
 msgid "3rd Category Name"
 msgstr ""
 
-#: ./interfaces.py:85
+#: ./interfaces.py:121
 msgid "4th Category Name"
 msgstr ""
 
-#: ./fieldmap.py:149
+#: ./fieldmap.py:155
 msgid "Coordinates (JSON)"
 msgstr ""
 
-#: ./interfaces.py:31
+#: ./interfaces.py:46
 msgid "Description"
+msgstr ""
+
+#: ./interfaces.py:68
+msgid "Descriptions for Category 1"
+msgstr ""
+
+#: ./interfaces.py:91
+msgid "Descriptions for Category 2"
+msgstr ""
+
+#: ./interfaces.py:114
+msgid "Descriptions for Category 3"
+msgstr ""
+
+#: ./interfaces.py:137
+msgid "Descriptions for Category 4"
 msgstr ""
 
 #: ./profiles/basetype/types/seantis.dir.base.directory.xml
@@ -49,11 +65,11 @@ msgstr ""
 msgid "Directory Item"
 msgstr ""
 
-#: ./interfaces.py:107
+#: ./interfaces.py:150
 msgid "Enable filtering"
 msgstr ""
 
-#: ./interfaces.py:113
+#: ./interfaces.py:156
 msgid "Enable searching"
 msgstr ""
 
@@ -65,11 +81,11 @@ msgstr ""
 msgid "Fulltext search"
 msgstr ""
 
-#: ./xlsimport.py:85
+#: ./xlsimport.py:86
 msgid "Import"
 msgstr ""
 
-#: ./xlsimport.py:40
+#: ./xlsimport.py:41
 msgid "Import directory items"
 msgstr ""
 
@@ -77,31 +93,31 @@ msgstr ""
 msgid "Import directory items using xls. The xls is expected to have the format defined in the template which you can <a href='#xlstemplate'>download here</a>"
 msgstr ""
 
-#: ./xlsimport.py:110
+#: ./xlsimport.py:111
 msgid "Imported ${number} items"
 msgstr ""
 
-#: ./xlsimport.py:99
+#: ./xlsimport.py:100
 msgid "Invalid XLS file"
 msgstr ""
 
-#: ./validators.py:13
+#: ./validators.py:14
 msgid "Invalid email address"
 msgstr ""
 
-#: ./interfaces.py:101
+#: ./interfaces.py:144
 msgid "Last time a DirectoryItem was modified"
 msgstr ""
 
-#: ./interfaces.py:22
+#: ./interfaces.py:37
 msgid "Name"
 msgstr ""
 
-#: ./templates/macros.pt:59
+#: ./templates/macros.pt:49
 msgid "No Results"
 msgstr ""
 
-#: ./xlsimport.py:187
+#: ./xlsimport.py:195
 msgid "Not all required fields have a value"
 msgstr ""
 
@@ -113,31 +129,31 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: ./interfaces.py:143
+#: ./interfaces.py:188
 msgid "Start typing and select a category. To add a new category write the name and hit enter."
 msgstr ""
 
-#: ./interfaces.py:26
+#: ./interfaces.py:41
 msgid "Subtitle"
 msgstr ""
 
-#: ./interfaces.py:43
+#: ./interfaces.py:58
 msgid "Suggested Values for the 1st Category"
 msgstr ""
 
-#: ./interfaces.py:59
+#: ./interfaces.py:81
 msgid "Suggested Values for the 2nd Category"
 msgstr ""
 
-#: ./interfaces.py:75
+#: ./interfaces.py:104
 msgid "Suggested Values for the 3rd Category"
 msgstr ""
 
-#: ./interfaces.py:91
+#: ./interfaces.py:127
 msgid "Suggested Values for the 4th Category"
 msgstr ""
 
-#: ./interfaces.py:45
+#: ./interfaces.py:60
 msgid "These values are suggested when typing category values in the category items, in addition to values found in other items."
 msgstr ""
 
