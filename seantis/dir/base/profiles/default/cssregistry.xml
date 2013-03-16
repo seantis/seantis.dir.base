@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <object name="portal_css" meta_type="Stylesheets Registry">
     <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="" id="++resource++seantis.dir.base.stylesheets/token-input.css" media="screen" rel="stylesheet" rendering="import" insert-before="base.css"/>
-    <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="python: 'seantis.dir' in object.portal_type" id="++resource++seantis.dir.base.stylesheets/directory.css" media="screen" rel="stylesheet" rendering="import" insert-before="base.css"/>
-    <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="python: 'seantis.dir' in object.portal_type" id="++resource++seantis.dir.base.stylesheets/search.css" media="screen" rel="stylesheet" rendering="import" insert-before="base.css"/>
+    <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="python: 'seantis.dir' in object.portal_type" id="++resource++seantis.dir.base.stylesheets/directory.css" media="all" rel="stylesheet" rendering="import" insert-before="base.css"/>
+    <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="python: 'seantis.dir' in object.portal_type" id="++resource++seantis.dir.base.stylesheets/search.css" media="all" rel="stylesheet" rendering="import" insert-before="base.css"/>
     <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="" id="++resource++seantis.dir.base.stylesheets/print.css" media="print" rel="stylesheet" rendering="link"/>
 </object>

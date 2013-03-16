@@ -1,7 +1,11 @@
-#directorySearchForm {
+#directorySearch {
     display: none;
 }
 
 .directoryResult {
     border: none !important;
+}
+
+#landingPageText {
+    display: none;
 }

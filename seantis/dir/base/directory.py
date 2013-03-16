@@ -221,12 +221,14 @@ class View(core.View, DirectoryCatalogMixin):
         if terms:
             self.items = self.catalog.filter(terms)
             self.filtered = True
+            self._used_terms = terms
         session.set_last_filter(self.context, terms)
 
     def search(self, searchtext):
         if searchtext:
             self.items = self.catalog.search(searchtext)
             self.filtered = True
+            self.used_searchtext = searchtext
         session.set_last_search(self.context, searchtext)
 
     def reset(self, *args):
@@ -271,7 +273,16 @@ class View(core.View, DirectoryCatalogMixin):
     def labels(self):
         return self.context.labels()
 
+    @property
+    def used_terms(self):
+        return dict(
+            i for i in self._used_terms.items() if i[1] and i[1] != '!empty'
+        )
+
     def update(self, **kwargs):
+        self._used_terms = {}
+        self.used_searchtext = ''
+
         action, param = self.primary_action()
         action(param)
 
