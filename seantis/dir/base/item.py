@@ -175,9 +175,9 @@ class DirectoryItemViewletManager(grok.ViewletManager):
 
 
 class DirectoryItemViewlet(grok.Viewlet):
-    grok.context(IDirectoryItemBase)
+    grok.context(Interface)
     grok.name('seantis.dir.base.item.detail')
     grok.require('zope2.View')
     grok.viewletmanager(DirectoryItemViewletManager)
 
-    template = grok.PageTemplate(u'<p tal:content="context/description" />')
+    template = grok.PageTemplate(u'<p tal:content="context/Description" />')
