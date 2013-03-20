@@ -4,7 +4,14 @@ Changelog
 
 1.3 (unreleased)
 ----------------
-- Map markers are now always set in the order of the itemview's batch list. 
+- Map markers are now always set in the order of the itemview's batch list.
+- The directory no longer uses a homegrown getObject cache and will instead
+  use catalog brains as much as possible. Directories building on
+  seantis.dir.base might have taken that for granted, so they might be
+  incompatible with this version.
+
+  As a result, viewlets registered with the DirectoryItemViewletManager now
+  need to expect catalog brains instead of objects.
 
 1.2
 ---
