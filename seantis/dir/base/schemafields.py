@@ -21,11 +21,9 @@ class AutoProtocolURI(URI):
     """URI field which assumes http:// if no protocol is specified."""
 
     def fromUnicode(self, value):
-        value = str(value.strip())
-
         try:
             if not urlparse(value).scheme:
-                value = 'http://' + value
+                value = u'http://' + value
         except:
             log.exception('invalid url %s' % value)
             raise InvalidURI(value)
