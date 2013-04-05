@@ -219,6 +219,7 @@
         this.set_options = function(index, values) {
             var category = this.category(index);
             if (category) {
+                var selected_value = category.find('option:selected').val();
                 category.find('option').remove();
 
                 // If the array does not contain the unselected value, add it
@@ -228,7 +229,11 @@
 
                 // Add all values from the array to the select
                 $.each(values, function(index, value) {
-                    category.append('<option>' + value + '</option>');
+                    if(value == selected_value) {
+                        category.append('<option selected="selected">' + value + '</option>');
+                    } else {
+                        category.append('<option>' + value + '</option>');
+                    }
                 });   
 
                 // IE7 you so silly, why you resize on insert?
