@@ -26,7 +26,7 @@
             var first = this.first();
             if (!first) {
                 this.reset_from_cache();
-                return;   
+                return;
             }
 
             var terms = this.terms(eventindex);
@@ -41,7 +41,7 @@
                     // The first selected item always gets the full list
                     if (index === first)
                         that.options(index, that.category_cache(index));
-                    
+
                     // Only the selects after the last clicked one
                     // are filled with values
                     if (index > eventindex)
@@ -74,7 +74,7 @@
 
                 var get_options = function(category, index) {
                     var i = index -1;
-                    if (i < data.length) 
+                    if (i < data.length)
                         return data[i][category];
                     else if (index >= 1)
                         return get_options(category, index - 1);
@@ -83,7 +83,7 @@
                 for (var i=2; i <= 4; i++) {
                     var category = 'cat' + i;
                     var options = get_options(category, i-1);
-                    
+
                     that.options(i, options);
 
                     if (category in terms) {
@@ -101,7 +101,7 @@
             };
             var normal = normalize(value);
             var result = false;
-            
+
             $.each(list, function(index, item) {
                 if (normal == normalize(item)) {
                     result = item;
@@ -125,7 +125,7 @@
             var category = this.category(index);
 
             terms[name] = category.val();
-            
+
             if (index < lastindex) {
                 this.terms(lastindex, index + 1, terms);
             }
@@ -138,7 +138,7 @@
             ix = ix - 1; // Everywhere else the index is 1 based
             if (ix >= this.categories.length)
                 return null;
-            
+
             return $(this.categories[ix]);
         };
 
@@ -185,7 +185,7 @@
             for (var index = 1; index <= this.categories.length; index++) {
                 if (this.selected(index))
                     return index;
-            }  
+            }
             return 0;
         };
 
@@ -234,7 +234,7 @@
                     } else {
                         category.append('<option>' + value + '</option>');
                     }
-                });   
+                });
 
                 // IE7 you so silly, why you resize on insert?
                 if ($.browser.msie && $.browser.version=="7.0") {
@@ -265,7 +265,7 @@
                 console.log('Error parsing element');
             else {
                 filter.unselect(index + 1);
-                filter.update(index);   
+                filter.update(index);
             }
         });
 
