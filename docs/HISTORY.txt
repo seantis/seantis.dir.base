@@ -2,8 +2,8 @@
 Changelog
 =========
 
-1.3 (unreleased)
-----------------
+1.3
+---
 - Map markers are now always set in the order of the itemview's batch list.
 - The directory no longer uses a homegrown getObject cache and will instead
   use catalog brains as much as possible. Directories building on
@@ -12,6 +12,8 @@ Changelog
 
   As a result, viewlets registered with the DirectoryItemViewletManager now
   need to expect catalog brains instead of objects.
+
+  The upsides are big performance gains and more stability.
 
 1.2
 ---
