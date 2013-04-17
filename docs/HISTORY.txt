@@ -2,6 +2,9 @@
 Changelog
 =========
 
+1.4 (unreleased)
+---
+
 1.3
 ---
 - Map markers are now always set in the order of the itemview's batch list.
