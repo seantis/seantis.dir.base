@@ -4,7 +4,7 @@ from datetime import datetime
 from five import grok
 from zope.interface import Interface
 from zope.interface import implements
-from zope.app.container.interfaces import IObjectMovedEvent
+from zope.container.interfaces import IObjectMovedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from plone.dexterity.content import Container

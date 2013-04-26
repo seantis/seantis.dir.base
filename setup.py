@@ -5,22 +5,26 @@ version = '1.4a'
 
 tests_require = [
     'collective.testcaselayer',
-    ]
+]
 
 setup(name='seantis.dir.base',
       version=version,
       description="Directory module for Plone using Dexterity",
-      long_description=open("README.rst").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
+      long_description='\n'.join((
+          open("README.rst").read(),
+          open(os.path.join("docs", "HISTORY.txt")).read()
+      )),
       # Get more strings from
       # http://pypi.python.org/pypi?:action=list_classifiers
       classifiers=[
-        'Framework :: Plone',
-        'Framework :: Plone :: 4.2',
-        'Intended Audience :: Developers',
-        'Topic :: Software Development :: Libraries :: Python Modules',
-        "Programming Language :: Python",
-        ],
+          'Framework :: Plone',
+          'Framework :: Plone :: 4.1',
+          'Framework :: Plone :: 4.2',
+          'Framework :: Plone :: 4.3',
+          'Intended Audience :: Developers',
+          'Topic :: Software Development :: Libraries :: Python Modules',
+          'Programming Language :: Python',
+      ],
       keywords='directory plone dexterity',
       author='Seantis GmbH',
       author_email='info@seantis.ch',
@@ -32,7 +36,7 @@ setup(name='seantis.dir.base',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'Plone',
+          'Plone>=4.1',
           'plone.app.dexterity',
           'collective.autopermission',
           'plone.behavior',
