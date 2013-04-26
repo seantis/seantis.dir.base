@@ -36,7 +36,7 @@ setup(name='seantis.dir.base',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'Plone>=4.1',
+          'Plone>=4.3',
           'plone.app.dexterity',
           'collective.autopermission',
           'plone.behavior',
