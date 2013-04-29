@@ -18,8 +18,6 @@ setup(name='seantis.dir.base',
       # http://pypi.python.org/pypi?:action=list_classifiers
       classifiers=[
           'Framework :: Plone',
-          'Framework :: Plone :: 4.1',
-          'Framework :: Plone :: 4.2',
           'Framework :: Plone :: 4.3',
           'Intended Audience :: Developers',
           'Topic :: Software Development :: Libraries :: Python Modules',
