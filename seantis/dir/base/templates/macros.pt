@@ -40,7 +40,7 @@
 
     <metal:define define-macro="resultlist">
       <div id="directoryResultList">
-        <div class="directoryResult" tal:repeat="brain brains">
+        <div class="directoryResult" tal:repeat="brain brains" tal:attributes="id brain/id">
 
           <metal:use use-macro="context/@@seantis-dir-macros/macros/map-marker"></metal:use>
 
