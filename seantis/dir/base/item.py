@@ -180,4 +180,9 @@ class DirectoryItemViewlet(grok.Viewlet):
     grok.require('zope2.View')
     grok.viewletmanager(DirectoryItemViewletManager)
 
-    template = grok.PageTemplate(u'<p tal:content="context/Description" />')
+    template = grok.PageTemplate(u"""
+        <a tal:attributes="href context/getURL">
+            <div class="result-title" tal:content="context/Title"/>
+            <div class="result-description" tal:content="context/Description"/>
+        </a>
+    """)

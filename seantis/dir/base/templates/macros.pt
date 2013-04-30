@@ -50,5 +50,11 @@
       </div>
     </metal:define>    
 
+    <metal:define define-macro="directory-info">
+      <div class="directory-info">
+        <div class="directory-subtitle" tal:content="context/subtitle"></div>
+        <div class="directory-description" tal:content="structure context/html_description"></div>
+      </div>
+    </metal:define>
   </body>
 </html>

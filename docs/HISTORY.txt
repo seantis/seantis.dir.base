@@ -2,6 +2,11 @@
 Changelog
 =========
 
+1.4.1 (unreleased)
+-----
+- Provide better default template for result list entry
+- Provide a macro for default directory information
+
 1.4
 ---
 - Map markers macro is now compatible with both brains and actual objects
