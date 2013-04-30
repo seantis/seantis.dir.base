@@ -2,10 +2,10 @@
 Changelog
 =========
 
-1.4 (unreleased)
+1.4
 ---
 - Map markers macro is now compatible with both brains and actual objects
-- Requires Plone 4.1 to run
+- Requires Plone 4.3 to run
 
 1.3
 ---
