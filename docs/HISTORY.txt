@@ -6,6 +6,7 @@ Changelog
 -----
 - Provide better default template for result list entry
 - Provide a macro for default directory information
+- Fixes search viewlet being hidden on item view
 
 1.4
 ---

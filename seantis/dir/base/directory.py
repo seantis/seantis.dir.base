@@ -96,7 +96,7 @@ class DirectoryCatalogMixin(object):
         if IDirectoryBase.providedBy(self.context):
             return self.context
         elif IDirectoryItemBase.providedBy(self.context):
-            if hasattr(IDirectoryItemBase(self.context), 'parent'):
+            if hasattr(IDirectoryItemBase(self.context), 'get_parent'):
                 return self.context.get_parent()
 
         return None
