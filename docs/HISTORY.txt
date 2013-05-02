@@ -9,6 +9,7 @@ Changelog
 - Fixes search viewlet being hidden on item view
 - New flag allow_custom_categories on directory which can be used to prevent users
 from entering their own categories on items
+- Added category values to kml document
 
 1.4
 ---

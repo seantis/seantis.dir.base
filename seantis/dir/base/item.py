@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from functools import partial
 
 from five import grok
 from zope.interface import Interface
@@ -20,7 +21,7 @@ from collective.geo.geographer.geo import GeoreferencingAnnotator
 from collective.geo.settings.interfaces import IGeoCustomFeatureStyle
 from collective.geo.contentlocations.geomanager import GeoManager
 
-from seantis.dir.base import utils
+from seantis.dir.base import utils, const
 from seantis.dir.base.interfaces import IDirectoryItemBase
 
 # Subscribe to every event that potentially has an impact on the
@@ -106,6 +107,32 @@ class DirectoryItem(Container):
 
         return list(utils.flatten(values))
 
+    def category_values_string(self, category):
+        """Returns the category values of the given category thusly:
+
+        value;another value;a third value
+
+        -> Required for collective.geo.kml's display_property
+        """
+
+        return ';'.join(k for k in self.keywords((category, )) if k)
+
+    @property
+    def cat1_value(self):
+        return self.category_values_string('cat1')
+
+    @property
+    def cat2_value(self):
+        return self.category_values_string('cat2')
+
+    @property
+    def cat3_value(self):
+        return self.category_values_string('cat3')
+
+    @property
+    def cat4_value(self):
+        return self.category_values_string('cat4')
+
     def html_description(self):
         """Returns the description with newlines replaced by <br/> tags"""
         if self.description:
@@ -158,6 +185,10 @@ class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
         self.geostyles['marker_image_size'] = 0.71875
         self.geostyles['display_properties'] = []
         self.geostyles['use_custom_styles'] = True
+        self.geostyles['display_properties'] = [
+            'title',
+            'description'
+        ] + ['{}_value'.format(cat) for cat in const.CATEGORIES]
 
 
 class DirectoryItemViewletManager(grok.ViewletManager):
