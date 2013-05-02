@@ -16,7 +16,7 @@ from seantis.dir.base.descriptions import parse_category_description
 from seantis.dir.base.const import CATEGORIES, ITEMSPERPAGE
 
 from seantis.dir.base.interfaces import (
-    IDirectoryItemBase, IDirectoryBase, IDirectoryCatalog
+    IDirectoryItemBase, IDirectoryBase, IDirectoryCatalog, IDirectoryPage
 )
 
 
@@ -200,6 +200,9 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
         if hasattr(self.view, 'hide_search_viewlet'):
             if self.view.hide_search_viewlet:
                 return False
+
+        if not IDirectoryPage.providedBy(self.view):
+            return False
 
         return self.directory is not None
 
