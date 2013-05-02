@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-03-07 09:54+0000\n"
+"POT-Creation-Date: 2013-05-02 09:11+0000\n"
 "PO-Revision-Date: 2012-12-18 13:47+0100\n"
 "Last-Translator: Fabian Reinhard <fabian.reinhard@seantis.ch>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,6 +30,10 @@ msgstr "Nom de 3ème catégorie"
 #: ./interfaces.py:121
 msgid "4th Category Name"
 msgstr "Nom de 4ème catégorie"
+
+#: ./interfaces.py:162
+msgid "Allow custom categories"
+msgstr ""
 
 #: ./fieldmap.py:155
 msgid "Coordinates (JSON)"
@@ -79,6 +83,10 @@ msgstr "Recherche avancée"
 msgid "Fulltext search"
 msgstr "Recherche de texte complet"
 
+#: ./interfaces.py:163
+msgid "If custom categories are allowed, items may specify new categories. If they are not allowed, people can only choose from the given suggestions."
+msgstr ""
+
 #: ./xlsimport.py:86
 msgid "Import"
 msgstr "Importation"
@@ -127,7 +135,7 @@ msgstr "Reset"
 msgid "Search"
 msgstr "Recherche"
 
-#: ./interfaces.py:188
+#: ./interfaces.py:199
 msgid "Start typing and select a category. To add a new category write the name and hit enter."
 msgstr "Commencez à taper et sélectionnez une catégorie. Pour ajouter une nouvelle catégorie d'écrire le nom et appuyez sur entrée."
 

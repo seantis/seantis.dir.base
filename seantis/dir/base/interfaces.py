@@ -158,6 +158,17 @@ class IDirectoryBase(IDirectoryRoot):
         default=True
     )
 
+    allow_custom_categories = Bool(
+        title=_(u'Allow custom categories'),
+        description=_(
+            u'If custom categories are allowed, items may specify new '
+            u'categories. If they are not allowed, people can only choose '
+            u'from the given suggestions.'
+        ),
+        required=True,
+        default=True,
+    )
+
 
 class IDirectory(IDirectoryBase):
     pass

@@ -3,6 +3,7 @@ import json
 from five import grok
 from zope.interface import Interface
 from zope.component import getAdapter
+from zope.schema.interfaces import IContextSourceBinder
 from plone.directives import form
 from plone.dexterity.content import Container
 from Products.CMFPlone.PloneBatch import Batch
@@ -18,6 +19,8 @@ from seantis.dir.base.const import CATEGORIES, ITEMSPERPAGE
 from seantis.dir.base.interfaces import (
     IDirectoryItemBase, IDirectoryBase, IDirectoryCatalog, IDirectoryPage
 )
+
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 class Directory(Container):
@@ -80,6 +83,27 @@ class Directory(Container):
             return self.description.replace('\n', '<br />')
         else:
             return ''
+
+    def source_provider(self, category):
+        """"Returns an IContextSourceBinder with the vocabulary of the
+        suggestions for the given category.
+
+        """
+
+        directory = self
+
+        @grok.provider(IContextSourceBinder)
+        def get_categories(ctx):
+            terms = []
+
+            for value in directory.suggested_values(category):
+                terms.append(
+                    SimpleVocabulary.createTerm(value, hash(value), value)
+                )
+
+            return SimpleVocabulary(terms)
+
+        return get_categories
 
 
 class DirectoryCatalogMixin(object):

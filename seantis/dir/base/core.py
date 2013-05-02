@@ -5,6 +5,7 @@ from five import grok
 
 from zope.interface import Interface, implements
 from zope.component import getUtility
+from zope.schema import Choice
 
 from plone.dexterity.schema import SCHEMA_CACHE
 from plone.memoize.instance import memoizedproperty
@@ -14,6 +15,7 @@ from plone.registry.interfaces import IRegistry
 
 from z3c.form.interfaces import IFieldsForm, IFormLayer, IAddForm
 from z3c.form.field import FieldWidgets
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
 
 from collective.geo.settings.interfaces import IGeoSettings
 from collective.geo.mapwidget.browser.widget import MapWidget
@@ -167,6 +169,11 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
             return self.content
 
     def update(self):
+        # lock widgets
+        if self.hook_form and '.item' in self.form.portal_type:
+            if not self.directory.allow_custom_categories:
+                self.lock_categories()
+
         super(DirectoryFieldWidgets, self).update()
 
         # some forms are adapted which we don't care about, since the
@@ -230,6 +237,32 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         # move fields after the star
         for prev, curr, next in previous_and_next(order[default + 1:]):
             move(self.form, curr, after=prev or '*')
+
+    def lock_categories(self):
+        """ Forces radio buttons for categories on items to prevent the user
+        from entering his own. Executed if 'allow_custom_categories' is set
+        to False on the directory.
+
+        The changes are actually made on the field, which is not what I would
+        prefer since they are persistent. But I have yet to find a way to do
+        the same thing with pure widgets.
+        """
+        try:
+            categories = (
+                self.form.fields['cat1'],
+                self.form.fields['cat2'],
+                self.form.fields['cat3'],
+                self.form.fields['cat4']
+            )
+        except KeyError:
+            return
+
+        for category in categories:
+            category.widgetFactory = CheckBoxFieldWidget
+            category.field.description = u''
+            category.field.value_type = Choice(
+                source=self.directory.source_provider(category.__name__)
+            )
 
     def label_widgets(self):
         """Takes a list of widgets and substitutes the labels of those

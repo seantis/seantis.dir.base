@@ -58,3 +58,11 @@ a.groupSelection {
 #geoshapemap polyline {
     fill: none;   
 }
+
+/* checkboxes of categories should each have their own line */
+#formfield-form-widgets-cat1 .option,
+#formfield-form-widgets-cat2 .option,
+#formfield-form-widgets-cat3 .option,
+#formfield-form-widgets-cat4 .option {
+    display: block;
+}
