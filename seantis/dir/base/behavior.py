@@ -5,6 +5,7 @@ from Products.ZCatalog.interfaces import IZCatalog
 
 from seantis.dir.base.interfaces import IDirectoryItemLike
 from seantis.dir.base import utils
+from seantis.dir.base import const
 
 
 class DirectoryItemBehavior(object):
@@ -63,55 +64,17 @@ class DirectoryItemBehavior(object):
         else:
             return ''
 
-    # I strongly dislike this cat1-4 setup here, but I failed so far in
-    # creating those properties dynamically. Will try again => TODO
-    def get_cat1(self):
-        return self.context.cat1
 
-    def set_cat1(self, value):
-        self.context.cat1 = value
+# add cat1-4 accessors
+for category in const.CATEGORIES:
+    getter = lambda self: getattr(self.context, category)
+    setter = lambda self, value: setattr(self.context, category, value)
+    setattr(DirectoryItemBehavior, category, property(getter, setter))
 
-    cat1 = property(get_cat1, set_cat1)
-
-    def get_cat2(self):
-        return self.context.cat2
-
-    def set_cat2(self, value):
-        self.context.cat2 = value
-
-    cat2 = property(get_cat2, set_cat2)
-
-    def get_cat3(self):
-        return self.context.cat3
-
-    def set_cat3(self, value):
-        self.context.cat3 = value
-
-    cat3 = property(get_cat3, set_cat3)
-
-    def get_cat4(self):
-        return self.context.cat4
-
-    def set_cat4(self, value):
-        self.context.cat4 = value
-
-    cat4 = property(get_cat4, set_cat4)
-
-    @property
-    def cat1_value(self):
-        return self.category_values_string('cat1')
-
-    @property
-    def cat2_value(self):
-        return self.category_values_string('cat2')
-
-    @property
-    def cat3_value(self):
-        return self.category_values_string('cat3')
-
-    @property
-    def cat4_value(self):
-        return self.category_values_string('cat4')
+# add cat1-4_value properties
+for category in const.CATEGORIES:
+    getter = lambda self: self.category_values_string(category)
+    setattr(DirectoryItemBehavior, category, property(getter))
 
 
 class DirectoryItemBehaviorIndexer(grok.MultiAdapter):
