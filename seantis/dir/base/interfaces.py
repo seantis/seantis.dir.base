@@ -174,12 +174,7 @@ class IDirectory(IDirectoryBase):
     pass
 
 
-class IDirectoryItemBase(IDirectoryRoot):
-    """Single entry of a directory. Usually you would not want to directly
-    work with this class. Instead refer to IDirectoryItem below.
-
-    """
-
+class IDirectoryItemBasics(IDirectoryRoot):
     searchable('title')
     title = TextLine(
         title=_(u'Name'),
@@ -193,6 +188,8 @@ class IDirectoryItemBase(IDirectoryRoot):
         missing_value=u''
     )
 
+
+class IDirectoryItemCategories(IDirectoryRoot):
     searchable('cat1')
     cat1 = List(
         title=_(u'1st Category Name'),
@@ -228,50 +225,21 @@ class IDirectoryItemBase(IDirectoryRoot):
         value_type=TextLine(),
         required=False,
     )
+
+
+class IDirectoryItemBase(IDirectoryItemBasics, IDirectoryItemCategories):
+    """Single entry of a directory. Usually you would not want to directly
+    work with this class. Instead refer to IDirectoryItem below.
+
+    """
 
 
 class IDirectoryItemLike(IDirectoryRoot):
     pass
 
 
-class IDirectoryItemBehavior(IDirectoryRoot):
-
-    searchable('cat1')
-    cat1 = List(
-        title=_(u'1st Category Name'),
-        description=_(u'Start typing and select a category. '
-                      u'To add a new category write the name and hit enter.'),
-        value_type=TextLine(),
-        required=False,
-    )
-
-    searchable('cat2')
-    cat2 = List(
-        title=_(u'2nd Category Name'),
-        description=_(u'Start typing and select a category. '
-                      u'To add a new category write the name and hit enter.'),
-        value_type=TextLine(),
-        required=False,
-    )
-
-    searchable('cat3')
-    cat3 = List(
-        title=_(u'3rd Category Name'),
-        description=_(u'Start typing and select a category. '
-                      u'To add a new category write the name and hit enter.'),
-        value_type=TextLine(),
-        required=False,
-    )
-
-    searchable('cat4')
-    cat4 = List(
-        title=_(u'4th Category Name'),
-        description=_(u'Start typing and select a category. '
-                      u'To add a new category write the name and hit enter.'),
-        value_type=TextLine(),
-        required=False,
-    )
-
+class IDirectoryItemBehavior(IDirectoryItemCategories):
+    pass
 
 alsoProvides(IDirectoryItemBehavior, form.IFormFieldProvider)
 

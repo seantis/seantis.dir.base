@@ -3,33 +3,14 @@ from five import grok
 from plone.indexer.interfaces import IIndexer
 from Products.ZCatalog.interfaces import IZCatalog
 
-from seantis.dir.base.interfaces import (
-    IDirectoryItemLike,
-    IDirectoryItemBehavior,
-    IDirectoryItemBase
-)
+from seantis.dir.base.interfaces import IDirectoryItemLike
 from seantis.dir.base import utils
 
 
-class DirectoryItemBehavior(grok.Adapter):
-    """Grant local roles to reviewers when the behavior is used.
-    """
-
-    grok.implements(IDirectoryItemBase)
-    grok.context(IDirectoryItemBehavior)
-
-    grok.name('seantis.dir.base.item-behavior')
+class DirectoryItemBehavior(object):
 
     def __init__(self, context):
         self.context = context
-
-    def get_cat1(self):
-        return self.context.cat1
-
-    def set_cat1(self, value):
-        self.context.cat1 = value
-
-    cat1 = property(get_cat1, set_cat1)
 
     @property
     def directory(self):
@@ -75,6 +56,47 @@ class DirectoryItemBehavior(grok.Adapter):
 
         return ';'.join(k for k in self.keywords((category, )) if k)
 
+    def html_description(self):
+        """Returns the description with newlines replaced by <br/> tags"""
+        if self.description:
+            return self.description.replace('\n', '<br />')
+        else:
+            return ''
+
+    # I strongly dislike this cat1-4 setup here, but I failed so far in
+    # creating those properties dynamically. Will try again => TODO
+    def get_cat1(self):
+        return self.context.cat1
+
+    def set_cat1(self, value):
+        self.context.cat1 = value
+
+    cat1 = property(get_cat1, set_cat1)
+
+    def get_cat2(self):
+        return self.context.cat2
+
+    def set_cat2(self, value):
+        self.context.cat2 = value
+
+    cat2 = property(get_cat2, set_cat2)
+
+    def get_cat3(self):
+        return self.context.cat3
+
+    def set_cat3(self, value):
+        self.context.cat3 = value
+
+    cat3 = property(get_cat3, set_cat3)
+
+    def get_cat4(self):
+        return self.context.cat4
+
+    def set_cat4(self, value):
+        self.context.cat4 = value
+
+    cat4 = property(get_cat4, set_cat4)
+
     @property
     def cat1_value(self):
         return self.category_values_string('cat1')
@@ -91,17 +113,8 @@ class DirectoryItemBehavior(grok.Adapter):
     def cat4_value(self):
         return self.category_values_string('cat4')
 
-    def html_description(self):
-        """Returns the description with newlines replaced by <br/> tags"""
-        if self.description:
-            return self.description.replace('\n', '<br />')
-        else:
-            return ''
-
 
 class DirectoryItemBehaviorIndexer(grok.MultiAdapter):
-    """Catalog indexer for the 'reviewers' index.
-    """
 
     grok.implements(IIndexer)
     grok.adapts(IDirectoryItemLike, IZCatalog)

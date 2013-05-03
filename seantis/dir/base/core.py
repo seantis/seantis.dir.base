@@ -134,7 +134,8 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         if hasattr(self.form, 'portal_type'):
             return self.form.portal_type
         elif hasattr(self.form, 'parentForm'):
-            return self.form.parentForm.portal_type
+            if hasattr(self.form.parentForm, 'portal_type'):
+                return self.form.parentForm.portal_type
 
     @property
     def hook_form(self):
