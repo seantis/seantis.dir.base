@@ -1,4 +1,4 @@
-from zope.interface import Interface, Invalid
+from zope.interface import Interface, Invalid, alsoProvides
 from zope.schema import (
     Text,
     TextLine,
@@ -228,6 +228,52 @@ class IDirectoryItemBase(IDirectoryRoot):
         value_type=TextLine(),
         required=False,
     )
+
+
+class IDirectoryItemLike(IDirectoryRoot):
+    pass
+
+
+class IDirectoryItemBehavior(IDirectoryRoot):
+
+    searchable('cat1')
+    cat1 = List(
+        title=_(u'1st Category Name'),
+        description=_(u'Start typing and select a category. '
+                      u'To add a new category write the name and hit enter.'),
+        value_type=TextLine(),
+        required=False,
+    )
+
+    searchable('cat2')
+    cat2 = List(
+        title=_(u'2nd Category Name'),
+        description=_(u'Start typing and select a category. '
+                      u'To add a new category write the name and hit enter.'),
+        value_type=TextLine(),
+        required=False,
+    )
+
+    searchable('cat3')
+    cat3 = List(
+        title=_(u'3rd Category Name'),
+        description=_(u'Start typing and select a category. '
+                      u'To add a new category write the name and hit enter.'),
+        value_type=TextLine(),
+        required=False,
+    )
+
+    searchable('cat4')
+    cat4 = List(
+        title=_(u'4th Category Name'),
+        description=_(u'Start typing and select a category. '
+                      u'To add a new category write the name and hit enter.'),
+        value_type=TextLine(),
+        required=False,
+    )
+
+
+alsoProvides(IDirectoryItemBehavior, form.IFormFieldProvider)
 
 
 class IDirectoryItem(IDirectoryItemBase):

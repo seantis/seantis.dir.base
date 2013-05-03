@@ -7,6 +7,7 @@ from zope.interface import Interface, implements
 from zope.component import getUtility
 from zope.schema import Choice
 
+from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.schema import SCHEMA_CACHE
 from plone.memoize.instance import memoizedproperty
 from plone.memoize import view
@@ -27,7 +28,10 @@ from seantis.dir.base import session
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
 from seantis.dir.base.interfaces import (
-    IDirectoryPage, IDirectoryRoot, IDirectoryItemBase, IMapMarker
+    IDirectoryPage,
+    IDirectoryRoot,
+    IDirectoryItemBase,
+    IMapMarker
 )
 
 
@@ -120,19 +124,40 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         # like a poor mans version of plone.autoform (though it's actually more
         # advanced when it comes to the field ordering)
         # => see field_order, omitted_fields, reorder_widgets and update
-        if hasattr(form, 'portal_type') and 'seantis.dir' in form.portal_type:
-            self.hook_form = True
+        if self.hook_form:
             self.reorder_widgets()
-        else:
-            self.hook_form = False
 
         super(DirectoryFieldWidgets, self).__init__(form, request, context)
 
     @property
-    def update_category_widgets(self):
-        " Return true if the category widgets need to be removed / renamed. "
+    def portal_type(self):
+        if hasattr(self.form, 'portal_type'):
+            return self.form.portal_type
+        elif hasattr(self.form, 'parentForm'):
+            return self.form.parentForm.portal_type
 
-        return '.item' in self.form.portal_type
+    @property
+    def hook_form(self):
+        """ Return True if the form should be hooked. """
+
+        if not self.portal_type:
+            return False
+
+        fti = getUtility(IDexterityFTI, name=self.portal_type)
+        if fti.lookupSchema().isOrExtends(IDirectoryRoot):
+            return True
+
+        item_behavior = 'seantis.dir.base.interfaces.IDirectoryItemBehavior'
+        if item_behavior in fti.behaviors:
+            return True
+
+        return False
+
+    @property
+    def is_directory(self):
+        """ Return True if this form is a directory. """
+
+        return '.directory' in self.portal_type
 
     @property
     def omitted_fields(self):
@@ -142,19 +167,19 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
             'seantis.dir.base.omitted', ['field1', 'field2']
         )
         """
-        iface = SCHEMA_CACHE.get(self.form.portal_type)
+        iface = SCHEMA_CACHE.get(self.portal_type)
         return iface.queryTaggedValue('seantis.dir.base.omitted', [])
 
     @property
     def field_order(self):
         """ See reorder_widgets. """
-        iface = SCHEMA_CACHE.get(self.form.portal_type)
+        iface = SCHEMA_CACHE.get(self.portal_type)
         return iface.queryTaggedValue('seantis.dir.base.order', ['*'])
 
     @property
     def custom_labels(self):
         """ See label_widgets. """
-        iface = SCHEMA_CACHE.get(self.form.portal_type)
+        iface = SCHEMA_CACHE.get(self.portal_type)
         return iface.queryTaggedValue('seantis.dir.base.labels', {})
 
     @property
@@ -163,14 +188,14 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
 
     @property
     def directory(self):
-        if IDirectoryItemBase.providedBy(self.content):
-            return self.content.get_parent()
+        if IDirectoryItemBase.providedBy(self.context):
+            return self.context.aq_inner.aq_parent
         else:
-            return self.content
+            return self.context
 
     def update(self):
         # lock widgets
-        if self.hook_form and '.item' in self.form.portal_type:
+        if self.hook_form:
             if not self.directory.allow_custom_categories:
                 self.lock_categories()
 
@@ -184,24 +209,20 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
             return
 
         # remove / rename category fields
-        if self.update_category_widgets:
-            self.label_widgets()
+        if not self.is_directory:
+            self.apply_labels(self.directory.labels())
             map(self.remove_widget, self.omitted_categories)
 
         # remove omitted fields
         map(self.remove_widget, self.omitted_fields)
 
         # apply custom labels
-        self.custom_label_widgets()
+        self.apply_labels(self.custom_labels)
 
-    def remove_widget(self, key):
-        # the second way is probably the right one, but the first way
-        # worked in older plone versions before, so i'll leave it
-        if key in self.__dict__:
-            del self[key]
-
-        if key in self.form.widgets:
-            del self.form.widgets[key]
+    def remove_widget(self, fieldname):
+        for key, widget in self.form.widgets.items():
+            if widget.field.__name__ == fieldname:
+                del self.form.widgets[key]
 
     def reorder_widgets(self):
         """ Reorders the widgets of the form. Must be called before the
@@ -264,25 +285,15 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
                 source=self.directory.source_provider(category.__name__)
             )
 
-    def label_widgets(self):
-        """Takes a list of widgets and substitutes the labels of those
-        representing category values with the labels from the Directory.
+    def apply_labels(self, labels):
+        """ Applies the labels of the given dictionary built as follows:
+
+            { fieldname => label }
 
         """
-        # Set correct label depending on the DirectoryItem value
-        labels = self.directory.labels()
-        for field, widget in self.items():
-            if field in labels:
-                widget.label = labels[field]
-
-    def custom_label_widgets(self):
-        """Goes throught he custom labels and applies them. """
-
-        for field, label in self.custom_labels.items():
-            if field in self.form.widgets:
-                self.form.widgets[field].label = utils.translate(
-                    self.context, self.request, label
-                )
+        for widget in self.form.widgets.values():
+            if widget.field.__name__ in labels:
+                widget.label = labels[widget.field.__name__]
 
 
 class DirectoryFieldWidgetsAddForm(DirectoryFieldWidgets):

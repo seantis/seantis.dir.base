@@ -1,6 +1,5 @@
 import json
 from datetime import datetime
-from functools import partial
 
 from five import grok
 from zope.interface import Interface
