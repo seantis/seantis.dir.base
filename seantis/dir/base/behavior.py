@@ -8,7 +8,7 @@ from seantis.dir.base import utils
 from seantis.dir.base import const
 
 
-class DirectoryItemBehavior(object):
+class DirectoryCategorized(object):
 
     def __init__(self, context):
         self.context = context
@@ -65,7 +65,7 @@ def create_category_property(category):
     return getter, setter
 
 for category in const.CATEGORIES:
-    setattr(DirectoryItemBehavior, category, property(
+    setattr(DirectoryCategorized, category, property(
         *create_category_property(category)
     ))
 
@@ -75,19 +75,19 @@ def create_category_value_property(category):
     return lambda self: self.category_values_string(category)
 
 for category in const.CATEGORIES:
-    setattr(DirectoryItemBehavior, '{}_value'.format(category), property(
+    setattr(DirectoryCategorized, '{}_value'.format(category), property(
         create_category_value_property(category)
     ))
 
 
-class DirectoryItemBehaviorIndexer(grok.MultiAdapter):
+class DirectoryCategorizedIndexer(grok.MultiAdapter):
 
     grok.implements(IIndexer)
     grok.adapts(IDirectoryItemLike, IZCatalog)
     grok.name('categories')
 
     def __init__(self, context, catalog):
-        self.behavior = DirectoryItemBehavior(context)
+        self.behavior = DirectoryCategorized(context)
 
     def __call__(self):
         return self.behavior.categories()

@@ -224,10 +224,10 @@ class IDirectoryItemLike(IDirectoryRoot):
     pass
 
 
-class IDirectoryItemBehavior(IDirectoryItemCategories):
+class IDirectoryCategorized(IDirectoryItemCategories):
     pass
 
-alsoProvides(IDirectoryItemBehavior, form.IFormFieldProvider)
+alsoProvides(IDirectoryCategorized, form.IFormFieldProvider)
 
 
 class IDirectoryItem(IDirectoryItemBase):

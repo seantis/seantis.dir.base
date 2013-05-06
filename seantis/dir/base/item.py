@@ -3,7 +3,6 @@ import json
 from five import grok
 from zope.interface import Interface
 from zope.interface import implements
-from zope.deprecation import deprecate
 
 from plone.dexterity.content import Container
 from collective.geo.contentlocations.geostylemanager import GeoStyleManager
@@ -18,35 +17,13 @@ from collective.geo.settings.interfaces import IGeoCustomFeatureStyle
 from collective.geo.contentlocations.geomanager import GeoManager
 
 from seantis.dir.base import const
-from seantis.dir.base.behavior import DirectoryItemBehavior
 from seantis.dir.base.interfaces import IDirectoryItemBase
-
-
-deprecation_message = """
-    Using this method or property on the directory item is deprecated,
-    use DirectoryItemBehavior instead
-"""
 
 
 class DirectoryItem(Container):
     """Represents objects created using IDirectoryItem."""
 
     implements(IAttributeAnnotatable, IGeoreferenceable)
-
-    def __init__(self, *args, **kwargs):
-        super(DirectoryItem, self).__init__(*args, **kwargs)
-
-    @deprecate(deprecation_message)
-    def get_parent(self):
-        return DirectoryItemBehavior(self).get_parent()
-
-    @deprecate(deprecation_message)
-    def categories(self):
-        return DirectoryItemBehavior(self).categories()
-
-    @deprecate(deprecation_message)
-    def keywords(self, categories=None):
-        return DirectoryItemBehavior(self).keywords(categories)
 
     def get_description(self):
         # ensure that the description is never None (which is handled by the

@@ -64,10 +64,10 @@
 
     <!-- Behaviors -->
     <plone:behavior
-        title="Directory Item Behavior"
+        title="Directory Categorized"
         description="Makes any type behave like a Directory Item"
-        provides=".interfaces.IDirectoryItemBehavior"
-        factory=".behavior.DirectoryItemBehavior"
+        provides=".interfaces.IDirectoryCategorized"
+        factory=".behavior.DirectoryCategorized"
         marker=".interfaces.IDirectoryItemLike"
         />
 

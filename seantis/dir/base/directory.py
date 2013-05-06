@@ -3,8 +3,10 @@ import json
 from five import grok
 from zope.interface import Interface
 from zope.component import getAdapter
+from zope.component import getAllUtilitiesRegisteredFor
 from zope.schema.interfaces import IContextSourceBinder
 from plone.directives import form
+from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.content import Container
 from Products.CMFPlone.PloneBatch import Batch
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
@@ -85,7 +87,7 @@ class Directory(Container):
             return ''
 
     def source_provider(self, category):
-        """"Returns an IContextSourceBinder with the vocabulary of the
+        """Returns an IContextSourceBinder with the vocabulary of the
         suggestions for the given category.
 
         """
@@ -104,6 +106,23 @@ class Directory(Container):
             return SimpleVocabulary(terms)
 
         return get_categories
+
+    def allowedContentTypes(self, context=None):
+        """Add all types adapting the IDirectoryItemBehavior to the allowed
+        content types.
+
+        """
+        all_types = getAllUtilitiesRegisteredFor(IDexterityFTI)
+        allowed = super(Directory, self).allowedContentTypes(context)
+        not_allowed = set(all_types) - set(allowed)
+
+        behavior = 'seantis.dir.base.interfaces.IDirectoryCategorized'
+
+        for fti in not_allowed:
+            if behavior in fti.behaviors:
+                allowed.append(fti)
+
+        return allowed
 
 
 class DirectoryCatalogMixin(object):

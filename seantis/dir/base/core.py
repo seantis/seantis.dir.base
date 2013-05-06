@@ -148,7 +148,7 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         if fti.lookupSchema().isOrExtends(IDirectoryRoot):
             return True
 
-        item_behavior = 'seantis.dir.base.interfaces.IDirectoryItemBehavior'
+        item_behavior = 'seantis.dir.base.interfaces.IDirectoryCategorized'
         if item_behavior in fti.behaviors:
             return True
 
