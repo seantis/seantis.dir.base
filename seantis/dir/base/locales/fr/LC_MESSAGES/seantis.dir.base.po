@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-05-02 09:11+0000\n"
+"POT-Creation-Date: 2013-05-06 14:59+0000\n"
 "PO-Revision-Date: 2012-12-18 13:47+0100\n"
 "Last-Translator: Fabian Reinhard <fabian.reinhard@seantis.ch>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,23 +15,23 @@ msgstr ""
 "Domain: DOMAIN\n"
 "X-Generator: Poedit 1.5.4\n"
 
-#: ./interfaces.py:52
+#: ./interfaces.py:51
 msgid "1st Category Name"
 msgstr "Nom de 1ère catégorie"
 
-#: ./interfaces.py:75
+#: ./interfaces.py:74
 msgid "2nd Category Name"
 msgstr "Nom de 2ème catégorie"
 
-#: ./interfaces.py:98
+#: ./interfaces.py:97
 msgid "3rd Category Name"
 msgstr "Nom de 3ème catégorie"
 
-#: ./interfaces.py:121
+#: ./interfaces.py:120
 msgid "4th Category Name"
 msgstr "Nom de 4ème catégorie"
 
-#: ./interfaces.py:162
+#: ./interfaces.py:155
 msgid "Allow custom categories"
 msgstr ""
 
@@ -39,23 +39,23 @@ msgstr ""
 msgid "Coordinates (JSON)"
 msgstr "Coordonnées (JSON)"
 
-#: ./interfaces.py:46
+#: ./interfaces.py:45
 msgid "Description"
 msgstr "Déscription"
 
-#: ./interfaces.py:68
+#: ./interfaces.py:67
 msgid "Descriptions for Category 1"
 msgstr ""
 
-#: ./interfaces.py:91
+#: ./interfaces.py:90
 msgid "Descriptions for Category 2"
 msgstr ""
 
-#: ./interfaces.py:114
+#: ./interfaces.py:113
 msgid "Descriptions for Category 3"
 msgstr ""
 
-#: ./interfaces.py:137
+#: ./interfaces.py:136
 msgid "Descriptions for Category 4"
 msgstr ""
 
@@ -67,11 +67,11 @@ msgstr "Dossier"
 msgid "Directory Item"
 msgstr "Dossier d'article"
 
-#: ./interfaces.py:150
+#: ./interfaces.py:143
 msgid "Enable filtering"
 msgstr "Activer le filtrage"
 
-#: ./interfaces.py:156
+#: ./interfaces.py:149
 msgid "Enable searching"
 msgstr "Activer la recherche"
 
@@ -83,7 +83,7 @@ msgstr "Recherche avancée"
 msgid "Fulltext search"
 msgstr "Recherche de texte complet"
 
-#: ./interfaces.py:163
+#: ./interfaces.py:156
 msgid "If custom categories are allowed, items may specify new categories. If they are not allowed, people can only choose from the given suggestions."
 msgstr ""
 
@@ -111,11 +111,7 @@ msgstr "Invalid fichier XLS"
 msgid "Invalid email address"
 msgstr "Adresse e-mail non valide"
 
-#: ./interfaces.py:144
-msgid "Last time a DirectoryItem was modified"
-msgstr "La dernière fois, un DirectoryItem a été modifié"
-
-#: ./interfaces.py:37
+#: ./interfaces.py:36
 msgid "Name"
 msgstr "Nom"
 
@@ -135,31 +131,31 @@ msgstr "Reset"
 msgid "Search"
 msgstr "Recherche"
 
-#: ./interfaces.py:199
+#: ./interfaces.py:189
 msgid "Start typing and select a category. To add a new category write the name and hit enter."
 msgstr "Commencez à taper et sélectionnez une catégorie. Pour ajouter une nouvelle catégorie d'écrire le nom et appuyez sur entrée."
 
-#: ./interfaces.py:41
+#: ./interfaces.py:40
 msgid "Subtitle"
 msgstr "Sous-titre"
 
-#: ./interfaces.py:58
+#: ./interfaces.py:57
 msgid "Suggested Values for the 1st Category"
 msgstr "Valeurs suggérées pour la 2ème catégorie"
 
-#: ./interfaces.py:81
+#: ./interfaces.py:80
 msgid "Suggested Values for the 2nd Category"
 msgstr "Valeurs suggérées pour la 1ère catégorie"
 
-#: ./interfaces.py:104
+#: ./interfaces.py:103
 msgid "Suggested Values for the 3rd Category"
 msgstr "Valeurs suggérées pour la 3ème catégorie"
 
-#: ./interfaces.py:127
+#: ./interfaces.py:126
 msgid "Suggested Values for the 4th Category"
 msgstr "Valeurs suggérées pour la 4ème catégorie"
 
-#: ./interfaces.py:60
+#: ./interfaces.py:59
 msgid "These values are suggested when typing category values in the category items, in addition to values found in other items."
 msgstr "Ces valeurs sont suggérées lors de la saisie des valeurs de catégories dans les éléments de catégorie, en plus des valeurs trouvées dans d'autres articles."
 
