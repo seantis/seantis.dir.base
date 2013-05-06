@@ -196,7 +196,7 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
 
     def update(self):
         # lock widgets
-        if self.hook_form:
+        if self.hook_form and not self.is_directory:
             if not self.directory.allow_custom_categories:
                 self.lock_categories()
 

@@ -1,14 +1,11 @@
 import json
-from datetime import datetime
 
 from five import grok
 from zope.interface import Interface
 from zope.interface import implements
-from zope.container.interfaces import IObjectMovedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.deprecation import deprecate
 
 from plone.dexterity.content import Container
-from Products.CMFCore.interfaces import IActionSucceededEvent
 from collective.geo.contentlocations.geostylemanager import GeoStyleManager
 
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -20,38 +17,36 @@ from collective.geo.geographer.geo import GeoreferencingAnnotator
 from collective.geo.settings.interfaces import IGeoCustomFeatureStyle
 from collective.geo.contentlocations.geomanager import GeoManager
 
-from seantis.dir.base import utils, const
+from seantis.dir.base import const
+from seantis.dir.base.behavior import DirectoryItemBehavior
 from seantis.dir.base.interfaces import IDirectoryItemBase
 
-# Subscribe to every event that potentially has an impact on the
-# caching in order to trigger a cache invalidation.
 
-
-@grok.subscribe(IDirectoryItemBase, IObjectMovedEvent)
-def onMovedItem(item, event):
-    # changed may not necesseraly be there (e.g. the object is
-    # using IDirectoryItemBase as a dexterity behavior)
-    if hasattr(item, 'changed'):
-        item.changed(event.oldParent)
-        item.changed(event.newParent)
-
-
-@grok.subscribe(IDirectoryItemBase, IObjectModifiedEvent)
-def onModifiedItem(item, event):
-    if hasattr(item, 'changed'):
-        item.changed(item.get_parent())
-
-
-@grok.subscribe(IDirectoryItemBase, IActionSucceededEvent)
-def onChangedWorkflowState(item, event):
-    if hasattr(item, 'changed'):
-        item.changed(item.get_parent())
+deprecation_message = """
+    Using this method or property on the directory item is deprecated,
+    use DirectoryItemBehavior instead
+"""
 
 
 class DirectoryItem(Container):
     """Represents objects created using IDirectoryItem."""
 
     implements(IAttributeAnnotatable, IGeoreferenceable)
+
+    def __init__(self, *args, **kwargs):
+        super(DirectoryItem, self).__init__(*args, **kwargs)
+
+    @deprecate(deprecation_message)
+    def get_parent(self):
+        return DirectoryItemBehavior(self).get_parent()
+
+    @deprecate(deprecation_message)
+    def categories(self):
+        return DirectoryItemBehavior(self).categories()
+
+    @deprecate(deprecation_message)
+    def keywords(self, categories=None):
+        return DirectoryItemBehavior(self).keywords(categories)
 
     def get_description(self):
         # ensure that the description is never None (which is handled by the
@@ -65,72 +60,6 @@ class DirectoryItem(Container):
         self.__dict__['description'] = value
 
     description = property(get_description, set_description)
-
-    def get_parent(self):
-        #I tried to use @property here, but this screws with the acquisition
-        #context, which apparently is a known sideffect in this case
-        return self.aq_inner.aq_parent
-
-    def changed(self, parent):
-        """Sets the time when a childitem was changed."""
-        if parent:
-            parent.child_modified = datetime.now()
-
-    def categories(self):
-        """Returns a list of tuples with each tuple containing three values:
-        [0] = attribute name
-        [1] = category label (from parent)
-        [2] = category value (from self)
-
-        Only returns actually used categories
-
-        """
-        items = []
-        labels = self.get_parent().labels()
-        for cat in labels.keys():
-            value = hasattr(self, cat) and getattr(self, cat) or u''
-            items.append((cat, labels[cat], value))
-
-        return items
-
-    def keywords(self, categories=None):
-        """Returns a flat list of all categories, wheter they are actually
-        visible in the directory or not, unless a list of categories is
-        specifically passed.
-
-        """
-        categories = categories or self.get_parent().all_categories()
-        values = []
-        for cat in categories:
-            values.append(getattr(self, cat))
-
-        return list(utils.flatten(values))
-
-    def category_values_string(self, category):
-        """Returns the category values of the given category thusly:
-
-        value;another value;a third value
-
-        -> Required for collective.geo.kml's display_property
-        """
-
-        return ';'.join(k for k in self.keywords((category, )) if k)
-
-    @property
-    def cat1_value(self):
-        return self.category_values_string('cat1')
-
-    @property
-    def cat2_value(self):
-        return self.category_values_string('cat2')
-
-    @property
-    def cat3_value(self):
-        return self.category_values_string('cat3')
-
-    @property
-    def cat4_value(self):
-        return self.category_values_string('cat4')
 
     def html_description(self):
         """Returns the description with newlines replaced by <br/> tags"""

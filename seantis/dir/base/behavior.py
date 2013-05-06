@@ -13,8 +13,7 @@ class DirectoryItemBehavior(object):
     def __init__(self, context):
         self.context = context
 
-    @property
-    def directory(self):
+    def get_parent(self):
         return self.context.aq_inner.aq_parent
 
     def categories(self):
@@ -27,7 +26,7 @@ class DirectoryItemBehavior(object):
 
         """
         items = []
-        labels = self.directory.labels()
+        labels = self.get_parent().labels()
         for cat in labels.keys():
             value = hasattr(self, cat) and getattr(self, cat) or u''
             items.append((cat, labels[cat], value))
@@ -40,7 +39,7 @@ class DirectoryItemBehavior(object):
         specifically passed.
 
         """
-        categories = categories or self.directory.all_categories()
+        categories = categories or self.get_parent().all_categories()
         values = []
         for cat in categories:
             values.append(getattr(self, cat))
@@ -57,24 +56,28 @@ class DirectoryItemBehavior(object):
 
         return ';'.join(k for k in self.keywords((category, )) if k)
 
-    def html_description(self):
-        """Returns the description with newlines replaced by <br/> tags"""
-        if self.description:
-            return self.description.replace('\n', '<br />')
-        else:
-            return ''
-
 
 # add cat1-4 accessors
-for category in const.CATEGORIES:
+def create_category_property(category):
     getter = lambda self: getattr(self.context, category)
     setter = lambda self, value: setattr(self.context, category, value)
-    setattr(DirectoryItemBehavior, category, property(getter, setter))
+
+    return getter, setter
+
+for category in const.CATEGORIES:
+    setattr(DirectoryItemBehavior, category, property(
+        *create_category_property(category)
+    ))
+
 
 # add cat1-4_value properties
+def create_category_value_property(category):
+    return lambda self: self.category_values_string(category)
+
 for category in const.CATEGORIES:
-    getter = lambda self: self.category_values_string(category)
-    setattr(DirectoryItemBehavior, category, property(getter))
+    setattr(DirectoryItemBehavior, '{}_value'.format(category), property(
+        create_category_value_property(category)
+    ))
 
 
 class DirectoryItemBehaviorIndexer(grok.MultiAdapter):

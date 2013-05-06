@@ -3,7 +3,6 @@ from zope.schema import (
     Text,
     TextLine,
     List,
-    Datetime,
     Bool
 )
 
@@ -140,12 +139,6 @@ class IDirectoryBase(IDirectoryRoot):
         constraint=description_constraint
     )
 
-    child_modified = Datetime(
-        title=_(u'Last time a DirectoryItem was modified'),
-        required=False,
-        readonly=True
-    )
-
     enable_filter = Bool(
         title=_(u'Enable filtering'),
         required=True,
@@ -174,7 +167,7 @@ class IDirectory(IDirectoryBase):
     pass
 
 
-class IDirectoryItemBasics(IDirectoryRoot):
+class IDirectoryItemBase(IDirectoryRoot):
     searchable('title')
     title = TextLine(
         title=_(u'Name'),
@@ -225,13 +218,6 @@ class IDirectoryItemCategories(IDirectoryRoot):
         value_type=TextLine(),
         required=False,
     )
-
-
-class IDirectoryItemBase(IDirectoryItemBasics, IDirectoryItemCategories):
-    """Single entry of a directory. Usually you would not want to directly
-    work with this class. Instead refer to IDirectoryItem below.
-
-    """
 
 
 class IDirectoryItemLike(IDirectoryRoot):
