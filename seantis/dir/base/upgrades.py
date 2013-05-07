@@ -34,3 +34,12 @@ def upgrade_to_2012110201(context):
             pass
 
     transaction.commit()
+
+
+def upgrade_to_2013050701(context):
+    """ Reapply jsregistry step """
+
+    setup = getToolByName(context, 'portal_setup')
+    setup.runImportStepFromProfile(
+        'profile-seantis.dir.base:default', 'jsregistry'
+    )

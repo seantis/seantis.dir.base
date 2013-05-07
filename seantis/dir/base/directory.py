@@ -331,6 +331,7 @@ class JsonFilterView(core.View, DirectoryCatalogMixin):
     grok.name('filter')
 
     mapfields = None
+    json_view = True
 
     def render(self, **kwargs):
         terms = self.get_filter_terms()
@@ -364,6 +365,8 @@ class JsonSearch(core.View, DirectoryCatalogMixin):
     grok.context(IDirectoryBase)
     grok.require('zope2.View')
     grok.name('query')
+
+    json_view = True
 
     def render(self, **kwargs):
         category = 'cat%i' % int(self.request['cat'])

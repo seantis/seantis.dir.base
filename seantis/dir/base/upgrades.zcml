@@ -2,7 +2,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:gs="http://namespaces.zope.org/genericsetup"
     i18n_domain="seantis.dir.base">
-       
+
     <gs:upgradeStep
         title="Upgrade seantis.dir.base"
         description="seantis.dir.base upgrade step"
@@ -10,5 +10,13 @@
         destination="2012110201"
         handler=".upgrades.upgrade_to_2012110201"
         profile="seantis.dir.base:default" />
-       
+
+    <gs:upgradeStep
+        title="Reimport jsregistry"
+        description=""
+        source="*"
+        destination="2013050701"
+        handler=".upgrades.upgrade_to_2013050701"
+        profile="seantis.dir.base:default" />
+
 </configure>

@@ -343,6 +343,9 @@ class View(grok.View):
         present we simply hide the mapwidget if the seantis.dir.base types
         are not in the content_types list. """
 
+        if hasattr(self, 'json_view') and self.json_view:
+            return False
+
         try:
             settings = getUtility(IRegistry).forInterface(IGeoSettings)
             return self.context.portal_type in settings.geo_content_types

@@ -17,7 +17,7 @@
     };
 
     var get_category = function(categoryid) {
-        return $('#form-widgets-cat' + categoryid);
+        return $('#form-widgets-IDirectoryCategorized-cat' + categoryid);
     };
 
     var get_existing = function(category) {
@@ -28,8 +28,8 @@
                 var item = {};
                 item.id = value;
                 item.name = value;
-            
-                existing.push(item); 
+
+                existing.push(item);
             }
         });
 
@@ -47,36 +47,8 @@
         return result;
     };
 
-    /* It is not possible to confine this script to seantis.dir.base.item types
-    as the resource registry offers way to examine if the item is being added
-    or not (in which case the context is seantis.dir.base even though an item
-    add form is shown).
-
-    Therefore a guess is made from the class names present in the current html,
-    though that might fail sometime in the future.
-
-    See Products.ResourceRegistry.tools.BaseRegistry.evaluateExpression
-    */
-    var enable = function() {
-        var body = $('body').attr('class');
-
-        // template-seantis.dir.....item (add edit view)
-        if (/template-seantis\.dir(\..*)?\.item/.test(body))
-            return true;
-
-        // apart from that, only template edit views
-        if (/template-edit/.test(body) === false)
-            return false;
-        
-        // with the correct portaltype
-        if (/portaltype-seantis-dir(-.*)?-item/.test(body))
-            return true;
-        
-        return false;
-    };
-
     var setup_category = function(categoryid) {
-        var category = get_category(categoryid);  
+        var category = get_category(categoryid);
         if (category.length <= 0)
             return;
 
@@ -105,11 +77,9 @@
     };
 
     $(document).ready(function() {
-        if (enable()) {
-            setup_category(1);
-            setup_category(2);
-            setup_category(3);
-            setup_category(4);   
-        }
+        setup_category(1);
+        setup_category(2);
+        setup_category(3);
+        setup_category(4);
     });
 })( jQuery );
