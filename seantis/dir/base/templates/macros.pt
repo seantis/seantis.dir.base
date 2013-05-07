@@ -34,7 +34,7 @@
 
     <metal:define define-macro="map-marker">
       <div class="directoryMarker" tal:condition="view/show_map">
-        <img tal:define="item python: item if 'item' in locals() else brain.getObject()" tal:condition="python: item.has_mapdata()" tal:attributes="src python: view.marker_image(item)" width="23" height="23"/>
+        <img tal:define="item python: item if 'item' in locals() else brain.getObject()" tal:condition="python: view.has_mapdata(item)" tal:attributes="src python: view.marker_image(item)" width="23" height="23"/>
       </div>
     </metal:define>
 

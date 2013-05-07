@@ -1,10 +1,20 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.4'
+version = '1.5'
 
 tests_require = [
     'collective.testcaselayer',
+]
+
+geo_require = [
+    'collective.geo.geographer>=1.6',
+    'collective.geo.contentlocations>=2.5',
+    'collective.geo.settings>=2.5',
+    'collective.geo.mapwidget>=1.6',
+    'collective.geo.openlayers>=2.5',
+    'collective.geo.kml>=2.5',
+    'collective.geo.behaviour'
 ]
 
 setup(name='seantis.dir.base',
@@ -42,15 +52,10 @@ setup(name='seantis.dir.base',
           'collective.dexteritytextindexer',
           'xlrd',
           'xlwt',
-          'collective.geo.geographer>=1.6',
-          'collective.geo.contentlocations>=2.5',
-          'collective.geo.settings>=2.5',
-          'collective.geo.mapwidget>=1.6',
-          'collective.geo.openlayers>=2.5',
-          'collective.geo.kml>=2.5',
       ],
       tests_require=tests_require,
-      extras_require=dict(tests=tests_require),
+      geo_require=geo_require,
+      extras_require=dict(tests=tests_require, geo=geo_require),
       entry_points="""
       [z3c.autoinclude.plugin]
       target = plone

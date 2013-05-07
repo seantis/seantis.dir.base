@@ -8,18 +8,13 @@ from plone.dexterity.content import Container
 from collective.geo.contentlocations.geostylemanager import GeoStyleManager
 
 from zope.annotation.interfaces import IAttributeAnnotatable
-from collective.geo.geographer.interfaces import (
-    IGeoreferenceable,
-    IGeoreferenced
-)
+from collective.geo.geographer.interfaces import IGeoreferenceable
 from collective.geo.geographer.geo import GeoreferencingAnnotator
 from collective.geo.settings.interfaces import IGeoCustomFeatureStyle
 from collective.geo.contentlocations.geomanager import GeoManager
 
-from seantis.dir.base import const
 from seantis.dir.base.interfaces import (
-    IDirectoryItemBase,
-    IDirectoryCategorized
+    IDirectoryItemBase
 )
 
 
@@ -48,21 +43,7 @@ class DirectoryItem(Container):
         else:
             return ''
 
-    def has_mapdata(self):
-        return IGeoreferenced(self).type is not None
-
-    @property
-    def kmlcategories(self):
-        """ Used for kml-document. """
-        categories = {}
-        categorized = IDirectoryCategorized(self)
-
-        for category in const.CATEGORIES:
-            keywords = [k for k in categorized.keywords((category,)) if k]
-            categories[category] = '; '.join(k for k in keywords if k) + ';'
-
-        return categories
-
+    # coordiantes_json is used for import / export of coordinates
     def get_coordinates(self):
         return GeoManager(self).getCoordinates()
 
@@ -108,7 +89,10 @@ class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
         self.geostyles['display_properties'] = [
             'title',
             'description',
-            'kmlcategories'
+            'cat1',
+            'cat2',
+            'cat3',
+            'cat4'
         ]
 
 

@@ -22,6 +22,7 @@ from collective.geo.settings.interfaces import IGeoSettings
 from collective.geo.mapwidget.browser.widget import MapWidget
 from collective.geo.mapwidget.maplayers import MapLayer
 from collective.geo.kml.browser import kmldocument
+from collective.geo.geographer.interfaces import IGeoreferenced
 
 from seantis.dir.base import utils
 from seantis.dir.base import session
@@ -377,6 +378,9 @@ class View(grok.View):
         else:
             return self.filtered
 
+    def has_mapdata(self, item):
+        return IGeoreferenced(item).type is not None
+
     @property
     def show_banner(self):
         return ('banner' in self.request) or not self.filtered
@@ -392,7 +396,7 @@ class View(grok.View):
         mapwidget = MapWidget(self, self.request, self.context)
 
         if self.is_itemview:
-            if self.context.has_mapdata():
+            if self.has_mapdata(self.context):
                 layer = DirectoryMapLayer(context=self.context)
                 layer.zoom = True
                 layer.letter = None
@@ -416,7 +420,7 @@ class View(grok.View):
                 if hasattr(item, 'getObject'):
                     item = item.getObject()
 
-                if not item.id in self.lettermap and item.has_mapdata():
+                if not item.id in self.lettermap and self.has_mapdata(item):
 
                     layer = DirectoryMapLayer(context=item)
 
