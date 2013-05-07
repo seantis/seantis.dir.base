@@ -1,5 +1,7 @@
 from five import grok
 
+from Acquisition import aq_base
+
 from plone.indexer.interfaces import IIndexer
 from Products.ZCatalog.interfaces import IZCatalog
 
@@ -46,37 +48,23 @@ class DirectoryCategorized(object):
 
         return list(utils.flatten(values))
 
-    def category_values_string(self, category):
-        """Returns the category values of the given category thusly:
-
-        value;another value;a third value
-
-        -> Required for collective.geo.kml's display_property
-        """
-
-        return ';'.join(k for k in self.keywords((category, )) if k)
-
 
 # add cat1-4 accessors
 def create_category_property(category):
-    getter = lambda self: getattr(self.context, category)
-    setter = lambda self, value: setattr(self.context, category, value)
+    def getter(self):
+        if hasattr(self.context, category):
+            return getattr(aq_base(self.context), category)
+        else:
+            return None
+
+    def setter(self, value):
+        setattr(self.context, category, value)
 
     return getter, setter
 
 for category in const.CATEGORIES:
     setattr(DirectoryCategorized, category, property(
         *create_category_property(category)
-    ))
-
-
-# add cat1-4_value properties
-def create_category_value_property(category):
-    return lambda self: self.category_values_string(category)
-
-for category in const.CATEGORIES:
-    setattr(DirectoryCategorized, '{}_value'.format(category), property(
-        create_category_value_property(category)
     ))
 
 
