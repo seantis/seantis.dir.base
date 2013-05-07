@@ -6,6 +6,7 @@ import xlwt
 import codecs
 import os
 
+from Acquisition import aq_base
 from zope.i18n import translate
 
 from seantis.dir.base.utils import get_interface_fields
@@ -14,6 +15,7 @@ from seantis.dir.base.fieldmap import get_map
 from seantis.dir.base import core
 from seantis.dir.base.directory import IDirectoryBase
 from seantis.dir.base.directory import CATEGORIES
+from seantis.dir.base.interfaces import IDirectoryCategorized
 
 
 class XlsExportView(core.View):
@@ -94,7 +96,9 @@ def write_title(fieldmap, worksheet, language, directory=None):
     minix = min(indexes)
     maxix = max(indexes)
 
-    write = lambda col, value: worksheet.write(0, col, value, colstyle(fieldmap, col))
+    write = lambda col, value: worksheet.write(
+        0, col, value, colstyle(fieldmap, col)
+    )
 
     for ix in xrange(minix, maxix + 1):
         name = fieldmap.indexmap[ix]
@@ -127,7 +131,9 @@ def write_objects(objects, fieldmap, worksheet, row, writeparent=None):
     startrow = row
     for obj in objects:
 
-        write = lambda r: write_object(obj, fieldmap, worksheet, r, writeparent)
+        write = lambda r: write_object(
+            obj, fieldmap, worksheet, r, writeparent
+        )
 
         for childmap in fieldmap.children:
             children = catalog.children(obj, childmap.typename)
@@ -149,15 +155,20 @@ def write_object(obj, fieldmap, worksheet, row, writeparent=None):
         writeparent(row)
 
     for field, ix in fieldmap.fieldmap.items():
-        write = lambda col, value: worksheet.write(row, col, value.encode('utf-8'), colstyle(fieldmap, col))
+        write = lambda col, value: worksheet.write(
+            row, col, value.encode('utf-8'), colstyle(fieldmap, col)
+        )
 
-        if not hasattr(obj, field):
+        if field in CATEGORIES:
+            value = getattr(IDirectoryCategorized(obj), field)
+        elif hasattr(aq_base(obj), field):
+            value = getattr(aq_base(obj), field)
+        else:
             continue
 
-        value = getattr(obj, field)
         if value:
             wrapper = fieldmap.get_wrapper(field)
-            attr = getattr(obj, field)
+            attr = getattr(aq_base(obj), field)
 
             # A field in the map may be a function in which case it is
             # called here and ignored on import

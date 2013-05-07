@@ -52,7 +52,7 @@ class DirectoryCategorized(object):
 # add cat1-4 accessors
 def create_category_property(category):
     def getter(self):
-        if hasattr(self.context, category):
+        if hasattr(aq_base(self.context), category):
             return getattr(aq_base(self.context), category)
         else:
             return None
@@ -63,9 +63,8 @@ def create_category_property(category):
     return getter, setter
 
 for category in const.CATEGORIES:
-    setattr(DirectoryCategorized, category, property(
-        *create_category_property(category)
-    ))
+    getter, setter = create_category_property(category)
+    setattr(DirectoryCategorized, category, property(getter, setter))
 
 
 class DirectoryCategorizedIndexer(grok.MultiAdapter):

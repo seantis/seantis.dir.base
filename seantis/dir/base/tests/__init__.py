@@ -1,19 +1,22 @@
 import random
 
-from seantis.dir.base.tests.layer import Layer
+from plone.dexterity.utils import createContentInContainer
 from Products.PloneTestCase.ptc import PloneTestCase
+from seantis.dir.base.tests.layer import Layer
 
 
 class IntegrationTestCase(PloneTestCase):
     layer = Layer
 
-    def add_directory(self, name='Directory'):
-        self.folder.invokeFactory('seantis.dir.base.directory', name)
-        return self.folder[name]
+    def add_directory(self, title='Directory'):
+        return createContentInContainer(
+            self.folder, 'seantis.dir.base.directory', title=title
+        )
 
-    def add_item(self, directory, name='DirectoryItem'):
-        directory.invokeFactory('seantis.dir.base.item', name)
-        return directory[name]
+    def add_item(self, directory, title='Directory Item'):
+        return createContentInContainer(
+            directory, 'seantis.dir.base.item', title=title
+        )
 
     def add_item_bulk(self, directory, values):
         items = []

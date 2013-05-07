@@ -3,7 +3,10 @@
 from zope.component import getAdapter
 
 from seantis.dir.base.tests import IntegrationTestCase
-from seantis.dir.base.interfaces import IDirectoryCatalog
+from seantis.dir.base.interfaces import (
+    IDirectoryCatalog,
+    IDirectoryCategorized
+)
 from seantis.dir.base.catalog import is_exact_match
 
 
@@ -49,10 +52,10 @@ class TestCatalog(IntegrationTestCase):
 
     def test_sorting(self):
         directory = self.add_directory()
-        self.add_item(directory, name='last').title = u'ööö'
-        self.add_item(directory, name='second').title = u'äää'
-        self.add_item(directory, name='third').title = u'bbb'
-        self.add_item(directory, name='first').title = u'aaa'
+        self.add_item(directory, title='last').title = u'ööö'
+        self.add_item(directory, title='second').title = u'äää'
+        self.add_item(directory, title='third').title = u'bbb'
+        self.add_item(directory, title='first').title = u'aaa'
 
         catalog = get_catalog(directory)
 

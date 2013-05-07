@@ -7,16 +7,6 @@ tests_require = [
     'collective.testcaselayer',
 ]
 
-geo_require = [
-    'collective.geo.geographer>=1.6',
-    'collective.geo.contentlocations>=2.5',
-    'collective.geo.settings>=2.5',
-    'collective.geo.mapwidget>=1.6',
-    'collective.geo.openlayers>=2.5',
-    'collective.geo.kml>=2.5',
-    'collective.geo.behaviour'
-]
-
 setup(name='seantis.dir.base',
       version=version,
       description="Directory module for Plone using Dexterity",
@@ -52,10 +42,16 @@ setup(name='seantis.dir.base',
           'collective.dexteritytextindexer',
           'xlrd',
           'xlwt',
+          'collective.geo.geographer>=1.6',
+          'collective.geo.contentlocations>=2.5',
+          'collective.geo.settings>=2.5',
+          'collective.geo.mapwidget>=1.6',
+          'collective.geo.openlayers>=2.5',
+          'collective.geo.kml>=2.5',
+          'collective.geo.behaviour'
       ],
       tests_require=tests_require,
-      geo_require=geo_require,
-      extras_require=dict(tests=tests_require, geo=geo_require),
+      extras_require=dict(tests=tests_require),
       entry_points="""
       [z3c.autoinclude.plugin]
       target = plone
