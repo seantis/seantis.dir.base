@@ -17,7 +17,10 @@ from collective.geo.settings.interfaces import IGeoCustomFeatureStyle
 from collective.geo.contentlocations.geomanager import GeoManager
 
 from seantis.dir.base import const
-from seantis.dir.base.interfaces import IDirectoryItemBase
+from seantis.dir.base.interfaces import (
+    IDirectoryItemBase,
+    IDirectoryCategorized
+)
 
 
 class DirectoryItem(Container):
@@ -47,6 +50,18 @@ class DirectoryItem(Container):
 
     def has_mapdata(self):
         return IGeoreferenced(self).type is not None
+
+    @property
+    def kmlcategories(self):
+        """ Used for kml-document. """
+        categories = {}
+        categorized = IDirectoryCategorized(self)
+
+        for category in const.CATEGORIES:
+            keywords = [k for k in categorized.keywords((category,)) if k]
+            categories[category] = '; '.join(k for k in keywords if k) + ';'
+
+        return categories
 
     def get_coordinates(self):
         return GeoManager(self).getCoordinates()
@@ -92,8 +107,9 @@ class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
         self.geostyles['use_custom_styles'] = True
         self.geostyles['display_properties'] = [
             'title',
-            'description'
-        ] + ['{}_value'.format(cat) for cat in const.CATEGORIES]
+            'description',
+            'kmlcategories'
+        ]
 
 
 class DirectoryItemViewletManager(grok.ViewletManager):
