@@ -87,12 +87,7 @@ class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
         self.geostyles['display_properties'] = []
         self.geostyles['use_custom_styles'] = True
         self.geostyles['display_properties'] = [
-            'title',
-            'description',
-            'cat1',
-            'cat2',
-            'cat3',
-            'cat4'
+            'title', 'description', 'cat1', 'cat2', 'cat3', 'cat4'
         ]
 
 

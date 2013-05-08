@@ -26,12 +26,14 @@ from collective.geo.geographer.interfaces import IGeoreferenced
 
 from seantis.dir.base import utils
 from seantis.dir.base import session
+from seantis.dir.base import const
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
 from seantis.dir.base.interfaces import (
     IDirectoryPage,
     IDirectoryRoot,
     IDirectoryItemBase,
+    IDirectoryCategorized,
     IMapMarker
 )
 
@@ -106,6 +108,20 @@ class KMLDocument(kmldocument.KMLDocument):
             features[0].styles['marker_image'] = self.marker_url
 
         return features
+
+
+class Placemark(kmldocument.Placemark):
+
+    def getDisplayValue(self, prop):
+        """ Categories need to be flattened and joined sanely. The default
+        practice of joining by space is not useful if there are spaces in the
+        categories.
+
+        """
+        if prop in const.CATEGORIES:
+            values = IDirectoryCategorized(self.context).keywords((prop, ))
+            return ';'.join(v for v in values if v)
+        return super(Placemark, self).getDisplayValue(prop)
 
 
 class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):

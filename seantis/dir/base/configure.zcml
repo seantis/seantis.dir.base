@@ -43,11 +43,18 @@
 
     <!-- Override default kml-document -->
     <browser:page
-      for="seantis.dir.base.interfaces.IDirectoryItem"
+      for="seantis.dir.base.interfaces.IDirectoryItemLike"
       name="kml-document"
       class="seantis.dir.base.core.KMLDocument"
       layer="collective.geo.kml.interfaces.IGeoKmlLayer"
       permission="zope2.View"
+      />
+
+    <adapter
+      factory="seantis.dir.base.core.Placemark"
+      for="seantis.dir.base.interfaces.IDirectoryItemLike
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      provides="collective.geo.kml.interfaces.IFeature"
       />
 
     <browser:resource name="directory-map.js" file="js/directory-map.js"/>
