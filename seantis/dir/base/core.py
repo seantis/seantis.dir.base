@@ -34,6 +34,7 @@ from seantis.dir.base.interfaces import (
     IDirectoryRoot,
     IDirectoryItemBase,
     IDirectoryCategorized,
+    IDirectorySpecific,
     IMapMarker
 )
 
@@ -157,6 +158,9 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
     @property
     def hook_form(self):
         """ Return True if the form should be hooked. """
+
+        if not IDirectorySpecific.providedBy(self.request):
+            return False
 
         if not self.portal_type:
             return False
