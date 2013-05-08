@@ -13,9 +13,7 @@ from collective.geo.geographer.geo import GeoreferencingAnnotator
 from collective.geo.settings.interfaces import IGeoCustomFeatureStyle
 from collective.geo.contentlocations.geomanager import GeoManager
 
-from seantis.dir.base.interfaces import (
-    IDirectoryItemBase
-)
+from seantis.dir.base.interfaces import IDirectoryItemBase
 
 
 class DirectoryItem(Container):

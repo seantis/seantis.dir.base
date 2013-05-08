@@ -43,3 +43,12 @@ def upgrade_to_2013050701(context):
     setup.runImportStepFromProfile(
         'profile-seantis.dir.base:default', 'jsregistry'
     )
+
+
+def upgrade_to_2013050801(context):
+    """ Add seantis.dir.base browserlayer """
+
+    setup = getToolByName(context, 'portal_setup')
+    setup.runImportStepFromProfile(
+        'profile-seantis.dir.base:default', 'browserlayer'
+    )

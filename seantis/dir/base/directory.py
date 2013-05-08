@@ -4,7 +4,6 @@ from five import grok
 from zope.interface import Interface
 from zope.component import getAdapter
 from zope.schema.interfaces import IContextSourceBinder
-from plone.directives import form
 from plone.dexterity.content import Container
 from Products.CMFPlone.PloneBatch import Batch
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
@@ -17,7 +16,11 @@ from seantis.dir.base.descriptions import parse_category_description
 from seantis.dir.base.const import CATEGORIES, ITEMSPERPAGE
 
 from seantis.dir.base.interfaces import (
-    IDirectoryItemBase, IDirectoryBase, IDirectoryCatalog, IDirectoryPage
+    IDirectoryItemBase,
+    IDirectoryBase,
+    IDirectoryCatalog,
+    IDirectoryPage,
+    IDirectorySpecific
 )
 
 from zope.schema.vocabulary import SimpleVocabulary
@@ -129,9 +132,10 @@ class DirectoryCatalogMixin(object):
 class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
 
     grok.name('seantis.dir.base.DirectorySearchViewlet')
-    grok.context(form.Schema)
+    grok.context(IDirectoryPage)
     grok.require('zope2.View')
     grok.viewletmanager(IBelowContentTitle)
+    grok.layer(IDirectorySpecific)
 
     _template = grok.PageTemplateFile('templates/search.pt')
 
@@ -225,9 +229,6 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
             if self.view.hide_search_viewlet:
                 return False
 
-        if not IDirectoryPage.providedBy(self.view):
-            return False
-
         return self.directory is not None
 
 
@@ -236,6 +237,7 @@ class View(core.View, DirectoryCatalogMixin):
 
     grok.context(IDirectoryBase)
     grok.require('zope2.View')
+    grok.layer(IDirectorySpecific)
 
     template = grok.PageTemplateFile('templates/directory.pt')
 
@@ -329,6 +331,7 @@ class JsonFilterView(core.View, DirectoryCatalogMixin):
     grok.context(IDirectoryBase)
     grok.require('zope2.View')
     grok.name('filter')
+    grok.layer(IDirectorySpecific)
 
     mapfields = None
     json_view = True
@@ -365,6 +368,7 @@ class JsonSearch(core.View, DirectoryCatalogMixin):
     grok.context(IDirectoryBase)
     grok.require('zope2.View')
     grok.name('query')
+    grok.layer(IDirectorySpecific)
 
     json_view = True
 

@@ -29,6 +29,10 @@ class IDirectoryRoot(form.Schema):
     """Root interface for directories and items alike."""
 
 
+class IDirectorySpecific(Interface):
+    """Layer for seantis.dir.base."""
+
+
 class IDirectoryBase(IDirectoryRoot):
     """Container for all directory items."""
 
