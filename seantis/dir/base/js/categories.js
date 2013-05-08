@@ -17,7 +17,7 @@
     };
 
     var get_category = function(categoryid) {
-        return $('#form-widgets-IDirectoryCategorized-cat' + categoryid);
+        return $('form #form-widgets-IDirectoryCategorized-cat' + categoryid);
     };
 
     var get_existing = function(category) {
@@ -77,6 +77,7 @@
     };
 
     $(document).ready(function() {
+
         setup_category(1);
         setup_category(2);
         setup_category(3);
