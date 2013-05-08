@@ -8,7 +8,7 @@ from five import grok
 from Products.CMFCore.utils import getToolByName
 
 from seantis.dir.base.interfaces import (
-    IDirectoryItemBase,
+    IDirectoryItemLike,
     IDirectoryBase,
     IDirectoryCatalog
 )
@@ -67,7 +67,7 @@ class DirectoryCatalog(grok.Adapter):
         highly storage_backend dependent. """
         results = self.catalog(
             path={'query': self.path, 'depth': 1},
-            object_provides=IDirectoryItemBase.__identifier__,
+            object_provides=IDirectoryItemLike.__identifier__,
             **kwargs
         )
         return results
