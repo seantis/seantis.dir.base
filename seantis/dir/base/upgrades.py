@@ -52,3 +52,12 @@ def upgrade_to_2013050801(context):
     setup.runImportStepFromProfile(
         'profile-seantis.dir.base:default', 'browserlayer'
     )
+
+
+def upgrade_to_2013050802(context):
+    """ Use new cssregistry """
+
+    setup = getToolByName(context, 'portal_setup')
+    setup.runImportStepFromProfile(
+        'profile-seantis.dir.base:default', 'cssregistry'
+    )
