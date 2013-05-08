@@ -92,14 +92,15 @@ class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
 
 
 class DirectoryItemViewletManager(grok.ViewletManager):
-    """ Shown by default on the item list in the directory view. The viewlet
-    have a local variable named context which is actually just a catalog brain.
+    """Manager whose viewlets are rendered for each item in the directory view.
+
+    Registered viewlets have access to a local variable named context. Context
+    is a catalog brain.
 
     If an object is needed the viewlet itself has to take care of getting it.
     Though preferrably it won't because the directory might show a lot of
     items and getObject will therefore slow the site down.
 
-    So it is better to define metadata if they are not too large.
     """
     grok.context(Interface)
     grok.name('seantis.dir.base.item.viewletmanager')
