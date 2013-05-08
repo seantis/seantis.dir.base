@@ -5,6 +5,7 @@ from five import grok
 
 from zope.interface import Interface, implements
 from zope.component import getUtility
+from zope.component.interfaces import ComponentLookupError
 from zope.schema import Choice
 
 from plone.dexterity.interfaces import IDexterityFTI
@@ -171,7 +172,11 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         if not self.portal_type:
             return False
 
-        fti = getUtility(IDexterityFTI, name=self.portal_type)
+        try:
+            fti = getUtility(IDexterityFTI, name=self.portal_type)
+        except ComponentLookupError:
+            return False
+
         if fti.lookupSchema().isOrExtends(IDirectoryRoot):
             return True
 
