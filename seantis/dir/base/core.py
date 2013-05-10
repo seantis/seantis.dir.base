@@ -301,12 +301,13 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         prefer since they are persistent. But I have yet to find a way to do
         the same thing with pure widgets.
         """
+
         try:
             categories = (
-                self.form.fields['cat1'],
-                self.form.fields['cat2'],
-                self.form.fields['cat3'],
-                self.form.fields['cat4']
+                self.form.fields['IDirectoryCategorized.cat1'],
+                self.form.fields['IDirectoryCategorized.cat2'],
+                self.form.fields['IDirectoryCategorized.cat3'],
+                self.form.fields['IDirectoryCategorized.cat4']
             )
         except KeyError:
             return

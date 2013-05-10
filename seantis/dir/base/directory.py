@@ -26,6 +26,12 @@ from seantis.dir.base.interfaces import (
 from zope.schema.vocabulary import SimpleVocabulary
 
 
+def valid_category_name(category):
+    category = category.replace('IDirectoryCategorized.', '')
+    assert category in CATEGORIES
+    return category
+
+
 class Directory(Container):
     """Represents objects created using IDirectory."""
 
@@ -46,6 +52,7 @@ class Directory(Container):
         Will always return a list, thought the list may be empty.
 
         """
+        category = valid_category_name(category)
 
         assert category in CATEGORIES
         attribute = '%s_suggestions' % category
@@ -93,6 +100,7 @@ class Directory(Container):
 
         """
 
+        category = valid_category_name(category)
         directory = self
 
         @grok.provider(IContextSourceBinder)
