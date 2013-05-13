@@ -2,7 +2,7 @@
 Changelog
 =========
 
-1.4.1 (unreleased)
+1.4.1
 -----
 - Provide better default template for result list entry
 - Provide a macro for default directory information
