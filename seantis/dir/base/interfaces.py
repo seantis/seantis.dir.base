@@ -357,9 +357,9 @@ class IExportProvider(Interface):
 
     url = Attribute('url of the export view or external site (may be None)')
 
-    def export(self, response):
+    def export(self, request):
         """ Creates the export and returns the body of the response. The
-        response object may be used to set headers.
+        request object may be used to set response headers.
 
         If an url is provided this function is NOT CALLED
 

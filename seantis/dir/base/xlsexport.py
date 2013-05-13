@@ -77,8 +77,24 @@ class DefaultExport(grok.Subscription):
     def url(self):
         return self.context.absolute_url() + '/export'
 
-    def export(self, response):
+    def export(self, request):
         pass
+
+
+def xls_response(request, filename, filehandle):
+    filename = codecs.utf_8_encode('filename="%s"' % filename)[0]
+    request.RESPONSE.setHeader('Content-disposition', filename)
+    request.RESPONSE.setHeader('Content-Type', 'application/xls')
+
+    response = filehandle.getvalue()
+
+    filehandle.seek(0, os.SEEK_END)
+    filesize = filehandle.tell()
+    filehandle.close()
+
+    request.RESPONSE.setHeader('Content-Length', filesize)
+
+    return response
 
 
 class XlsExportView(core.View):
@@ -91,26 +107,17 @@ class XlsExportView(core.View):
     def render(self, **kwargs):
 
         xlsfile = StringIO()
-        filename = '%s.xls' % self.context.title
-        filename = codecs.utf_8_encode('filename="%s"' % filename)[0]
 
-        language = self.current_language
-        as_template = 'template' in self.request.keys()
+        export_xls(
+            directory=self.context,
+            filehandle=xlsfile,
+            language=self.current_language,
+            as_template='template' in self.request.keys()
+        )
 
-        try:
-            export_xls(self.context, xlsfile, language, as_template)
-            output = xlsfile.getvalue()
-        finally:
-            xlsfile.seek(0, os.SEEK_END)
-            filesize = xlsfile.tell()
-            xlsfile.close()
-
-        RESPONSE = self.request.RESPONSE
-        RESPONSE.setHeader("Content-disposition", filename)
-        RESPONSE.setHeader("Content-Type", "application/xls")
-        RESPONSE.setHeader("Content-Length", filesize)
-
-        return output
+        return xls_response(
+            self.request, '%s.xls' % self.context.title, xlsfile
+        )
 
 
 def export_xls(directory, filehandle, language, as_template):
