@@ -1,4 +1,4 @@
-from zope.interface import Interface, Invalid, alsoProvides
+from zope.interface import Interface, Invalid, alsoProvides, Attribute
 from zope.schema import (
     Text,
     TextLine,
@@ -339,4 +339,28 @@ class IMapMarker(Interface):
     def url(self, letter):
         """
         Returns the absolute URL of the marker image.
+        """
+
+
+class IExportProvider(Interface):
+    """
+    Interface for Subscription Adapters providing exports for directories.
+    See xlsexport.py for more information and an example (the default export)
+
+    """
+
+    id = Attribute('unique id of the export provider')
+
+    # the following two attributes must be i18n messages as they are translated
+    title = Attribute('title shown for the export')
+    description = Attribute('a lengthy description for the export')
+
+    url = Attribute('url of the export view or external site (may be None)')
+
+    def export(self, response):
+        """ Creates the export and returns the body of the response. The
+        response object may be used to set headers.
+
+        If an url is provided this function is NOT CALLED
+
         """

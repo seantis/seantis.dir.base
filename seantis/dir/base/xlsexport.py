@@ -1,3 +1,4 @@
+from collections import namedtuple
 from StringIO import StringIO
 
 from five import grok
@@ -8,14 +9,76 @@ import os
 
 from Acquisition import aq_base
 from zope.i18n import translate
+from zope.component import subscribers
 
+from seantis.dir.base import _
+from seantis.dir.base import utils
 from seantis.dir.base.utils import get_interface_fields
 from seantis.dir.base import catalog
 from seantis.dir.base.fieldmap import get_map
 from seantis.dir.base import core
 from seantis.dir.base.directory import IDirectoryBase
 from seantis.dir.base.directory import CATEGORIES
-from seantis.dir.base.interfaces import IDirectoryCategorized
+from seantis.dir.base.interfaces import IDirectoryCategorized, IExportProvider
+
+
+class XlsExportsView(grok.View):
+    """Shows a list of possible exports."""
+
+    grok.context(IDirectoryBase)
+    grok.require('cmf.ManagePortal')
+    grok.name('exports')
+
+    template = grok.PageTemplateFile('templates/exports.pt')
+
+    def title(self):
+        return ' '.join((_(u'Exports for'), self.context.title))
+
+    def exports(self):
+
+        ExportDefinition = namedtuple(
+            'ExportDefinition', ('url', 'title', 'description')
+        )
+
+        self.providers = subscribers([self.context], IExportProvider)
+
+        exports = []
+        for provider in self.providers:
+            exports.append(
+                ExportDefinition(
+                    url=provider.url,
+                    title=utils.translate(
+                        self.context, self.request, provider.title
+                    ),
+                    description=utils.translate(
+                        self.context, self.request, provider.description
+                    )
+                )
+            )
+
+        return exports
+
+
+class DefaultExport(grok.Subscription):
+
+    grok.context(IDirectoryBase)
+    grok.provides(IExportProvider)
+
+    id = 'default'
+    title = _(u'Default Export')
+
+    description = _(
+        u'The default export contains the basic fields of the '
+        u'directory, without additional fields defined by client specific '
+        u'fields. It is the only export which may be also be imported.'
+    )
+
+    @property
+    def url(self):
+        return self.context.absolute_url() + '/export'
+
+    def export(self, response):
+        pass
 
 
 class XlsExportView(core.View):
