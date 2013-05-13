@@ -13,7 +13,7 @@ from zope.component import subscribers
 
 from seantis.dir.base import _
 from seantis.dir.base import utils
-from seantis.dir.base.utils import get_interface_fields
+from seantis.dir.base.utils import get_interface_fields, cached_property
 from seantis.dir.base import catalog
 from seantis.dir.base.fieldmap import get_map
 from seantis.dir.base import core
@@ -29,10 +29,14 @@ class XlsExportsView(grok.View):
     grok.require('cmf.ManagePortal')
     grok.name('exports')
 
-    template = grok.PageTemplateFile('templates/exports.pt')
+    _template = grok.PageTemplateFile('templates/exports.pt')
 
     def title(self):
         return ' '.join((_(u'Exports for'), self.context.title))
+
+    @cached_property
+    def providers(self):
+        return subscribers([self.context], IExportProvider)
 
     def exports(self):
 
@@ -40,13 +44,16 @@ class XlsExportsView(grok.View):
             'ExportDefinition', ('url', 'title', 'description')
         )
 
-        self.providers = subscribers([self.context], IExportProvider)
-
         exports = []
         for provider in self.providers:
+
+            url = provider.url or ''.join(
+                (self.url(), '?export-id=', provider.id)
+            )
+
             exports.append(
                 ExportDefinition(
-                    url=provider.url,
+                    url=url,
                     title=utils.translate(
                         self.context, self.request, provider.title
                     ),
@@ -57,6 +64,15 @@ class XlsExportsView(grok.View):
             )
 
         return exports
+
+    def render(self):
+        id = self.request.get('export-id', None)
+
+        for provider in self.providers:
+            if provider.id == id:
+                return provider.export(self.request)
+
+        return self._template.render(self)
 
 
 class DefaultExport(grok.Subscription):
@@ -120,11 +136,11 @@ class XlsExportView(core.View):
         )
 
 
-def export_xls(directory, filehandle, language, as_template):
+def export_xls(directory, filehandle, language, as_template, fieldmap=None):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet(directory.title[:30])
 
-    fieldmap = get_map(directory)
+    fieldmap = fieldmap or get_map(directory)
 
     write_title(fieldmap, ws, language, directory)
 
