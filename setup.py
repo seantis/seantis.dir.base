@@ -47,8 +47,7 @@ setup(name='seantis.dir.base',
           'collective.geo.settings>=2.5',
           'collective.geo.mapwidget>=1.6',
           'collective.geo.openlayers>=2.5',
-          'collective.geo.kml>=2.5',
-          'collective.geo.behaviour'
+          'collective.geo.kml>=2.5'
       ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),

@@ -36,7 +36,15 @@ class XlsExportsView(grok.View):
 
     @cached_property
     def providers(self):
-        return subscribers([self.context], IExportProvider)
+        providers = []
+        for provider in subscribers([self.context], IExportProvider):
+            if provider.layer:
+                if not provider.layer.providedBy(self.request):
+                    continue
+
+            providers.append(provider)
+
+        return providers
 
     def exports(self):
 
@@ -82,6 +90,7 @@ class DefaultExport(grok.Subscription):
 
     id = 'default'
     title = _(u'Default Export')
+    layer = None
 
     description = _(
         u'The default export contains the basic fields of the '

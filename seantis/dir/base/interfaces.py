@@ -350,6 +350,9 @@ class IExportProvider(Interface):
     """
 
     id = Attribute('unique id of the export provider')
+    layer = Attribute("""
+        layer required for the provider to be considered, None if always
+    """)
 
     # the following two attributes must be i18n messages as they are translated
     title = Attribute('title shown for the export')
