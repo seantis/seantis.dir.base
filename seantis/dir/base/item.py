@@ -1,7 +1,6 @@
 import json
 
 from five import grok
-from zope.interface import Interface
 from zope.interface import implements
 
 from plone.dexterity.content import Container
@@ -87,32 +86,3 @@ class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
         self.geostyles['display_properties'] = [
             'title', 'description', 'cat1', 'cat2', 'cat3', 'cat4'
         ]
-
-
-class DirectoryItemViewletManager(grok.ViewletManager):
-    """Manager whose viewlets are rendered for each item in the directory view.
-
-    Registered viewlets have access to a local variable named context. Context
-    is a catalog brain.
-
-    If an object is needed the viewlet itself has to take care of getting it.
-    Though preferrably it won't because the directory might show a lot of
-    items and getObject will therefore slow the site down.
-
-    """
-    grok.context(Interface)
-    grok.name('seantis.dir.base.item.viewletmanager')
-
-
-class DirectoryItemViewlet(grok.Viewlet):
-    grok.context(Interface)
-    grok.name('seantis.dir.base.item.detail')
-    grok.require('zope2.View')
-    grok.viewletmanager(DirectoryItemViewletManager)
-
-    template = grok.PageTemplate(u"""
-        <a tal:attributes="href context/getURL">
-            <div class="result-title" tal:content="context/Title"/>
-            <div class="result-description" tal:content="context/Description"/>
-        </a>
-    """)

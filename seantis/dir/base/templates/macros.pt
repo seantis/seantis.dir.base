@@ -44,7 +44,10 @@
 
           <metal:use use-macro="context/@@seantis-dir-macros/macros/map-marker"></metal:use>
 
-          <div tal:define="context python: brain" tal:replace="structure provider:seantis.dir.base.item.viewletmanager"/>
+          <a tal:attributes="href brain/getURL">
+            <div class="result-title" tal:content="brain/Title"/>
+            <div class="result-description" tal:content="brain/Description"/>
+          </a>
         </div>
         <div class="directoryResult" tal:condition="python: len(brains) == 0" i18n:translate="">No Results</div>
       </div>
