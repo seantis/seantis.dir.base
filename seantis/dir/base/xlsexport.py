@@ -7,19 +7,21 @@ import xlwt
 import codecs
 import os
 
-from Acquisition import aq_base
 from zope.i18n import translate
 from zope.component import subscribers
 
 from seantis.dir.base import _
 from seantis.dir.base import utils
-from seantis.dir.base.utils import get_interface_fields, cached_property
+from seantis.dir.base.utils import (
+    get_interface_fields,
+    cached_property
+)
 from seantis.dir.base import catalog
 from seantis.dir.base.fieldmap import get_map
 from seantis.dir.base import core
 from seantis.dir.base.directory import IDirectoryBase
 from seantis.dir.base.directory import CATEGORIES
-from seantis.dir.base.interfaces import IDirectoryCategorized, IExportProvider
+from seantis.dir.base.interfaces import IExportProvider
 
 
 class XlsExportsView(grok.View):
@@ -256,23 +258,19 @@ def write_object(obj, fieldmap, worksheet, row, writeparent=None):
 
     for field, ix in fieldmap.fieldmap.items():
         write = lambda col, value: worksheet.write(
-            row, col, value.encode('utf-8'), colstyle(fieldmap, col)
+            row, col,
+            value and value.encode('utf-8') or '',
+            colstyle(fieldmap, col)
         )
 
-        if field in CATEGORIES:
-            value = getattr(IDirectoryCategorized(obj), field)
-        elif hasattr(aq_base(obj), field):
-            value = getattr(aq_base(obj), field)
+        transformer = fieldmap.get_transformer(field)
+
+        attr = getattr(transformer(obj), field)
+        wrapper = fieldmap.get_wrapper(field)
+
+        # A field in the map may be a function in which case it is
+        # called here and ignored on import
+        if callable(attr):
+            write(ix, wrapper(attr()))
         else:
-            continue
-
-        if value:
-            wrapper = fieldmap.get_wrapper(field)
-            attr = getattr(aq_base(obj), field)
-
-            # A field in the map may be a function in which case it is
-            # called here and ignored on import
-            if callable(attr):
-                write(ix, wrapper(attr()))
-            else:
-                write(ix, wrapper(attr))
+            write(ix, wrapper(attr))
