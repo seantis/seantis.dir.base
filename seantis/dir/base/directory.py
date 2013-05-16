@@ -19,6 +19,7 @@ from seantis.dir.base.interfaces import (
     IDirectoryItemBase,
     IDirectoryBase,
     IDirectoryCatalog,
+    IDirectoryRoot,
     IDirectoryPage,
     IDirectorySpecific
 )
@@ -140,7 +141,7 @@ class DirectoryCatalogMixin(object):
 class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
 
     grok.name('seantis.dir.base.DirectorySearchViewlet')
-    grok.context(IDirectoryPage)
+    grok.context(IDirectoryRoot)
     grok.require('zope2.View')
     grok.viewletmanager(IBelowContentTitle)
     grok.layer(IDirectorySpecific)
@@ -233,6 +234,9 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
             return u''
 
     def available(self):
+        if not IDirectoryPage.providedBy(self.view):
+            return False
+
         if hasattr(self.view, 'hide_search_viewlet'):
             if self.view.hide_search_viewlet:
                 return False
