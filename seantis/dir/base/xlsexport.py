@@ -160,13 +160,18 @@ def export_xls(directory, filehandle, language, as_template, fieldmap=None):
     wb.save(filehandle)
 
 
+UNSTYLED = xlwt.easyxf('')
+REQUIRED = xlwt.easyxf('pattern: fore_color light_yellow, pattern solid;')
+READONLY = xlwt.easyxf('pattern: fore_color gray25, pattern solid;')
+
+
 def colstyle(fieldmap, col):
     if col in fieldmap.keyindexes(True):
-        return xlwt.easyxf('pattern: fore_color light_yellow, pattern solid;')
+        return REQUIRED
     elif col in fieldmap.readonlyindexes(True):
-        return xlwt.easyxf('pattern: fore_color gray25, pattern solid;')
+        return READONLY
 
-    return xlwt.easyxf('')
+    return UNSTYLED
 
 
 def color_required(fieldmap, worksheet):
