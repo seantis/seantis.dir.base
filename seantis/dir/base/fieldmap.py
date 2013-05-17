@@ -159,7 +159,7 @@ class FieldMap(object):
 
 
 def add_category_binds(fieldmap):
-    listwrap = lambda val: ','.join(val)
+    listwrap = lambda val: ','.join(val) if val else ''
     listunwrap = lambda val: [v.strip() for v in val.split(',') if v.strip()]
     cattransform = lambda obj: IDirectoryCategorized(obj)
 
