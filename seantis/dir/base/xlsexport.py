@@ -203,23 +203,19 @@ def write_title(fieldmap, worksheet, language, directory=None):
     )
 
     for ix in xrange(minix, maxix + 1):
-        name = fieldmap.indexmap[ix]
-
+        field = fieldmap.indexmap[ix]
         typ = fieldmap.typename
-        title = None
 
-        if directory and '.item' in typ and name in CATEGORIES:
-            title = getattr(directory, name)
-
-        if not title:
-            if name in fields:
-                title = fields[name].title
-            elif name in basefields:
-                title = basefields[name].title
-            elif name in fieldmap.titles:
-                title = fieldmap.titles[name]
-            else:
-                title = name
+        if field in fieldmap.titles:
+            title = fieldmap.titles[field]
+        elif directory and '.item' in typ and field in CATEGORIES:
+            title = getattr(directory, field)
+        elif field in fields:
+            title = fields[field].title
+        elif field in basefields:
+            title = basefields[field].title
+        else:
+            title = field
 
         write(ix, translate(title, target_language=language))
 
