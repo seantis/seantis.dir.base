@@ -40,7 +40,18 @@ class DirectoryItem(Container):
         else:
             return ''
 
-    # coordiantes_json is used for import / export of coordinates
+    @property
+    def longitude(self):
+        geo = GeoreferencingAnnotator(self).geo
+        if geo['type'] and geo['type'].lower() == 'point':
+            return geo['coordinates'][0]
+
+    @property
+    def latitude(self):
+        geo = GeoreferencingAnnotator(self).geo
+        if geo['type'] and geo['type'].lower() == 'point':
+            return geo['coordinates'][1]
+
     def get_coordinates(self):
         return GeoManager(self).getCoordinates()
 
@@ -55,6 +66,7 @@ class DirectoryItem(Container):
         geo['type'] = None
         geo['coordinates'] = None
 
+    # coordiantes_json is used for import / export of coordinates
     def get_coordinates_json(self):
         if all(self.get_coordinates()):
             return json.dumps(self.get_coordinates())
