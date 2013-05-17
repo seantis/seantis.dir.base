@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-05-02 09:11+0000\n"
+"POT-Creation-Date: 2013-05-13 08:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,23 +14,23 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./interfaces.py:52
+#: ./interfaces.py:55
 msgid "1st Category Name"
 msgstr "Kategorie 1"
 
-#: ./interfaces.py:75
+#: ./interfaces.py:78
 msgid "2nd Category Name"
 msgstr "Kategorie 2"
 
-#: ./interfaces.py:98
+#: ./interfaces.py:101
 msgid "3rd Category Name"
 msgstr "Kategorie 3"
 
-#: ./interfaces.py:121
+#: ./interfaces.py:124
 msgid "4th Category Name"
 msgstr "Kategorie 4"
 
-#: ./interfaces.py:162
+#: ./interfaces.py:159
 msgid "Allow custom categories"
 msgstr "Kategorien-Eingabe auf Eintrag erlauben"
 
@@ -38,23 +38,27 @@ msgstr "Kategorien-Eingabe auf Eintrag erlauben"
 msgid "Coordinates (JSON)"
 msgstr "Koordinaten (JSON)"
 
-#: ./interfaces.py:46
+#: ./xlsexport.py:90
+msgid "Default Export"
+msgstr "Standard Export"
+
+#: ./interfaces.py:49
 msgid "Description"
 msgstr "Beschreibung"
 
-#: ./interfaces.py:68
+#: ./interfaces.py:71
 msgid "Descriptions for Category 1"
 msgstr "Beschreibungen für Kategorie 1"
 
-#: ./interfaces.py:91
+#: ./interfaces.py:94
 msgid "Descriptions for Category 2"
 msgstr "Beschreibungen für Kategorie 2"
 
-#: ./interfaces.py:114
+#: ./interfaces.py:117
 msgid "Descriptions for Category 3"
 msgstr "Beschreibungen für Kategorie 3"
 
-#: ./interfaces.py:137
+#: ./interfaces.py:140
 msgid "Descriptions for Category 4"
 msgstr "Beschreibungen für Kategorie 4"
 
@@ -66,13 +70,17 @@ msgstr "Verzeichnis"
 msgid "Directory Item"
 msgstr "Verzeichnis-Eintrag"
 
-#: ./interfaces.py:150
+#: ./interfaces.py:147
 msgid "Enable filtering"
 msgstr "Filter zeigen"
 
-#: ./interfaces.py:156
+#: ./interfaces.py:153
 msgid "Enable searching"
 msgstr "Suche zeigen"
+
+#: ./xlsexport.py:61
+msgid "Exports for"
+msgstr "Exporte für"
 
 #: ./templates/search.pt:7
 msgid "Filter"
@@ -82,7 +90,7 @@ msgstr "Filtern"
 msgid "Fulltext search"
 msgstr "Volltext Suche"
 
-#: ./interfaces.py:163
+#: ./interfaces.py:160
 msgid "If custom categories are allowed, items may specify new categories. If they are not allowed, people can only choose from the given suggestions."
 msgstr "Neue Kategorien können auf den Einträgen erfasst werden, wenn erlaubt. Wenn dies nicht erlaubt ist können nur Kategorien gewählt werden welche als Vorschläge erfasst wurden."
 
@@ -110,11 +118,7 @@ msgstr "Ungültige XLS Datei"
 msgid "Invalid email address"
 msgstr "Ungültige Email Adresse"
 
-#: ./interfaces.py:144
-msgid "Last time a DirectoryItem was modified"
-msgstr "Letztes Änderungsdatum eines Verzeichniseintrages"
-
-#: ./interfaces.py:37
+#: ./interfaces.py:40
 msgid "Name"
 msgstr "Name"
 
@@ -134,31 +138,35 @@ msgstr "Zurücksetzen"
 msgid "Search"
 msgstr "Suchen"
 
-#: ./interfaces.py:199
+#: ./interfaces.py:193
 msgid "Start typing and select a category. To add a new category write the name and hit enter."
 msgstr "Tippen und eine Kategorie wählen. Um eine neue Kategorie zu erstellen, Text eingeben und Enter drücken."
 
-#: ./interfaces.py:41
+#: ./interfaces.py:44
 msgid "Subtitle"
 msgstr "Untertitel"
 
-#: ./interfaces.py:58
+#: ./interfaces.py:61
 msgid "Suggested Values for the 1st Category"
 msgstr "Vorschläge für die erste Kategorie"
 
-#: ./interfaces.py:81
+#: ./interfaces.py:84
 msgid "Suggested Values for the 2nd Category"
 msgstr "Vorschläge für die zweite Kategorie"
 
-#: ./interfaces.py:104
+#: ./interfaces.py:107
 msgid "Suggested Values for the 3rd Category"
 msgstr "Vorschläge für die dritte Kategorie"
 
-#: ./interfaces.py:127
+#: ./interfaces.py:130
 msgid "Suggested Values for the 4th Category"
 msgstr "Vorschläge für die vierte Kategorie"
 
-#: ./interfaces.py:60
+#: ./xlsexport.py:92
+msgid "The default export contains the basic fields of the directory, without additional fields defined by client specific fields. It is the only export which may be also be imported."
+msgstr "Der Standard Export enthält die einfachen Felder des Verzeichnises, ohne kunden-spezifische Felder. Es ist der einzige Export der auch importiert werden kann."
+
+#: ./interfaces.py:63
 msgid "These values are suggested when typing category values in the category items, in addition to values found in other items."
 msgstr "Diese Werte werden vorgeschlagen wenn Kategorie Werte im Eintrag eingegeben werden, zusätzlich zu den Werten die in anderen Einträgen gefunden werden."
 

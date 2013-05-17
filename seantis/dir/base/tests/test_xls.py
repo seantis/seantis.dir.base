@@ -3,6 +3,7 @@ from StringIO import StringIO
 from xlwt import Workbook
 from xlrd import open_workbook
 
+from seantis.dir.base.interfaces import IDirectoryCategorized
 from seantis.dir.base.xlsimport import import_xls
 from seantis.dir.base.xlsexport import export_xls
 from seantis.dir.base.tests import IntegrationTestCase
@@ -62,14 +63,16 @@ class TestXLS(IntegrationTestCase):
         directory.cat2 = u'Testkategorie 2'
 
         item = self.add_item(directory, 'item1')
-        item.title = u'item1'
         item.description = u'description1'
-        item.cat1 = [u'Eins']
-        item.cat2 = [u'Zwei']
+
+        categorized = IDirectoryCategorized(item)
+        categorized.cat1 = [u'Eins']
+        categorized.cat2 = [u'Zwei']
 
         item = self.add_item(directory, 'item2')
-        item.cat1 = [u'One']
-        item.cat2 = [u'Two']
+        categorized = IDirectoryCategorized(item)
+        categorized.cat1 = [u'One']
+        categorized.cat2 = [u'Two']
 
         export_xls(directory, xls.file, 'de', False)
 
@@ -83,7 +86,7 @@ class TestXLS(IntegrationTestCase):
         self.assertEqual(ws.cell(1, 2).value, u'Eins')
         self.assertEqual(ws.cell(1, 3).value, u'Zwei')
 
-        self.assertEqual(ws.cell(2, 0).value, u'')
+        self.assertEqual(ws.cell(2, 0).value, u'item2')
         self.assertEqual(ws.cell(2, 1).value, u'')
         self.assertEqual(ws.cell(2, 2).value, u'One')
         self.assertEqual(ws.cell(2, 3).value, u'Two')
@@ -108,7 +111,10 @@ class TestXLS(IntegrationTestCase):
         self.write_row(
             sheet,
             3,
-            ['Second', 'Description', 'Cat1', 'Cat2', 'Cat3', 'Cat4', '', 'Url']
+            [
+                'Second', 'Description', 'Cat1', 'Cat2', 'Cat3', 'Cat4',
+                '', 'Url'
+            ]
         )
 
         directory = self.add_directory()

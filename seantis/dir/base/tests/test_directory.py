@@ -12,7 +12,7 @@ class TestDirectory(IntegrationTestCase):
     def test_add(self):
         directory = self.add_directory('Daycare Centers')
         self.assertTrue(IDirectory.providedBy(directory))
-        self.assertEqual(directory.id, 'Daycare Centers')
+        self.assertEqual(directory.id, 'daycare-centers')
 
     def test_categories(self):
         directory = self.add_directory()

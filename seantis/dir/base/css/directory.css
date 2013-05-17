@@ -60,9 +60,27 @@ a.groupSelection {
 }
 
 /* checkboxes of categories should each have their own line */
-#formfield-form-widgets-cat1 .option,
-#formfield-form-widgets-cat2 .option,
-#formfield-form-widgets-cat3 .option,
-#formfield-form-widgets-cat4 .option {
+#formfield-form-widgets-IDirectoryCategorized-cat1 .option,
+#formfield-form-widgets-IDirectoryCategorized-cat2 .option,
+#formfield-form-widgets-IDirectoryCategorized-cat3 .option,
+#formfield-form-widgets-IDirectoryCategorized-cat4 .option {
     display: block;
+}
+
+/* category field blocks create a ton of unneeded whitespace if
+not put next to each other.. */
+#formfield-form-widgets-IDirectoryCategorized-cat1,
+#formfield-form-widgets-IDirectoryCategorized-cat2,
+#formfield-form-widgets-IDirectoryCategorized-cat3,
+#formfield-form-widgets-IDirectoryCategorized-cat4 {
+    float: left;
+    clear: none;
+}
+
+/* ..unless the token input is used */
+#formfield-form-widgets-IDirectoryCategorized-cat1 .token-input-list,
+#formfield-form-widgets-IDirectoryCategorized-cat2 .token-input-list,
+#formfield-form-widgets-IDirectoryCategorized-cat3 .token-input-list,
+#formfield-form-widgets-IDirectoryCategorized-cat4 .token-input-list {
+    width: 100% !important;   
 }

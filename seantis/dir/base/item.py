@@ -1,51 +1,18 @@
 import json
-from datetime import datetime
 
 from five import grok
-from zope.interface import Interface
 from zope.interface import implements
-from zope.container.interfaces import IObjectMovedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from plone.dexterity.content import Container
-from Products.CMFCore.interfaces import IActionSucceededEvent
 from collective.geo.contentlocations.geostylemanager import GeoStyleManager
 
 from zope.annotation.interfaces import IAttributeAnnotatable
-from collective.geo.geographer.interfaces import (
-    IGeoreferenceable,
-    IGeoreferenced
-)
+from collective.geo.geographer.interfaces import IGeoreferenceable
 from collective.geo.geographer.geo import GeoreferencingAnnotator
 from collective.geo.settings.interfaces import IGeoCustomFeatureStyle
 from collective.geo.contentlocations.geomanager import GeoManager
 
-from seantis.dir.base import utils
 from seantis.dir.base.interfaces import IDirectoryItemBase
-
-# Subscribe to every event that potentially has an impact on the
-# caching in order to trigger a cache invalidation.
-
-
-@grok.subscribe(IDirectoryItemBase, IObjectMovedEvent)
-def onMovedItem(item, event):
-    # changed may not necesseraly be there (e.g. the object is
-    # using IDirectoryItemBase as a dexterity behavior)
-    if hasattr(item, 'changed'):
-        item.changed(event.oldParent)
-        item.changed(event.newParent)
-
-
-@grok.subscribe(IDirectoryItemBase, IObjectModifiedEvent)
-def onModifiedItem(item, event):
-    if hasattr(item, 'changed'):
-        item.changed(item.get_parent())
-
-
-@grok.subscribe(IDirectoryItemBase, IActionSucceededEvent)
-def onChangedWorkflowState(item, event):
-    if hasattr(item, 'changed'):
-        item.changed(item.get_parent())
 
 
 class DirectoryItem(Container):
@@ -66,46 +33,6 @@ class DirectoryItem(Container):
 
     description = property(get_description, set_description)
 
-    def get_parent(self):
-        #I tried to use @property here, but this screws with the acquisition
-        #context, which apparently is a known sideffect in this case
-        return self.aq_inner.aq_parent
-
-    def changed(self, parent):
-        """Sets the time when a childitem was changed."""
-        if parent:
-            parent.child_modified = datetime.now()
-
-    def categories(self):
-        """Returns a list of tuples with each tuple containing three values:
-        [0] = attribute name
-        [1] = category label (from parent)
-        [2] = category value (from self)
-
-        Only returns actually used categories
-
-        """
-        items = []
-        labels = self.get_parent().labels()
-        for cat in labels.keys():
-            value = hasattr(self, cat) and getattr(self, cat) or u''
-            items.append((cat, labels[cat], value))
-
-        return items
-
-    def keywords(self, categories=None):
-        """Returns a flat list of all categories, wheter they are actually
-        visible in the directory or not, unless a list of categories is
-        specifically passed.
-
-        """
-        categories = categories or self.get_parent().all_categories()
-        values = []
-        for cat in categories:
-            values.append(getattr(self, cat))
-
-        return list(utils.flatten(values))
-
     def html_description(self):
         """Returns the description with newlines replaced by <br/> tags"""
         if self.description:
@@ -113,8 +40,17 @@ class DirectoryItem(Container):
         else:
             return ''
 
-    def has_mapdata(self):
-        return IGeoreferenced(self).type is not None
+    @property
+    def longitude(self):
+        geo = GeoreferencingAnnotator(self).geo
+        if geo['type'] and geo['type'].lower() == 'point':
+            return geo['coordinates'][0]
+
+    @property
+    def latitude(self):
+        geo = GeoreferencingAnnotator(self).geo
+        if geo['type'] and geo['type'].lower() == 'point':
+            return geo['coordinates'][1]
 
     def get_coordinates(self):
         return GeoManager(self).getCoordinates()
@@ -130,6 +66,7 @@ class DirectoryItem(Container):
         geo['type'] = None
         geo['coordinates'] = None
 
+    # coordiantes_json is used for import / export of coordinates
     def get_coordinates_json(self):
         if all(self.get_coordinates()):
             return json.dumps(self.get_coordinates())
@@ -159,34 +96,5 @@ class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
         self.geostyles['display_properties'] = []
         self.geostyles['use_custom_styles'] = True
         self.geostyles['display_properties'] = [
-            'title',
-            'description'
+            'title', 'description', 'cat1', 'cat2', 'cat3', 'cat4'
         ]
-
-
-class DirectoryItemViewletManager(grok.ViewletManager):
-    """ Shown by default on the item list in the directory view. The viewlet
-    have a local variable named context which is actually just a catalog brain.
-
-    If an object is needed the viewlet itself has to take care of getting it.
-    Though preferrably it won't because the directory might show a lot of
-    items and getObject will therefore slow the site down.
-
-    So it is better to define metadata if they are not too large.
-    """
-    grok.context(Interface)
-    grok.name('seantis.dir.base.item.viewletmanager')
-
-
-class DirectoryItemViewlet(grok.Viewlet):
-    grok.context(Interface)
-    grok.name('seantis.dir.base.item.detail')
-    grok.require('zope2.View')
-    grok.viewletmanager(DirectoryItemViewletManager)
-
-    template = grok.PageTemplate(u"""
-        <a tal:attributes="href context/getURL">
-            <div class="result-title" tal:content="context/Title"/>
-            <div class="result-description" tal:content="context/Description"/>
-        </a>
-    """)

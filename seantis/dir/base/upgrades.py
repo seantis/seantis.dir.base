@@ -34,3 +34,30 @@ def upgrade_to_2012110201(context):
             pass
 
     transaction.commit()
+
+
+def upgrade_to_2013050701(context):
+    """ Reapply jsregistry step """
+
+    setup = getToolByName(context, 'portal_setup')
+    setup.runImportStepFromProfile(
+        'profile-seantis.dir.base:default', 'jsregistry'
+    )
+
+
+def upgrade_to_2013050801(context):
+    """ Add seantis.dir.base browserlayer """
+
+    setup = getToolByName(context, 'portal_setup')
+    setup.runImportStepFromProfile(
+        'profile-seantis.dir.base:default', 'browserlayer'
+    )
+
+
+def upgrade_to_2013050802(context):
+    """ Use new cssregistry """
+
+    setup = getToolByName(context, 'portal_setup')
+    setup.runImportStepFromProfile(
+        'profile-seantis.dir.base:default', 'cssregistry'
+    )

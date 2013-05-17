@@ -1,9 +1,8 @@
-from zope.interface import Interface, Invalid
+from zope.interface import Interface, Invalid, alsoProvides, Attribute
 from zope.schema import (
     Text,
     TextLine,
     List,
-    Datetime,
     Bool
 )
 
@@ -28,6 +27,10 @@ class IDirectoryPage(Interface):
 
 class IDirectoryRoot(form.Schema):
     """Root interface for directories and items alike."""
+
+
+class IDirectorySpecific(Interface):
+    """Layer for seantis.dir.base."""
 
 
 class IDirectoryBase(IDirectoryRoot):
@@ -140,12 +143,6 @@ class IDirectoryBase(IDirectoryRoot):
         constraint=description_constraint
     )
 
-    child_modified = Datetime(
-        title=_(u'Last time a DirectoryItem was modified'),
-        required=False,
-        readonly=True
-    )
-
     enable_filter = Bool(
         title=_(u'Enable filtering'),
         required=True,
@@ -175,11 +172,6 @@ class IDirectory(IDirectoryBase):
 
 
 class IDirectoryItemBase(IDirectoryRoot):
-    """Single entry of a directory. Usually you would not want to directly
-    work with this class. Instead refer to IDirectoryItem below.
-
-    """
-
     searchable('title')
     title = TextLine(
         title=_(u'Name'),
@@ -193,6 +185,8 @@ class IDirectoryItemBase(IDirectoryRoot):
         missing_value=u''
     )
 
+
+class IDirectoryItemCategories(IDirectoryRoot):
     searchable('cat1')
     cat1 = List(
         title=_(u'1st Category Name'),
@@ -228,6 +222,16 @@ class IDirectoryItemBase(IDirectoryRoot):
         value_type=TextLine(),
         required=False,
     )
+
+
+class IDirectoryItemLike(IDirectoryRoot):
+    pass
+
+
+class IDirectoryCategorized(IDirectoryItemCategories):
+    pass
+
+alsoProvides(IDirectoryCategorized, form.IFormFieldProvider)
 
 
 class IDirectoryItem(IDirectoryItemBase):
@@ -335,4 +339,31 @@ class IMapMarker(Interface):
     def url(self, letter):
         """
         Returns the absolute URL of the marker image.
+        """
+
+
+class IExportProvider(Interface):
+    """
+    Interface for Subscription Adapters providing exports for directories.
+    See xlsexport.py for more information and an example (the default export)
+
+    """
+
+    id = Attribute('unique id of the export provider')
+    layer = Attribute("""
+        layer required for the provider to be considered, None if always
+    """)
+
+    # the following two attributes must be i18n messages as they are translated
+    title = Attribute('title shown for the export')
+    description = Attribute('a lengthy description for the export')
+
+    url = Attribute('url of the export view or external site (may be None)')
+
+    def export(self, request):
+        """ Creates the export and returns the body of the response. The
+        request object may be used to set response headers.
+
+        If an url is provided this function is NOT CALLED
+
         """

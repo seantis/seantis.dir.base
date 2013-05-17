@@ -1,7 +1,26 @@
 <?xml version="1.0"?>
 <object name="portal_css" meta_type="Stylesheets Registry">
-    <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="" id="++resource++seantis.dir.base.stylesheets/token-input.css" media="screen" rel="stylesheet" rendering="import" insert-before="base.css"/>
-    <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="python: 'seantis.dir' in object.portal_type" id="++resource++seantis.dir.base.stylesheets/directory.css" media="all" rel="stylesheet" rendering="import" insert-before="base.css"/>
-    <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="python: 'seantis.dir' in object.portal_type" id="++resource++seantis.dir.base.stylesheets/search.css" media="all" rel="stylesheet" rendering="import" insert-before="base.css"/>
-    <stylesheet title="" cacheable="True" compression="safe" cookable="True" enabled="1" expression="" id="++resource++seantis.dir.base.stylesheets/print.css" media="print" rel="stylesheet" rendering="link"/>
+
+    <stylesheet id="++resource++seantis.dir.base.stylesheets/token-input.css"
+        enabled="True"
+        media="screen"
+    />
+    
+    <stylesheet id="++resource++seantis.dir.base.stylesheets/directory.css"
+        enabled="True"
+        media="all"
+        expression="python: object.restrictedTraverse('@@plone_interface_info').provides('seantis.dir.base.interfaces.IDirectoryRoot')"
+    />
+    
+    <stylesheet id="++resource++seantis.dir.base.stylesheets/search.css"
+        enabled="True"
+        media="all"
+        expression="python: object.restrictedTraverse('@@plone_interface_info').provides('seantis.dir.base.interfaces.IDirectoryRoot')"
+    />
+    
+    <stylesheet id="++resource++seantis.dir.base.stylesheets/print.css" 
+        enabled="True"
+        media="print"
+        expression="python: object.restrictedTraverse('@@plone_interface_info').provides('seantis.dir.base.interfaces.IDirectoryRoot')"
+    />
 </object>

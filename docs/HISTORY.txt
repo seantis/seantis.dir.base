@@ -2,6 +2,20 @@
 Changelog
 =========
 
+1.5 (unreleased)
+---
+- Adds a behavior with which any item can be used as a directory item.
+
+  This is a major change to the way directories and their items relate to each
+  other internally. All directories using seantis.dir.base have to be migrated
+  by adding the new IDirectoryCategorized behavior to the each item and
+  reimporting the typeinof.
+
+- Adds category values to KML document
+- View now use their own directory specific browserlayer
+- Adds ability to define new xls exports through adapters
+- Fixes crash in big excel exports
+
 1.4.1
 -----
 - Provide better default template for result list entry

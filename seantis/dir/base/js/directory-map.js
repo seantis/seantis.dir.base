@@ -5,7 +5,7 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
 
     var layer = new OpenLayers.Layer.Vector(title, {
         protocol: new OpenLayers.Protocol.HTTP({
-            url: kmlurl, 
+            url: kmlurl,
             format: new OpenLayers.Format.KML({
                 extractStyles: true,
                 extractAttributes: true
@@ -22,7 +22,7 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
         } else {
             layer.map.zoomTo(layer.map.getZoom()-4);
         }
-    };    
+    };
 
     var link_layer = function(layer, url) {
         // this won't work on ie < 8
@@ -57,17 +57,17 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
             for (var i=0; i<stops.length; i++) {
                 stops[i]();
             }
-        }
-    }
+        };
+    };
 
     var get_attr = function(el, attr) {
-        return parseInt(el.getAttribute(attr));
-    }
+        return parseInt(el.getAttribute(attr), 10);
+    };
 
     var set_attr = function(el, attr, val) {
         if (isNaN(val)) return;
         el.setAttribute(attr, val);
-    }
+    };
 
     var pulseate_element = function(element) {
         var height = get_attr(element, 'height');
@@ -75,7 +75,7 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
         var x = get_attr(element, 'x');
         var y = get_attr(element, 'y');
         var strokewidth = get_attr(element, 'stroke-width');
-        
+
         var on = function(offset) {
             set_attr(element, "height", height+offset);
             set_attr(element, "width", width+offset);
@@ -102,7 +102,7 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
             clearInterval(id);
             on(0);
         };
-    }
+    };
 
     var highlight_target = function(layer, id) {
         // this won't work on ie < 8
@@ -128,7 +128,7 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
                     pulsate(layer, false);
                 }
             );
-        }        
+        }
     };
 
     layer.events.on({"loadend":function(){
