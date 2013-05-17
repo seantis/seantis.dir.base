@@ -77,7 +77,6 @@
     };
 
     $(document).ready(function() {
-
         setup_category(1);
         setup_category(2);
         setup_category(3);
