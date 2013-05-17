@@ -18,6 +18,7 @@ from plone.registry.interfaces import IRegistry
 from z3c.form.interfaces import IFieldsForm, IFormLayer, IAddForm
 from z3c.form.field import FieldWidgets
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
+from z3c.form.browser.textlines import TextLinesFieldWidget
 
 from collective.geo.settings.interfaces import IGeoSettings
 from collective.geo.mapwidget.browser.widget import MapWidget
@@ -28,6 +29,7 @@ from collective.geo.geographer.interfaces import IGeoreferenced
 from seantis.dir.base import utils
 from seantis.dir.base import session
 from seantis.dir.base import const
+from seantis.dir.base.utils import get_interface_fields
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
 from seantis.dir.base.interfaces import (
@@ -36,6 +38,7 @@ from seantis.dir.base.interfaces import (
     IDirectoryItemBase,
     IDirectoryCategorized,
     IDirectorySpecific,
+    IDirectoryItemCategories,
     IMapMarker
 )
 
@@ -231,6 +234,8 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         if self.hook_form and not self.is_directory:
             if not self.directory.allow_custom_categories:
                 self.lock_categories()
+            else:
+                self.unlock_categories()
 
         super(DirectoryFieldWidgets, self).update()
 
@@ -318,6 +323,28 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
             category.field.value_type = Choice(
                 source=self.directory.source_provider(category.__name__)
             )
+
+    def unlock_categories(self):
+        """ Undoes the changes that lock_categories does to the fields. """
+        try:
+            categories = (
+                self.form.fields['IDirectoryCategorized.cat1'],
+                self.form.fields['IDirectoryCategorized.cat2'],
+                self.form.fields['IDirectoryCategorized.cat3'],
+                self.form.fields['IDirectoryCategorized.cat4']
+            )
+        except KeyError:
+            return
+
+        fields = get_interface_fields(IDirectoryItemCategories)
+
+        for category in categories:
+            original = fields[
+                category.__name__.replace(category.prefix, '').replace('.', '')
+            ]
+            category.widgetFactory = TextLinesFieldWidget
+            category.field.description = original.description
+            category.field.value_type = original.value_type
 
     def apply_labels(self, labels):
         """ Applies the labels of the given dictionary built as follows:
