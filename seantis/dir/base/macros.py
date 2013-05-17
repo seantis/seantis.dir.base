@@ -11,3 +11,6 @@ class View(core.View):
     grok.name('seantis-dir-macros')
 
     template = grok.PageTemplateFile('templates/macros.pt')
+
+    def __getitem__(self, key):
+        return self.template._template.macros[key]
