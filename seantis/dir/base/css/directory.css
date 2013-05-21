@@ -84,3 +84,7 @@ not put next to each other.. */
 #formfield-form-widgets-IDirectoryCategorized-cat4 .token-input-list {
     width: 100% !important;   
 }
+
+.formControls {
+    clear: both;   
+}

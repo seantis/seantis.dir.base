@@ -1,7 +1,11 @@
+from StringIO import StringIO
+
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 
 from seantis.dir.base.interfaces import IDirectoryItemBase
+
+from plone.namedfile.file import NamedImage
 
 
 def get_site(context):
@@ -36,6 +40,29 @@ def add_behavior_to_item(context, module, interface):
 
     for item in items:
         item.getObject().reindexObject()
+
+
+def reset_images(context, interfaces):
+    """ Plone 4.3 uses plone.namedfile 2.0.1 which fails on all existing images
+    of seantis.dir.facility. This function reapplies those images after which
+    everything is fine again. This unfortunately makes Plone 4.2 incompatible.
+
+    """
+
+    catalog = getToolByName(context, 'portal_catalog')
+
+    def brains():
+        for interface in interfaces:
+            for result in catalog(object_provides=interface.__identifier__):
+                yield result
+
+    objects = [i.getObject() for i in brains()]
+
+    for obj in objects:
+        if obj.image is None:
+            continue
+
+        obj.image = NamedImage(StringIO(obj.image.data), obj.image.contentType)
 
 
 def upgrade_to_2012110201(context):
