@@ -441,7 +441,10 @@ class View(grok.View):
             return self.filtered
 
     def has_mapdata(self, item):
-        return IGeoreferenced(item).type is not None
+        try:
+            return IGeoreferenced(item).type is not None
+        except TypeError:
+            return False
 
     @property
     def show_banner(self):
