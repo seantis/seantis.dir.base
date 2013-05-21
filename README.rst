@@ -18,21 +18,17 @@ This module is probably only really useful for anyone if used as a base to build
 
 
 Build Status
-============
+------------
 
 .. image:: https://secure.travis-ci.org/seantis/seantis.dir.base.png
    :target: https://travis-ci.org/seantis/seantis.dir.base
 
-PyPI Release
-============
+Latest PyPI Release
+-------------------
 
 .. image:: https://pypip.in/v/seantis.dir.base/badge.png
     :target: https://crate.io/packages/seantis.dir.base
     :alt: Latest PyPI version
-
-.. image:: https://pypip.in/d/$REPO/badge.png
-    :target: https://crate.io/packages/$REPO/
-    :alt: Number of PyPI downloads
 
 Installation
 ============
