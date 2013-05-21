@@ -16,8 +16,9 @@ Changelog
 - Adds ability to define new xls exports through adapters
 - Fixes crash in big excel exports
 - Removes Directory Item Viewlets in Directory View. They have not been working
-  correctly sinde 1.3 and they can be easily replaced by overriding the
-  directory view.
+  correctly sinde 1.3 anyway.
+- Defines slots in macros which may be replaced by directories building on
+  seantis.dir.base. This may be used as an alternative to the viewlets.
 
 1.4.1
 -----

@@ -39,10 +39,10 @@
     </metal:define>
 
     <metal:define define-macro="result-list-entry">
-      <a tal:attributes="href brain/getURL">
-          <div class="result-title" tal:content="brain/Title"/>
-          <div class="result-description" tal:content="brain/Description"/>
-      </a>
+        <a tal:attributes="href brain/getURL">
+            <div class="result-title" tal:content="brain/Title"/>
+            <div class="result-description" tal:content="brain/Description"/>
+        </a>
     </metal:define>
 
     <metal:define define-macro="resultlist">
@@ -50,7 +50,10 @@
         <div class="directoryResult" tal:repeat="brain brains" tal:attributes="id brain/id">
 
           <metal:use use-macro="context/@@seantis-dir-macros/map-marker" />
-          <metal:use use-macro="context/@@seantis-dir-macros/result-list-entry" />
+
+          <metal:result-list-entry define-slot="result-list-entry">
+            <metal:use use-macro="context/@@seantis-dir-macros/result-list-entry" />
+          </metal:result-list-entry>
 
         </div>
         <div class="directoryResult" tal:condition="python: len(brains) == 0" i18n:translate="">No Results</div>

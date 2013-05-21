@@ -1,3 +1,4 @@
+<metal:page define-macro="directory">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
@@ -24,8 +25,10 @@
         </tal:block>
 
         <div id="directoryInfo" tal:define="brains view/batch">
-            <metal:use use-macro="context/@@seantis-dir-macros/macros/resultlist">
-            </metal:use>
+            <metal:directory-result-list metal:define-slot="directory-result-list">
+              <metal:use use-macro="context/@@seantis-dir-macros/macros/resultlist">
+              </metal:use>
+            </metal:directory-result-list>
             
             <metal:use use-macro="context/@@seantis-dir-macros/macros/map">
             </metal:use>
@@ -44,3 +47,4 @@
 
 </body>
 </html>
+</metal:page>
