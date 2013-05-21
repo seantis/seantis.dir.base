@@ -2,7 +2,7 @@
 Changelog
 =========
 
-1.5 (unreleased)
+1.5
 ---
 - Adds a behavior with which any item can be used as a directory item.
 
