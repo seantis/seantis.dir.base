@@ -58,6 +58,7 @@ def create_category_property(category):
             return None
 
     def setter(self, value):
+        value = utils.remove_empty(value)
         setattr(self.context, category, value)
 
     return getter, setter

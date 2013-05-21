@@ -144,6 +144,13 @@ def naive_time(fn):
     return wrapper
 
 
+def remove_empty(iterable):
+    if iterable is None or isinstance(iterable, basestring):
+        return iterable
+
+    return filter(lambda i: bool(i), iterable)
+
+
 class cached_property(object):
     """A read-only @property that is only evaluated once. The value is cached
     on the object itself rather than the function or class; this should prevent
