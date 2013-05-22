@@ -2,6 +2,11 @@
 Changelog
 =========
 
+1.5.1 (unreleased)
+-----
+- Limit portlet blocking to directory, making it easy to enable portlets for
+  all items through the portlet settings of the directory. Fixes #4.
+
 1.5
 ---
 - Adds a behavior with which any item can be used as a directory item.

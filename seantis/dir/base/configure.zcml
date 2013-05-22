@@ -61,11 +61,7 @@
 
     <!-- Remove default portlets from directories (may be added later) -->
     <subscriber for="seantis.dir.base.interfaces.IDirectoryBase
-                     zope.container.interfaces.IObjectAddedEvent"                 
-                handler=".subscribers.block_portlets_on_creation"
-    />
-    <subscriber for="seantis.dir.base.interfaces.IDirectoryItemBase
-                     zope.container.interfaces.IObjectAddedEvent"                 
+                     zope.lifecycleevent.interfaces.IObjectAddedEvent"                 
                 handler=".subscribers.block_portlets_on_creation"
     />
 
