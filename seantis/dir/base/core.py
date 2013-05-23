@@ -190,6 +190,9 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         if not IDirectorySpecific.providedBy(self.request):
             return False
 
+        if self.is_group_form:
+            return False
+
         if not self.portal_type:
             return False
 

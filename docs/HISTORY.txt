@@ -2,6 +2,10 @@
 Changelog
 =========
 
+1.5.2
+-----
+- Stop hooking up group forms completely, fixing an issue in seantis.dir.events
+
 1.5.1
 -----
 - Limit portlet blocking to directory, making it easy to enable portlets for
