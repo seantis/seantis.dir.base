@@ -36,6 +36,7 @@ from seantis.dir.base.interfaces import (
     IDirectoryPage,
     IDirectoryRoot,
     IDirectoryItemBase,
+    IDirectory,
     IDirectoryCategorized,
     IDirectorySpecific,
     IDirectoryItemCategories,
@@ -192,6 +193,9 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         if not self.portal_type:
             return False
 
+        if not self.inside_directory:
+            return False
+
         try:
             fti = getUtility(IDexterityFTI, name=self.portal_type)
         except ComponentLookupError:
@@ -245,6 +249,10 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
             return self.context.aq_inner.aq_parent
         else:
             return self.context
+
+    @property
+    def inside_directory(self):
+        return IDirectory.providedBy(self.directory)
 
     def update(self):
         # lock widgets
