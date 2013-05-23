@@ -43,13 +43,14 @@ def add_behavior_to_item(context, module, interface):
 
 
 def reset_images(context, interfaces):
-    reset_images_and_attachments(context, interfaces)
+    # for backwards compatibility
+    reset_images_and_attachments(context, interfaces, ['image', 'attachment'])
 
 
-def reset_images_and_attachments(context, interfaces):
-    """ Plone 4.3 uses plone.namedfile 2.0.1 which fails on all existing images
-    of seantis.dir.facility. This function reapplies those images after which
-    everything is fine again. This unfortunately makes Plone 4.2 incompatible.
+def reset_images_and_attachments(context, interfaces, fields):
+    """ Plone 4.3 uses plone.namedfile 2.0.1 which fails on all images and
+    files created by the old version. This function reapplies all those
+    files, fixing the problem.
 
     """
 
@@ -63,20 +64,28 @@ def reset_images_and_attachments(context, interfaces):
     objects = [i.getObject() for i in brains()]
 
     for obj in objects:
-        if not hasattr(obj, 'image') or obj.image is None:
-            continue
+        for field in fields:
+            if not hasattr(obj, field):
+                continue
 
-        obj.image = NamedImage(StringIO(obj.image.data), obj.image.contentType)
+            value = getattr(obj, field)
 
-    for obj in objects:
-        if not hasattr(obj, 'attachment') or obj.attachment is None:
-            continue
+            if value is None:
+                continue
 
-        obj.attachment = NamedFile(
-            StringIO(obj.attachment.data),
-            obj.attachment.contentType,
-            obj.attachment.filename
-        )
+            if isinstance(value, NamedImage):
+                setattr(obj, field, NamedImage(
+                    StringIO(value.data),
+                    value.contentType)
+                )
+            elif isinstance(value, NamedFile):
+                setattr(obj, field, NamedFile(
+                    StringIO(value.data),
+                    value.contentType,
+                    value.filename)
+                )
+            else:
+                continue
 
 
 def upgrade_to_2012110201(context):
