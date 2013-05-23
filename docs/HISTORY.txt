@@ -2,10 +2,12 @@
 Changelog
 =========
 
-1.5.1 (unreleased)
+1.5.1
 -----
 - Limit portlet blocking to directory, making it easy to enable portlets for
   all items through the portlet settings of the directory. Fixes #4.
+- Fixes form view failing on IDirectoryCategorized items outside a directory
+- Fixes form reordering issue on group forms
 
 1.5
 ---
