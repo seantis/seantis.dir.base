@@ -15,7 +15,7 @@ from plone.memoize import view
 from plone.z3cform.fieldsets.utils import move
 from plone.registry.interfaces import IRegistry
 
-from z3c.form.interfaces import IFieldsForm, IFormLayer, IAddForm
+from z3c.form.interfaces import IFieldsForm, IFormLayer, IAddForm, IGroup
 from z3c.form.field import FieldWidgets
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
@@ -155,6 +155,23 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
     def portal_type(self):
         return self.portal_type_of_form(self.form)
 
+    @property
+    def is_group_form(self):
+        return IGroup.providedBy(self.form)
+
+    @property
+    def uninstantiated_groups(self):
+        """ Returns the number of groups which have not been instantiated by
+        z3c.form.group.Group.
+
+        """
+        if not self.form.groups:
+            return 0
+
+        return sum(
+            1 for group in self.form.groups if not IGroup.providedBy(group)
+        )
+
     def portal_type_of_form(self, form):
         if hasattr(form, 'portal_type'):
             return form.portal_type
@@ -284,6 +301,19 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         Field5, Field4, Field2, Field3, Field1
 
         """
+
+        # The order is defined on the schema, but the this widget manager
+        # is instantiated on groupforms as well as normal forms. The moving
+        # should only happen on the parentform, not the groupform, as
+        # the move function will otherwise not find the fields.
+        if self.is_group_form:
+            return
+
+        # The move function searches for fields in the groups which fails
+        # hard if the groups have not been instantiated yet.
+        if self.uninstantiated_groups > 0:
+            return
+
         order = self.field_order
         default = order.index('*')
 
