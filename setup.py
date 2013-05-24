@@ -5,7 +5,8 @@ version = '1.5.2'
 
 tests_require = [
     'collective.testcaselayer',
-    'plone.app.testing'
+    'plone.app.testing',
+    'collective.betterbrowser[pyquery]'
 ]
 
 setup(name='seantis.dir.base',
