@@ -69,6 +69,23 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
         el.setAttribute(attr, val);
     };
 
+    var force_topmost = function(layer) {
+        var parent = document.getElementById(layer.id+'_vroot');
+        if (!parent) return;
+
+        /* append the container holding the marker to the container holding
+        all the markers, forcing it to show on top of the other markers (
+        essentially what you would usually do with a z-index).
+
+        SVG's render orders is defined solely through element order, which
+        is why this is done like that, see:
+
+        http://stackoverflow.com/questions/482115/
+        with-javascript-can-i-change-the-z-index-layer-of-an-svg-g-element
+        */
+        parent.parentNode.parentNode.appendChild(parent.parentNode);
+    };
+
     var pulseate_element = function(element) {
         var height = get_attr(element, 'height');
         var width = get_attr(element, 'width');
@@ -122,6 +139,7 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
 
             target.hover(
                 function() {
+                    force_topmost(layer);
                     pulsate(layer, true);
                 },
                 function() {

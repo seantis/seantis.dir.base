@@ -2,6 +2,10 @@
 Changelog
 =========
 
+1.5.3 (unreleased)
+------------------
+- Render ative/pulsating map markers in front of inactive ones
+
 1.5.2
 -----
 - Stop hooking up group forms completely, fixing an issue in seantis.dir.events
