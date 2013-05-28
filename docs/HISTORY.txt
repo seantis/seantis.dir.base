@@ -2,8 +2,8 @@
 Changelog
 =========
 
-1.5.3 (unreleased)
-------------------
+1.5.3
+-----
 - Render ative/pulsating map markers in front of inactive ones
 - Make core form work with directory again
 - Prevents code from storing categories as sets (which trips up the keyword index)
