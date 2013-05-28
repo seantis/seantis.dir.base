@@ -196,7 +196,7 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         if not self.portal_type:
             return False
 
-        if not self.inside_directory:
+        if not self.is_directory and not self.inside_directory:
             return False
 
         try:

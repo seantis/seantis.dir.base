@@ -5,6 +5,7 @@ Changelog
 1.5.3 (unreleased)
 ------------------
 - Render ative/pulsating map markers in front of inactive ones
+- Make core form work with directory again
 
 1.5.2
 -----
