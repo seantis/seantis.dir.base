@@ -58,6 +58,11 @@ def create_category_property(category):
             return None
 
     def setter(self, value):
+
+        # if a set is given errors will happen in the keyword index
+        if isinstance(value, set):
+            value = list(value)
+
         value = utils.remove_empty(value)
         setattr(self.context, category, value)
 
