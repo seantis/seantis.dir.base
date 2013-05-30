@@ -90,6 +90,11 @@ class DirectoryCatalog(grok.Adapter):
 
     def search(self, text):
 
+        text = text.strip() if text else ''
+
+        if not text:
+            return []
+
         # make the search fuzzyish (cannot do wildcard in front)
         if not text.endswith('*'):
             text += '*'

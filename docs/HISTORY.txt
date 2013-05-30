@@ -2,6 +2,10 @@
 Changelog
 =========
 
+1.5. (unreleased)
+-----------------
+- Stop directory search from throwing exceptions if an empty string is given
+
 1.5.3
 -----
 - Render ative/pulsating map markers in front of inactive ones
