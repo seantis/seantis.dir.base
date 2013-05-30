@@ -26,6 +26,7 @@ from collective.geo.mapwidget.maplayers import MapLayer
 from collective.geo.kml.browser import kmldocument
 from collective.geo.geographer.interfaces import IGeoreferenced
 
+from seantis.dir.base import _
 from seantis.dir.base import utils
 from seantis.dir.base import session
 from seantis.dir.base import const
@@ -457,7 +458,14 @@ class View(grok.View):
         terms = {}
         request = self.request
 
-        filterable = lambda k: k.startswith('cat') and request[k] != ''
+        # "Whatever" is also defined in search.pt
+        empty = (u'', utils.translate(
+            self.context, self.request, _(u'Whatever')
+        ))
+
+        filterable = lambda k: k.startswith('cat') \
+            and request[k].decode('utf-8') not in empty
+
         category_keys = (k for k in request.keys() if filterable(k))
 
         for key in category_keys:

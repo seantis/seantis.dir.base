@@ -10,12 +10,12 @@
                         <label tal:attributes="for category" tal:content="python: viewlet.labels[category]"/>
                         <select class="seantis-directory-category" tal:attributes="name category; id category; data-cache python: viewlet.category_cache(category)">
                             
-                            <!-- Preselected values -->
+                            <!-- Preselected values (also defined in core.py) -->
                             <tal:block condition="python: viewlet.select[category] == '!empty'">
-                                <option selected></option>
+                                <option selected i18n:translate="">Whatever</option>
                             </tal:block>
                             <tal:block condition="python: viewlet.select[category] != '!empty'">
-                                <option></option>
+                                <option i18n:translate="">Whatever</option>
                             </tal:block>
                             
                             <!-- All values -->

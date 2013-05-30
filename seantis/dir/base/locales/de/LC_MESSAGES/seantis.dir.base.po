@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-05-13 08:48+0000\n"
+"POT-Creation-Date: 2013-05-30 13:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,11 +34,11 @@ msgstr "Kategorie 4"
 msgid "Allow custom categories"
 msgstr "Kategorien-Eingabe auf Eintrag erlauben"
 
-#: ./fieldmap.py:155
+#: ./fieldmap.py:186
 msgid "Coordinates (JSON)"
 msgstr "Koordinaten (JSON)"
 
-#: ./xlsexport.py:90
+#: ./xlsexport.py:94
 msgid "Default Export"
 msgstr "Standard Export"
 
@@ -78,7 +78,7 @@ msgstr "Filter zeigen"
 msgid "Enable searching"
 msgstr "Suche zeigen"
 
-#: ./xlsexport.py:61
+#: ./xlsexport.py:37
 msgid "Exports for"
 msgstr "Exporte für"
 
@@ -122,7 +122,7 @@ msgstr "Ungültige Email Adresse"
 msgid "Name"
 msgstr "Name"
 
-#: ./templates/macros.pt:49
+#: ./templates/macros.pt:59
 msgid "No Results"
 msgstr "Keine Resultate"
 
@@ -162,13 +162,18 @@ msgstr "Vorschläge für die dritte Kategorie"
 msgid "Suggested Values for the 4th Category"
 msgstr "Vorschläge für die vierte Kategorie"
 
-#: ./xlsexport.py:92
+#: ./xlsexport.py:97
 msgid "The default export contains the basic fields of the directory, without additional fields defined by client specific fields. It is the only export which may be also be imported."
 msgstr "Der Standard Export enthält die einfachen Felder des Verzeichnises, ohne kunden-spezifische Felder. Es ist der einzige Export der auch importiert werden kann."
 
 #: ./interfaces.py:63
 msgid "These values are suggested when typing category values in the category items, in addition to values found in other items."
 msgstr "Diese Werte werden vorgeschlagen wenn Kategorie Werte im Eintrag eingegeben werden, zusätzlich zu den Werten die in anderen Einträgen gefunden werden."
+
+#: ./core.py:463
+#: ./templates/search.pt:15
+msgid "Whatever"
+msgstr "Egal"
 
 #: ./xlsimport.py:35
 msgid "XLS file"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-05-13 08:48+0000\n"
+"POT-Creation-Date: 2013-05-30 13:48+0000\n"
 "PO-Revision-Date: 2012-12-18 13:47+0100\n"
 "Last-Translator: Fabian Reinhard <fabian.reinhard@seantis.ch>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,11 +35,11 @@ msgstr "Nom de 4ème catégorie"
 msgid "Allow custom categories"
 msgstr ""
 
-#: ./fieldmap.py:155
+#: ./fieldmap.py:186
 msgid "Coordinates (JSON)"
 msgstr "Coordonnées (JSON)"
 
-#: ./xlsexport.py:90
+#: ./xlsexport.py:94
 msgid "Default Export"
 msgstr ""
 
@@ -79,7 +79,7 @@ msgstr "Activer le filtrage"
 msgid "Enable searching"
 msgstr "Activer la recherche"
 
-#: ./xlsexport.py:61
+#: ./xlsexport.py:37
 msgid "Exports for"
 msgstr ""
 
@@ -123,7 +123,7 @@ msgstr "Adresse e-mail non valide"
 msgid "Name"
 msgstr "Nom"
 
-#: ./templates/macros.pt:49
+#: ./templates/macros.pt:59
 msgid "No Results"
 msgstr "Pas de résultat"
 
@@ -163,13 +163,18 @@ msgstr "Valeurs suggérées pour la 3ème catégorie"
 msgid "Suggested Values for the 4th Category"
 msgstr "Valeurs suggérées pour la 4ème catégorie"
 
-#: ./xlsexport.py:92
+#: ./xlsexport.py:97
 msgid "The default export contains the basic fields of the directory, without additional fields defined by client specific fields. It is the only export which may be also be imported."
 msgstr ""
 
 #: ./interfaces.py:63
 msgid "These values are suggested when typing category values in the category items, in addition to values found in other items."
 msgstr "Ces valeurs sont suggérées lors de la saisie des valeurs de catégories dans les éléments de catégorie, en plus des valeurs trouvées dans d'autres articles."
+
+#: ./core.py:463
+#: ./templates/search.pt:15
+msgid "Whatever"
+msgstr ""
 
 #: ./xlsimport.py:35
 msgid "XLS file"

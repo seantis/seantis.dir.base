@@ -6,7 +6,7 @@
      * Instantiate with a jQuery instance holding the concerned selects.
      */
     var Filter = function (elements) {
-        var UNSELECTED = '';
+        var UNSELECTED = $('.cat1 option:first-child').text();
         this.categories = elements;
 
         // Performs a server request for possible values depending on the given
@@ -32,9 +32,9 @@
             var terms = this.terms(eventindex);
             var that = this;
 
-            // Query the server for the possible values
             this.query(terms, function(data) {
                 $.each(data, function(key, value) {
+
                     var index = that.index(key);
                     var selected = that.selected(index);
 

@@ -5,6 +5,7 @@ Changelog
 1.5. (unreleased)
 -----------------
 - Stop directory search from throwing exceptions if an empty string is given
+- Show 'Whatever' instead of an empty string as default in filter combo boxes
 
 1.5.3
 -----
