@@ -2,7 +2,7 @@
 Changelog
 =========
 
-1.5. (unreleased)
+1.5.4 (unreleased)
 -----------------
 - Stop directory search from throwing exceptions if an empty string is given
 - Show 'Whatever' instead of an empty string as default in filter combo boxes
@@ -48,7 +48,7 @@ Changelog
 - Provide a macro for default directory information
 - Fixes search viewlet being hidden on item view
 - New flag allow_custom_categories on directory which can be used to prevent users
-from entering their own categories on items
+  from entering their own categories on items
 
 1.4
 ---
