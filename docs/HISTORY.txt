@@ -2,8 +2,8 @@
 Changelog
 =========
 
-1.5.5 (unreleased)
-------------------
+1.5.5
+-----
 - Put search and categories on different lines if more than two categories
   and the searchbox is active
 
