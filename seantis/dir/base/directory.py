@@ -161,8 +161,15 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
 
     @property
     def widths(self):
+        # Eventually the whole search / filter block at the top needs to be
+        # rewritten. Currently it's styled weirldy to fit in the izug basetheme
+        # world. This could be done better and without clutches like below.
+        # => TODO
         if self.context.enable_search and self.context.enable_filter:
-            return (40, 60)
+            if len(self.context.used_categories()) > 2:
+                return (100, 100)
+            else:
+                return (40, 60)
         elif self.context.enable_search:
             return (100, 0)
         elif self.context.enable_filter:

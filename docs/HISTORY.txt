@@ -2,6 +2,11 @@
 Changelog
 =========
 
+1.5.5 (unreleased)
+------------------
+- Put search and categories on different lines if more than two categories
+  and the searchbox is active
+
 1.5.4
 -----
 - Stop directory search from throwing exceptions if an empty string is given
