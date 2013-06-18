@@ -167,6 +167,9 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         z3c.form.group.Group.
 
         """
+        if not hasattr(self.form, 'groups'):
+            return 0
+
         if not self.form.groups:
             return 0
 
