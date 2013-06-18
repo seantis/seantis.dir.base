@@ -7,9 +7,9 @@ this.seantis.omit_url_parts = function(url, count) {
 
     for (var i=parts.length-1; i >= 0; i--) {
         if (count === 0) {
-            result = parts[i] + '/' + result;        
+            result = parts[i] + '/' + result;
         } else {
-            count--;   
+            count--;
         }
     }
 
@@ -29,3 +29,7 @@ this.seantis.filtered = function() {
     else
         return true;
 };
+
+if (typeof(jq) === "undefined") {
+    jq = jQuery;
+}
