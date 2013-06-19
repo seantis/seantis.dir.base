@@ -2,7 +2,7 @@
 Changelog
 =========
 
-1.5.6 (unreleased)
+1.5.6
 -----
 - Fixes group-less forms controlled by seantis.dir.base crashing
 - Temporarily reintroduces jq as jQuery alias for collective.geo.mapwidget 
