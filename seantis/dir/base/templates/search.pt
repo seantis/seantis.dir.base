@@ -12,10 +12,10 @@
                             
                             <!-- Preselected values (also defined in core.py) -->
                             <tal:block condition="python: viewlet.select[category] == '!empty'">
-                                <option selected i18n:translate="">Whatever</option>
+                                <option selected i18n:translate="">Any</option>
                             </tal:block>
                             <tal:block condition="python: viewlet.select[category] != '!empty'">
-                                <option i18n:translate="">Whatever</option>
+                                <option i18n:translate="">Any</option>
                             </tal:block>
                             
                             <!-- All values -->

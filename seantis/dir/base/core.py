@@ -461,9 +461,9 @@ class View(grok.View):
         terms = {}
         request = self.request
 
-        # "Whatever" is also defined in search.pt
+        # "Any" is also defined in search.pt
         empty = (u'', utils.translate(
-            self.context, self.request, _(u'Whatever')
+            self.context, self.request, _(u'Any')
         ))
 
         filterable = lambda k: k.startswith('cat') \
