@@ -2,8 +2,8 @@
 Changelog
 =========
 
-1.5.7 (unreleased)
-------------------
+1.5.7
+-----
 - Show 'Any' instead of 'Whatever'
 - Wrap search text in quotes to avoid query parsers errors
 
