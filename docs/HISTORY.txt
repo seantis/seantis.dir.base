@@ -4,7 +4,7 @@ Changelog
 
 1.5.8
 -----
-- Exclude *.mo files from the release
+- Exclude \*.mo files from the release
 
 1.5.7
 -----
