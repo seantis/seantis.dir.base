@@ -8,3 +8,4 @@ global-include *.zcml
 global-include README.rst
 global-include docs/*
 global-include allkeys.txt
+global-exclude *.mo
