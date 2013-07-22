@@ -3,10 +3,7 @@
 from zope.component import getAdapter
 
 from seantis.dir.base.tests import IntegrationTestCase
-from seantis.dir.base.interfaces import (
-    IDirectoryCatalog,
-    IDirectoryCategorized
-)
+from seantis.dir.base.interfaces import IDirectoryCatalog
 from seantis.dir.base.catalog import is_exact_match
 
 
@@ -119,6 +116,28 @@ class TestCatalog(IntegrationTestCase):
         found = catalog.filter(dict(cat1=['For Kids', 'For Adults']))
         self.assertEqual(len(found), 1)
         found = catalog.filter(dict(cat1=['For Adults', 'For Kids']))
+        self.assertEqual(len(found), 1)
+
+    def test_search(self):
+
+        directory = self.toy_data()
+        catalog = get_catalog(directory)
+
+        items = [i.getObject() for i in catalog.items()]
+
+        items[0].description = 'Unique'
+        items[0].reindexObject()
+
+        found = catalog.search('Unique')
+        self.assertEqual(len(found), 1)
+
+        items[1].description = 'Unique (Not really)'
+        items[1].reindexObject()
+
+        found = catalog.search('Unique')
+        self.assertEqual(len(found), 2)
+
+        found = catalog.search('Unique (Not really)')
         self.assertEqual(len(found), 1)
 
     def test_possible_values(self):

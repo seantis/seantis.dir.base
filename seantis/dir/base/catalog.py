@@ -90,14 +90,16 @@ class DirectoryCatalog(grok.Adapter):
 
     def search(self, text):
 
-        text = text.strip() if text else ''
+        # remove the fuzzy-search first
+        text = text.replace('*', '')
 
-        if not text:
-            return []
-
-        # make the search fuzzyish (cannot do wildcard in front)
-        if not text.endswith('*'):
-            text += '*'
+        # wrap the text in quotes so the query parser ignores the content
+        # (the user should not be able to get his text inspected by the
+        # query parser, because it's a hidden feature at best and a security
+        # problem at worst)
+        #
+        # add a wildcard at the end for fuzzyness
+        text = '"{}"*'.format(text)
 
         return sorted(self.query(SearchableText=text), key=self.sortkey())
 
