@@ -2,6 +2,10 @@
 Changelog
 =========
 
+1.5.9
+-----
+- Update French translations
+
 1.5.8
 -----
 - Exclude \*.mo files from the release
