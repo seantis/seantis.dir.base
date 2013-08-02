@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2013-07-19 13:49+0000\n"
-"PO-Revision-Date: 2012-12-18 13:47+0100\n"
+"PO-Revision-Date: 2013-08-02 11:55+0100\n"
 "Last-Translator: Fabian Reinhard <fabian.reinhard@seantis.ch>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -13,170 +13,194 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.5.7\n"
 
-#: ./interfaces.py:55
+#: interfaces.py:55
 msgid "1st Category Name"
 msgstr "Nom de 1ère catégorie"
 
-#: ./interfaces.py:78
+#: interfaces.py:78
 msgid "2nd Category Name"
 msgstr "Nom de 2ème catégorie"
 
-#: ./interfaces.py:101
+#: interfaces.py:101
 msgid "3rd Category Name"
 msgstr "Nom de 3ème catégorie"
 
-#: ./interfaces.py:124
+#: interfaces.py:124
 msgid "4th Category Name"
 msgstr "Nom de 4ème catégorie"
 
-#: ./interfaces.py:159
+#: interfaces.py:159
 msgid "Allow custom categories"
-msgstr ""
+msgstr "Autoriser des catégories personnalisées"
 
-#: ./core.py:466
-#: ./templates/search.pt:15
+#: core.py:466 templates/search.pt:15
 msgid "Any"
-msgstr ""
+msgstr "tout"
 
-#: ./fieldmap.py:186
+#: fieldmap.py:186
 msgid "Coordinates (JSON)"
 msgstr "Coordonnées (JSON)"
 
-#: ./xlsexport.py:94
+#: xlsexport.py:94
 msgid "Default Export"
-msgstr ""
+msgstr "Exportation standard"
 
-#: ./interfaces.py:49
+#: interfaces.py:49
 msgid "Description"
 msgstr "Déscription"
 
-#: ./interfaces.py:71
+#: interfaces.py:71
 msgid "Descriptions for Category 1"
-msgstr ""
+msgstr "Descriptions de 1ère catégorie"
 
-#: ./interfaces.py:94
+#: interfaces.py:94
 msgid "Descriptions for Category 2"
-msgstr ""
+msgstr "Descriptions de 2ème catégorie"
 
-#: ./interfaces.py:117
+#: interfaces.py:117
 msgid "Descriptions for Category 3"
-msgstr ""
+msgstr "Descriptions de 2ème catégorie"
 
-#: ./interfaces.py:140
+#: interfaces.py:140
 msgid "Descriptions for Category 4"
-msgstr ""
+msgstr "Descriptions de 2ème catégorie"
 
-#: ./profiles/basetype/types/seantis.dir.base.directory.xml
+#: profiles/basetype/types/seantis.dir.base.directory.xml
 msgid "Directory"
 msgstr "Dossier"
 
-#: ./profiles/basetype/types/seantis.dir.base.item.xml
+#: profiles/basetype/types/seantis.dir.base.item.xml
 msgid "Directory Item"
 msgstr "Dossier d'article"
 
-#: ./interfaces.py:147
+#: interfaces.py:147
 msgid "Enable filtering"
 msgstr "Activer le filtrage"
 
-#: ./interfaces.py:153
+#: interfaces.py:153
 msgid "Enable searching"
 msgstr "Activer la recherche"
 
-#: ./xlsexport.py:37
+#: xlsexport.py:37
 msgid "Exports for"
-msgstr ""
+msgstr "Exportations pour"
 
-#: ./templates/search.pt:7
+#: templates/search.pt:7
 msgid "Filter"
 msgstr "Recherche avancée"
 
-#: ./templates/search.pt:53
+#: templates/search.pt:53
 msgid "Fulltext search"
 msgstr "Recherche de texte complet"
 
-#: ./interfaces.py:160
-msgid "If custom categories are allowed, items may specify new categories. If they are not allowed, people can only choose from the given suggestions."
+#: interfaces.py:160
+msgid ""
+"If custom categories are allowed, items may specify new categories. If they "
+"are not allowed, people can only choose from the given suggestions."
 msgstr ""
+"Si catégories personnalisées sont autorisés, les articles peuvent spécifier "
+"de nouvelles catégories. S'ils ne sont pas autorisés, les gens ne peuvent "
+"choisir parmi les suggestions données."
 
-#: ./xlsimport.py:86
+#: xlsimport.py:86
 msgid "Import"
 msgstr "Importation"
 
-#: ./xlsimport.py:41
+#: xlsimport.py:41
 msgid "Import directory items"
 msgstr "Importation des éléments de dossier"
 
-#: ./xlsimport.py:37
-msgid "Import directory items using xls. The xls is expected to have the format defined in the template which you can <a href='#xlstemplate'>download here</a>"
-msgstr "Importation des éléments d'annuaire à l'aide xls. Les xls devrait avoir le format défini dans le modèle que vous pouvez télécharger ici href='#xlstemplate'> <a </ a>"
+#: xlsimport.py:37
+msgid ""
+"Import directory items using xls. The xls is expected to have the format "
+"defined in the template which you can <a href='#xlstemplate'>download here</"
+"a>"
+msgstr ""
+"Importation des éléments d'annuaire à l'aide xls. Les xls devrait avoir le "
+"format défini dans le modèle que vous pouvez télécharger ici "
+"href='#xlstemplate'> <a </ a>"
 
-#: ./xlsimport.py:111
+#: xlsimport.py:111
 msgid "Imported ${number} items"
 msgstr "Importé ${number} articles"
 
-#: ./xlsimport.py:100
+#: xlsimport.py:100
 msgid "Invalid XLS file"
 msgstr "Invalid fichier XLS"
 
-#: ./validators.py:14
+#: validators.py:14
 msgid "Invalid email address"
 msgstr "Adresse e-mail non valide"
 
-#: ./interfaces.py:40
+#: interfaces.py:40
 msgid "Name"
 msgstr "Nom"
 
-#: ./templates/macros.pt:59
+#: templates/macros.pt:59
 msgid "No Results"
 msgstr "Pas de résultat"
 
-#: ./xlsimport.py:195
+#: xlsimport.py:195
 msgid "Not all required fields have a value"
 msgstr "Pas tous les champs obligatoires ont une valeur"
 
-#: ./templates/search.pt:39
+#: templates/search.pt:39
 msgid "Reset"
 msgstr "Reset"
 
-#: ./templates/search.pt:50
+#: templates/search.pt:50
 msgid "Search"
 msgstr "Recherche"
 
-#: ./interfaces.py:193
-msgid "Start typing and select a category. To add a new category write the name and hit enter."
-msgstr "Commencez à taper et sélectionnez une catégorie. Pour ajouter une nouvelle catégorie d'écrire le nom et appuyez sur entrée."
+#: interfaces.py:193
+msgid ""
+"Start typing and select a category. To add a new category write the name and "
+"hit enter."
+msgstr ""
+"Commencez à taper et sélectionnez une catégorie. Pour ajouter une nouvelle "
+"catégorie d'écrire le nom et appuyez sur entrée."
 
-#: ./interfaces.py:44
+#: interfaces.py:44
 msgid "Subtitle"
 msgstr "Sous-titre"
 
-#: ./interfaces.py:61
+#: interfaces.py:61
 msgid "Suggested Values for the 1st Category"
 msgstr "Valeurs suggérées pour la 2ème catégorie"
 
-#: ./interfaces.py:84
+#: interfaces.py:84
 msgid "Suggested Values for the 2nd Category"
 msgstr "Valeurs suggérées pour la 1ère catégorie"
 
-#: ./interfaces.py:107
+#: interfaces.py:107
 msgid "Suggested Values for the 3rd Category"
 msgstr "Valeurs suggérées pour la 3ème catégorie"
 
-#: ./interfaces.py:130
+#: interfaces.py:130
 msgid "Suggested Values for the 4th Category"
 msgstr "Valeurs suggérées pour la 4ème catégorie"
 
-#: ./xlsexport.py:97
-msgid "The default export contains the basic fields of the directory, without additional fields defined by client specific fields. It is the only export which may be also be imported."
+#: xlsexport.py:97
+msgid ""
+"The default export contains the basic fields of the directory, without "
+"additional fields defined by client specific fields. It is the only export "
+"which may be also be imported."
 msgstr ""
+"L'exportation par défaut contient les champs de base du répertoire, sans "
+"autres champs définis par des champs spécifiques de la clientèle. C'est la "
+"seule exportation qui peuvent être également être importé."
 
-#: ./interfaces.py:63
-msgid "These values are suggested when typing category values in the category items, in addition to values found in other items."
-msgstr "Ces valeurs sont suggérées lors de la saisie des valeurs de catégories dans les éléments de catégorie, en plus des valeurs trouvées dans d'autres articles."
+#: interfaces.py:63
+msgid ""
+"These values are suggested when typing category values in the category "
+"items, in addition to values found in other items."
+msgstr ""
+"Ces valeurs sont suggérées lors de la saisie des valeurs de catégories dans "
+"les éléments de catégorie, en plus des valeurs trouvées dans d'autres "
+"articles."
 
-#: ./xlsimport.py:35
+#: xlsimport.py:35
 msgid "XLS file"
 msgstr "fichier XLS"
-
