@@ -1,6 +1,7 @@
 import logging
 log = logging.getLogger('seantis.dir.base')
 
+from collections import namedtuple
 from five import grok
 
 from zope.interface import Interface, implements
@@ -23,7 +24,8 @@ from z3c.form.browser.textlines import TextLinesFieldWidget
 from collective.geo.settings.interfaces import IGeoSettings
 from collective.geo.mapwidget.browser.widget import MapWidget
 from collective.geo.mapwidget.maplayers import MapLayer
-from collective.geo.kml.browser import kmldocument
+from collective.geo.fastkml.browser import kmldocument
+from collective.geo.kml.browser.kmldocument import Placemark as BasePlacemark
 from collective.geo.geographer.interfaces import IGeoreferenced
 
 from seantis.dir.base import _
@@ -110,6 +112,7 @@ class KMLDocument(kmldocument.KMLDocument):
     def features(self):
         """ Manipulates the features of the klm-document to include the marker
         defined by the query (e.g. @@kml-document?letter=A). """
+
         features = super(KMLDocument, self).features
         if features:
             features[0].styles['marker_image'] = self.marker_url
@@ -117,7 +120,7 @@ class KMLDocument(kmldocument.KMLDocument):
         return features
 
 
-class Placemark(kmldocument.Placemark):
+class Placemark(BasePlacemark):
 
     def getDisplayValue(self, prop):
         """ Categories need to be flattened and joined sanely. The default
@@ -129,6 +132,23 @@ class Placemark(kmldocument.Placemark):
             values = IDirectoryCategorized(self.context).keywords((prop, ))
             return ';'.join(v for v in values if v)
         return super(Placemark, self).getDisplayValue(prop)
+
+    @property
+    def extended_data(self):
+        Element = namedtuple('ExtendedDataElement', [
+            'name', 'value', 'display_name'
+        ])
+
+        elements = []
+        directory = self.context.aq_inner.aq_parent
+
+        for category, display_name in directory.labels().items():
+            elements.append(
+                Element(
+                    category, self.getDisplayValue(category), display_name
+                )
+            )
+        return elements
 
 
 class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
