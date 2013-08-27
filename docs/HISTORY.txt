@@ -2,6 +2,10 @@
 Changelog
 =========
 
+1.6 (unreleased)
+----------------
+- Removes fieldset/legend from directory search
+
 1.5.9
 -----
 - Update French translations
