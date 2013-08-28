@@ -441,20 +441,27 @@ class View(grok.View):
     @property
     @view.memoize
     def show_map(self):
-        """ The map is shown if the interface is defined in the
-        collective.geo.settings. Said module usually sets or removes the
-        interfaces. But since we define our own adapter which is always
-        present we simply hide the mapwidget if the seantis.dir.base types
-        are not in the content_types list. """
+        """ The map is shown if the item type uses the collective.geo 
+        behaviour. The directory itself does not have coordinates.
 
-        if hasattr(self, 'json_view') and self.json_view:
-            return False
+        """
+
+        # blimey, those brits and their spelling
+        behavior = 'collective.geo.behaviours.interfaces.ICoordinates'
+
+        if self.is_itemview:
+            item_type = self.context.portal_type
+        else:
+            item_type = self.context.portal_type.replace('.directory', '.item')
 
         try:
-            settings = getUtility(IRegistry).forInterface(IGeoSettings)
-            return self.context.portal_type in settings.geo_content_types
-        except:
+            fti = getUtility(IDexterityFTI, name=item_type)
+        except ComponentLookupError:
+            log.error("Lookup for {} failed".format(item_type))
+
             return False
+
+        return behavior in fti.behaviors
 
     def get_filter_terms(self):
         """Unpacks the filter terms from a request."""

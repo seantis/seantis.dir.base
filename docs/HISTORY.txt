@@ -4,6 +4,7 @@ Changelog
 
 1.6 (unreleased)
 ----------------
+- Upgrades to latest collective.geo.* releases (not backwards compatible)
 - Removes fieldset/legend from directory search
 
 1.5.9
