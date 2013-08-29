@@ -6,6 +6,10 @@ Changelog
 ----------------
 - Upgrades to latest collective.geo.* releases (not backwards compatible)
 - Removes fieldset/legend from directory search
+- Adds category values to extended data if collective.geo.fastkml is installed.
+  Use seantis.dir.base[extended_data] to install. Collective.geo.fastkml will
+  be merged into collective.geo.kml in the future at which point this feature
+  will no longer be optional.
 
 1.5.9
 -----
