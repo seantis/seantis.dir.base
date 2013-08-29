@@ -9,6 +9,11 @@ tests_require = [
     'collective.betterbrowser[pyquery]'
 ]
 
+extended_data_require = [
+    'collective.geo.fastkml>=0.3',
+    'fastkml>=0.4'
+]
+
 setup(name='seantis.dir.base',
       version=version,
       description="Directory module for Plone using Dexterity",
@@ -53,7 +58,10 @@ setup(name='seantis.dir.base',
           'collective.geo.kml>=2.5'
       ],
       tests_require=tests_require,
-      extras_require=dict(tests=tests_require),
+      extras_require=dict(
+        tests=tests_require,
+        extended_data=extended_data_require
+      ),
       entry_points="""
       [z3c.autoinclude.plugin]
       target = plone

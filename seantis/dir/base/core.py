@@ -24,9 +24,14 @@ from z3c.form.browser.textlines import TextLinesFieldWidget
 from collective.geo.settings.interfaces import IGeoSettings
 from collective.geo.mapwidget.browser.widget import MapWidget
 from collective.geo.mapwidget.maplayers import MapLayer
-from collective.geo.fastkml.browser import kmldocument
 from collective.geo.kml.browser.kmldocument import Placemark as BasePlacemark
 from collective.geo.geographer.interfaces import IGeoreferenced
+
+# support both fastkml and kml (to be merged in the future)
+try:
+    from collective.geo.fastkml.browser import kmldocument
+except ImportError:
+    from collective.geo.kml.browser import kmldocument
 
 from seantis.dir.base import _
 from seantis.dir.base import utils
