@@ -22,20 +22,24 @@ from z3c.form.browser.textlines import TextLinesFieldWidget
 
 from collective.geo.mapwidget.browser.widget import MapWidget
 from collective.geo.mapwidget.maplayers import MapLayer
-from collective.geo.kml.browser.kmldocument import Placemark as BasePlacemark
 from collective.geo.geographer.interfaces import IGeoreferenced
 
 # support both fastkml and kml (to be merged in the future)
 try:
     from collective.geo.fastkml.browser.kmldocument import (
-        FastKMLDocument as DefaultKMLDocument,
-        KMLFolderDocument as DefaultKMLFolderDocument
+        KMLDocument as BaseKMLDocument,
+        KMLFolderDocument as BaseKMLFolderDocument
     )
+    log.info('using fastkml for kml generation')
 except ImportError:
     from collective.geo.kml.browser.kmldocument import (
-        KMLDocument as DefaultKMLDocument,
-        KMLFolderDocument as DefaultKMLFolderDocument
+        KMLDocument as BaseKMLDocument,
+        KMLFolderDocument as BaseKMLFolderDocument
     )
+    log.info('using default for kml generation')
+
+# no fastkml variant for this one
+from collective.geo.kml.browser.kmldocument import Placemark as BasePlacemark
 
 from seantis.dir.base import _
 from seantis.dir.base import utils
@@ -109,7 +113,7 @@ class LetterMapMarker(grok.Adapter):
         return utils.get_marker_url(self.context, letter)
 
 
-class KMLDocument(DefaultKMLDocument):
+class KMLDocument(BaseKMLDocument):
 
     @property
     def marker_url(self):
@@ -129,7 +133,7 @@ class KMLDocument(DefaultKMLDocument):
         return features
 
 
-class KMLFolderDocument(DefaultKMLFolderDocument):
+class KMLFolderDocument(BaseKMLFolderDocument):
     pass
 
 
