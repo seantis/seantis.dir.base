@@ -43,6 +43,14 @@
 
     <!-- Override default kml-document -->
     <browser:page
+      for="seantis.dir.base.interfaces.IDirectoryBase"
+      name="kml-document"
+      class="seantis.dir.base.core.KMLFolderDocument"
+      layer="collective.geo.kml.interfaces.IGeoKmlLayer"
+      permission="zope2.View"
+      />
+
+    <browser:page
       for="seantis.dir.base.interfaces.IDirectoryItemLike"
       name="kml-document"
       class="seantis.dir.base.core.KMLDocument"

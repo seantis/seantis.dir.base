@@ -14,14 +14,12 @@ from plone.dexterity.schema import SCHEMA_CACHE
 from plone.memoize.instance import memoizedproperty
 from plone.memoize import view
 from plone.z3cform.fieldsets.utils import move
-from plone.registry.interfaces import IRegistry
 
 from z3c.form.interfaces import IFieldsForm, IFormLayer, IAddForm, IGroup
 from z3c.form.field import FieldWidgets
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
 
-from collective.geo.settings.interfaces import IGeoSettings
 from collective.geo.mapwidget.browser.widget import MapWidget
 from collective.geo.mapwidget.maplayers import MapLayer
 from collective.geo.kml.browser.kmldocument import Placemark as BasePlacemark
@@ -29,9 +27,15 @@ from collective.geo.geographer.interfaces import IGeoreferenced
 
 # support both fastkml and kml (to be merged in the future)
 try:
-    from collective.geo.fastkml.browser import kmldocument
+    from collective.geo.fastkml.browser.kmldocument import (
+        FastKMLDocument as DefaultKMLDocument,
+        KMLFolderDocument as DefaultKMLFolderDocument
+    )
 except ImportError:
-    from collective.geo.kml.browser import kmldocument
+    from collective.geo.kml.browser.kmldocument import (
+        KMLDocument as DefaultKMLDocument,
+        KMLFolderDocument as DefaultKMLFolderDocument
+    )
 
 from seantis.dir.base import _
 from seantis.dir.base import utils
@@ -105,7 +109,7 @@ class LetterMapMarker(grok.Adapter):
         return utils.get_marker_url(self.context, letter)
 
 
-class KMLDocument(kmldocument.KMLDocument):
+class KMLDocument(DefaultKMLDocument):
 
     @property
     def marker_url(self):
@@ -123,6 +127,10 @@ class KMLDocument(kmldocument.KMLDocument):
             features[0].styles['marker_image'] = self.marker_url
 
         return features
+
+
+class KMLFolderDocument(DefaultKMLFolderDocument):
+    pass
 
 
 class Placemark(BasePlacemark):
