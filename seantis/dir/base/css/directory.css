@@ -1,52 +1,3 @@
-#landingPageImage {
-    float:left;
-    display:inline;
-    margin-right: 15px;
-}
-
-#landingPageIntro {
-    width: 100%;
-}
-
-.directoryResult {
-    position: relative;
-    border-top: 1px solid #ddd;
-    padding: 0px 0 12px 0;
-}
-
-div#landingPageText {
-    width: 50%;
-    float: left;
-    margin-top: 0;
-    padding-top: 0;
-}
-
-div#directoryResultList, div#directoryInfo {
-    padding-top: 0;
-}
-
-#directoryResultList {
-    width: 100%;
-}
-
-.directoryMarker {
-    position: absolute;
-    top: 5px;
-    left: auto !important;  
-}
-
-.directoryInfoText {
-    padding-left: 10px !important;
-}
-
-#content #document-action-kml_download {
-    display: none;
-}
-
-a.groupSelection {
-    text-decoration: underline !important;
-}
-
 /* category descriptions is an unfinished feature and only visible for
 seantis.dir.council, once it's finished this will be gone */
 #formfield-form-widgets-cat1_descriptions,
@@ -91,9 +42,5 @@ not put next to each other.. */
 #formfield-form-widgets-IDirectoryCategorized-cat2 .token-input-list,
 #formfield-form-widgets-IDirectoryCategorized-cat3 .token-input-list,
 #formfield-form-widgets-IDirectoryCategorized-cat4 .token-input-list {
-    width: 100% !important;   
-}
-
-.formControls {
-    clear: both;   
+    width: 100%;   
 }

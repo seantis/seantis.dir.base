@@ -4,6 +4,8 @@ Changelog
 
 1.6 (unreleased)
 ----------------
+- Removes almost all css styles - it's the job of seantis.dir.* packages to
+  look shiny.
 - Removes fieldset/legend from directory search
 
 1.5.9
