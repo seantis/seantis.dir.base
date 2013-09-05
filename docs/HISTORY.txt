@@ -5,6 +5,8 @@ Changelog
 1.6 (unreleased)
 ----------------
 - Upgrades to latest collective.geo.* releases (not backwards compatible)
+- Removes almost all css styles - it's the job of seantis.dir.* packages to
+  look shiny.
 - Removes fieldset/legend from directory search
 - Adds category values to extended data if collective.geo.fastkml is installed.
   Use seantis.dir.base[extended_data] to install. Collective.geo.fastkml will
