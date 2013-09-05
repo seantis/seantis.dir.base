@@ -484,7 +484,7 @@ class View(grok.View):
         """
 
         # blimey, those brits and their spelling
-        behavior = 'collective.geo.behaviours.interfaces.ICoordinates'
+        behavior = 'collective.geo.behaviour.interfaces.ICoordinates'
 
         if self.is_itemview:
             item_type = self.context.portal_type
