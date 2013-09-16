@@ -2,6 +2,12 @@
 Changelog
 =========
 
+1.6.1 (2013-06-16)
+------------------
+- Adds seantis-directory-all, seantis-directory-results or 
+  seantis-directory-items to all directory views' body class. This allows
+  for easier styling of different seantis.dir.* modules.
+
 1.6 (2013-09-12)
 ----------------
 - Removes almost all css styles - it's the job of seantis.dir.* packages to
