@@ -65,6 +65,15 @@
                 handler=".subscribers.block_portlets_on_creation"
     />
 
+    <!-- custom css classes for directory views -->
+    <browser:page
+        name="plone_layout"
+        for=".interfaces.IDirectoryRoot"
+        permission="zope.Public"
+        class=".core.DirectoryLayoutPolicy"
+        allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
+        />
+
     <!-- Behaviors -->
     <plone:behavior
         title="Directory Categorized"

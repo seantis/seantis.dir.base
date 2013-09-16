@@ -26,6 +26,8 @@ from collective.geo.mapwidget.maplayers import MapLayer
 from collective.geo.kml.browser import kmldocument
 from collective.geo.geographer.interfaces import IGeoreferenced
 
+from plone.app.layout.globals.layout import LayoutPolicy
+
 from seantis.dir.base import _
 from seantis.dir.base import utils
 from seantis.dir.base import session
@@ -36,6 +38,7 @@ from seantis.dir.base.utils import remove_count
 from seantis.dir.base.interfaces import (
     IDirectoryPage,
     IDirectoryRoot,
+    IDirectoryBase,
     IDirectoryItemBase,
     IDirectory,
     IDirectoryCategorized,
@@ -553,3 +556,26 @@ class View(grok.View):
         """ Returns the marker image used in the mapfields. """
         marker = IMapMarker(item)
         return marker.url(self.lettermap.get(item.id, None))
+
+
+class DirectoryLayoutPolicy(LayoutPolicy):
+    """ Adds a seantis-directory-all, seantis-directory-results and
+    seantis-directory-item class to the body of all DirectoryPages.
+
+    """
+
+    def bodyClass(self, template, view):
+        """Returns the CSS class to be used on the body tag.
+        """
+
+        body_class = LayoutPolicy.bodyClass(self, template, view)
+
+        additional_classes = ['seantis-directory-all']
+
+        if IDirectoryBase.providedBy(self.context):
+            additional_classes.append('seantis-directory-results')
+
+        if IDirectoryItemBase.providedBy(self.context):
+            additional_classes.append('seantis-directory-item')
+
+        return '{} {}'.format(body_class, ' '.join(additional_classes))
