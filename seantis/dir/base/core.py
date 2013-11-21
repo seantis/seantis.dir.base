@@ -1,6 +1,7 @@
 import logging
 log = logging.getLogger('seantis.dir.base')
 
+from collections import namedtuple
 from five import grok
 
 from zope.interface import Interface, implements
@@ -13,20 +14,33 @@ from plone.dexterity.schema import SCHEMA_CACHE
 from plone.memoize.instance import memoizedproperty
 from plone.memoize import view
 from plone.z3cform.fieldsets.utils import move
-from plone.registry.interfaces import IRegistry
+from plone.app.layout.globals.layout import LayoutPolicy
 
 from z3c.form.interfaces import IFieldsForm, IFormLayer, IAddForm, IGroup
 from z3c.form.field import FieldWidgets
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
 
-from collective.geo.settings.interfaces import IGeoSettings
 from collective.geo.mapwidget.browser.widget import MapWidget
 from collective.geo.mapwidget.maplayers import MapLayer
-from collective.geo.kml.browser import kmldocument
 from collective.geo.geographer.interfaces import IGeoreferenced
 
-from plone.app.layout.globals.layout import LayoutPolicy
+# support both fastkml and kml (to be merged in the future)
+try:
+    from collective.geo.fastkml.browser.kmldocument import (
+        KMLDocument as BaseKMLDocument,
+        KMLFolderDocument as BaseKMLFolderDocument
+    )
+    log.info('using fastkml for kml generation')
+except ImportError:
+    from collective.geo.kml.browser.kmldocument import (
+        KMLDocument as BaseKMLDocument,
+        KMLFolderDocument as BaseKMLFolderDocument
+    )
+    log.info('using default for kml generation')
+
+# no fastkml variant for this one
+from collective.geo.kml.browser.kmldocument import Placemark as BasePlacemark
 
 from seantis.dir.base import _
 from seantis.dir.base import utils
@@ -101,7 +115,7 @@ class LetterMapMarker(grok.Adapter):
         return utils.get_marker_url(self.context, letter)
 
 
-class KMLDocument(kmldocument.KMLDocument):
+class KMLDocument(BaseKMLDocument):
 
     @property
     def marker_url(self):
@@ -113,6 +127,7 @@ class KMLDocument(kmldocument.KMLDocument):
     def features(self):
         """ Manipulates the features of the klm-document to include the marker
         defined by the query (e.g. @@kml-document?letter=A). """
+
         features = super(KMLDocument, self).features
         if features:
             features[0].styles['marker_image'] = self.marker_url
@@ -120,7 +135,11 @@ class KMLDocument(kmldocument.KMLDocument):
         return features
 
 
-class Placemark(kmldocument.Placemark):
+class KMLFolderDocument(BaseKMLFolderDocument):
+    pass
+
+
+class Placemark(BasePlacemark):
 
     def getDisplayValue(self, prop):
         """ Categories need to be flattened and joined sanely. The default
@@ -132,6 +151,23 @@ class Placemark(kmldocument.Placemark):
             values = IDirectoryCategorized(self.context).keywords((prop, ))
             return ';'.join(v for v in values if v)
         return super(Placemark, self).getDisplayValue(prop)
+
+    @property
+    def extended_data(self):
+        Element = namedtuple('ExtendedDataElement', [
+            'name', 'value', 'display_name'
+        ])
+
+        elements = []
+        directory = self.context.aq_inner.aq_parent
+
+        for category, display_name in directory.labels().items():
+            elements.append(
+                Element(
+                    category, self.getDisplayValue(category), display_name
+                )
+            )
+        return elements
 
 
 class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
@@ -444,20 +480,27 @@ class View(grok.View):
     @property
     @view.memoize
     def show_map(self):
-        """ The map is shown if the interface is defined in the
-        collective.geo.settings. Said module usually sets or removes the
-        interfaces. But since we define our own adapter which is always
-        present we simply hide the mapwidget if the seantis.dir.base types
-        are not in the content_types list. """
+        """ The map is shown if the item type uses the collective.geo 
+        behaviour. The directory itself does not have coordinates.
 
-        if hasattr(self, 'json_view') and self.json_view:
-            return False
+        """
+
+        # blimey, those brits and their spelling
+        behavior = 'collective.geo.behaviour.interfaces.ICoordinates'
+
+        if self.is_itemview:
+            item_type = self.context.portal_type
+        else:
+            item_type = self.context.portal_type.replace('.directory', '.item')
 
         try:
-            settings = getUtility(IRegistry).forInterface(IGeoSettings)
-            return self.context.portal_type in settings.geo_content_types
-        except:
+            fti = getUtility(IDexterityFTI, name=item_type)
+        except ComponentLookupError:
+            log.error("Lookup for {} failed".format(item_type))
+
             return False
+
+        return behavior in fti.behaviors
 
     def get_filter_terms(self):
         """Unpacks the filter terms from a request."""

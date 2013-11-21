@@ -11,6 +11,11 @@ Changelog
   https://github.com/seantis/seantis.dir.contacts/commit/02c18f8f10fb20ac1610d94204e7ff753bfbaadf
   (note that the release is 1.7 instead of 1.6)
 
+- Adds category values to extended data if collective.geo.fastkml is installed.
+  Use seantis.dir.base[extended_data] to install. Collective.geo.fastkml will
+  be merged into collective.geo.kml in the future at which point this feature
+  will no longer be optional.
+
 1.6.1 (2013-06-16)
 ------------------
 - Adds seantis-directory-all, seantis-directory-results or 
@@ -22,6 +27,10 @@ Changelog
 - Removes almost all css styles - it's the job of seantis.dir.* packages to
   look shiny.
 - Removes fieldset/legend from directory search
+- Adds category values to extended data if collective.geo.fastkml is installed.
+  Use seantis.dir.base[extended_data] to install. Collective.geo.fastkml will
+  be merged into collective.geo.kml in the future at which point this feature
+  will no longer be optional.
 
 1.5.9
 -----
