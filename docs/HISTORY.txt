@@ -2,6 +2,15 @@
 Changelog
 =========
 
+1.7 (unreleased)
+----------------
+
+- Upgrade to latest collective.geo releases. Please note that an upgrade step
+  is necessary for each module using seantis.dir.base. Implemented as follows:
+  
+  https://github.com/seantis/seantis.dir.contacts/commit/02c18f8f10fb20ac1610d94204e7ff753bfbaadf
+  (note that the release is 1.7 instead of 1.6)
+
 1.6.1 (2013-06-16)
 ------------------
 - Adds seantis-directory-all, seantis-directory-results or 

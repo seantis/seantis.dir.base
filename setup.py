@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.6.1'
+version = '1.7'
 
 tests_require = [
     'collective.testcaselayer',
@@ -45,12 +45,13 @@ setup(name='seantis.dir.base',
           'collective.dexteritytextindexer',
           'xlrd',
           'xlwt',
-          'collective.geo.geographer>=1.6',
-          'collective.geo.contentlocations>=2.5',
-          'collective.geo.settings>=2.5',
-          'collective.geo.mapwidget>=1.6',
-          'collective.geo.openlayers>=2.5',
-          'collective.geo.kml>=2.5'
+          'collective.geo.geographer>=2.0',
+          'collective.geo.contentlocations>=3.0',
+          'collective.geo.settings>=3.0',
+          'collective.geo.mapwidget>=2.0',
+          'collective.geo.openlayers>=3.0',
+          'collective.geo.kml>=3.1',
+          'collective.geo.behaviour>=1.0'
       ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
