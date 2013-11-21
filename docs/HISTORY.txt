@@ -2,8 +2,8 @@
 Changelog
 =========
 
-1.7 (unreleased)
-----------------
+1.7
+---
 
 - Upgrade to latest collective.geo releases. Please note that an upgrade step
   is necessary for each module using seantis.dir.base. Implemented as follows:
