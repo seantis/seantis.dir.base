@@ -90,11 +90,16 @@ class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
     def __init__(self, context):
         super(DirectoryItemGeoStyleAdapter, self).__init__(context)
 
+    def get(self, key, default=False):
+
         # permanently override certain style settings
-        self.geostyles['map_viewlet_position'] = u'fake-manager'
-        self.geostyles['marker_image_size'] = 0.71875
-        self.geostyles['display_properties'] = []
-        self.geostyles['use_custom_styles'] = True
-        self.geostyles['display_properties'] = [
+        self.ensure_geostyle('map_viewlet_position', u'fake-manager')
+        self.ensure_geostyle('marker_image_size', 0.71875)
+        self.ensure_geostyle('use_custom_styles', True)
+        self.ensure_geostyle('display_properties', [
             'title', 'description', 'cat1', 'cat2', 'cat3', 'cat4'
-        ]
+        ])
+
+    def ensure_geostyle(self, key, value):
+        if self.geostyles[key] != value:
+            self.geostyles[key] = value
