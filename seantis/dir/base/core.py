@@ -1,6 +1,7 @@
 import logging
 log = logging.getLogger('seantis.dir.base')
 
+from copy import copy
 from collections import namedtuple
 from five import grok
 
@@ -19,7 +20,6 @@ from plone.app.layout.globals.layout import LayoutPolicy
 from z3c.form.interfaces import IFieldsForm, IFormLayer, IAddForm, IGroup
 from z3c.form.field import FieldWidgets
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
-from z3c.form.browser.textlines import TextLinesFieldWidget
 
 from collective.geo.mapwidget.browser.widget import MapWidget
 from collective.geo.mapwidget.maplayers import MapLayer
@@ -46,7 +46,6 @@ from seantis.dir.base import _
 from seantis.dir.base import utils
 from seantis.dir.base import session
 from seantis.dir.base import const
-from seantis.dir.base.utils import get_interface_fields
 from seantis.dir.base.utils import get_current_language
 from seantis.dir.base.utils import remove_count
 from seantis.dir.base.interfaces import (
@@ -57,7 +56,6 @@ from seantis.dir.base.interfaces import (
     IDirectory,
     IDirectoryCategorized,
     IDirectorySpecific,
-    IDirectoryItemCategories,
     IMapMarker
 )
 
@@ -305,8 +303,6 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         if self.hook_form and not self.is_directory:
             if not self.directory.allow_custom_categories:
                 self.lock_categories()
-            else:
-                self.unlock_categories()
 
         super(DirectoryFieldWidgets, self).update()
 
@@ -391,15 +387,23 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
         the same thing with pure widgets.
         """
 
+        # shallow copy the fields to be changed so the change does not leak
+        # through to other forms.
+        self.form.fields = copy(self.form.fields)
+
+        field_names = (
+            ['IDirectoryCategorized.cat{}'.format(i) for i in range(1, 5)]
+        )
         try:
-            categories = (
-                self.form.fields['IDirectoryCategorized.cat1'],
-                self.form.fields['IDirectoryCategorized.cat2'],
-                self.form.fields['IDirectoryCategorized.cat3'],
-                self.form.fields['IDirectoryCategorized.cat4']
-            )
+            for field in field_names:
+                # copy field.field manually as the parent is shallow copied
+                self.form.fields[field].field = copy(
+                    self.form.fields[field].field
+                )
         except KeyError:
             return
+
+        categories = [self.form.fields[f] for f in field_names]
 
         for category in categories:
             category.widgetFactory = CheckBoxFieldWidget
@@ -407,28 +411,6 @@ class DirectoryFieldWidgets(FieldWidgets, grok.MultiAdapter):
             category.field.value_type = Choice(
                 source=self.directory.source_provider(category.__name__)
             )
-
-    def unlock_categories(self):
-        """ Undoes the changes that lock_categories does to the fields. """
-        try:
-            categories = (
-                self.form.fields['IDirectoryCategorized.cat1'],
-                self.form.fields['IDirectoryCategorized.cat2'],
-                self.form.fields['IDirectoryCategorized.cat3'],
-                self.form.fields['IDirectoryCategorized.cat4']
-            )
-        except KeyError:
-            return
-
-        fields = get_interface_fields(IDirectoryItemCategories)
-
-        for category in categories:
-            original = fields[
-                category.__name__.replace(category.prefix, '').replace('.', '')
-            ]
-            category.widgetFactory = TextLinesFieldWidget
-            category.field.description = original.description
-            category.field.value_type = original.value_type
 
     def apply_labels(self, labels):
         """ Applies the labels of the given dictionary built as follows:
@@ -480,7 +462,7 @@ class View(grok.View):
     @property
     @view.memoize
     def show_map(self):
-        """ The map is shown if the item type uses the collective.geo 
+        """ The map is shown if the item type uses the collective.geo
         behaviour. The directory itself does not have coordinates.
 
         """
