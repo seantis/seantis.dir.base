@@ -5,6 +5,10 @@ Changelog
 1.7.1 (unreleased)
 ------------------
 
+- Switching between locked/unlocked categories no longer results in ability
+  to save an item. Fixes #11.
+  [href]
+
 - No longer trigger a transaction on a simple read-only view request. Fixes #9.
   [href]
 
