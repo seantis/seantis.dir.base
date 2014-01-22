@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.7'
+version = '1.7.1'
 
 tests_require = [
     'collective.testcaselayer',
@@ -60,8 +60,8 @@ setup(name='seantis.dir.base',
       ],
       tests_require=tests_require,
       extras_require=dict(
-        tests=tests_require,
-        extended_data=extended_data_require
+          tests=tests_require,
+          extended_data=extended_data_require
       ),
       entry_points="""
       [z3c.autoinclude.plugin]
