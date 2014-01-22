@@ -20,7 +20,10 @@ def set_session(context, key, value):
     """Stores the given value with the key in the session."""
     session_manager = context.session_data_manager
     session = session_manager.getSessionData()
-    session[key] = value
+
+    # avoid triggering a write if not necessary
+    if session.get(key) != value:
+        session[key] = value
 
 
 def has_last_search(directory):
