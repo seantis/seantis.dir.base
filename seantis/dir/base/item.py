@@ -100,6 +100,8 @@ class DirectoryItemGeoStyleAdapter(GeoStyleManager, grok.Adapter):
             'title', 'description', 'cat1', 'cat2', 'cat3', 'cat4'
         ])
 
+        return self.geostyles[key]
+
     def ensure_geostyle(self, key, value):
         if self.geostyles[key] != value:
             self.geostyles[key] = value

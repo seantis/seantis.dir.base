@@ -8,6 +8,9 @@ Changelog
 - Integrate seantis.plonetools.
   [href]
 
+- Fixes geo customstyles not returning a value.
+  [href]
+
 1.7.1 (2014-01-22)
 ------------------
 
