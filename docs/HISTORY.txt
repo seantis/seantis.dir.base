@@ -2,10 +2,11 @@
 Changelog
 =========
 
-1.7.2
------
+1.7.2 (unreleased)
+------------------
 
-Nothing yet.
+- Integrate seantis.plonetools.
+  [href]
 
 1.7.1 (2014-01-22)
 ------------------
