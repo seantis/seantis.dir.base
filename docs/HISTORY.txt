@@ -5,6 +5,10 @@ Changelog
 1.7.2 (unreleased)
 ------------------
 
+- No longer fix the width of the search/filter viewlet in python. This will
+  impact the style of existing themes, except for plonetheme.onegov.
+  [href]
+
 - Integrate seantis.plonetools.
   [href]
 

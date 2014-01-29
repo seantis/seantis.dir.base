@@ -7,7 +7,7 @@
 
     <div id="directorySearchForm" class="directorySearchForm" tal:attributes="data-search-url viewlet/search_url">
         <tal:block condition="context/enable_filter">
-            <form tal:attributes="action viewlet/search_url; style viewlet/filterstyle" method="POST" class="seantis-directory-filter">
+            <form tal:attributes="action viewlet/search_url" method="POST" class="seantis-directory-filter">
                 <div class="directorySearchFormSelection" tal:repeat="category python: viewlet.labels.keys()">
                     <div tal:attributes="class python: 'visualMarginRight ' + category">
                         <label tal:attributes="for category" tal:content="python: viewlet.labels[category]"/>
@@ -47,7 +47,7 @@
         </tal:block>
         
         <tal:block condition="context/enable_search">
-            <form tal:attributes="action viewlet/search_url; style viewlet/searchstyle" method="POST" class="seantis-directory-search">
+            <form tal:attributes="action viewlet/search_url" method="POST" class="seantis-directory-search">
                 <div class="directorySearchFormSelection">
                     <div class="visualMarginRight">
                         <label i18n:translate="">Fulltext search</label>
