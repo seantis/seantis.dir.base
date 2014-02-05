@@ -2,7 +2,7 @@
 Changelog
 =========
 
-1.7.2 (unreleased)
+1.7.2 (2014-02-05)
 ------------------
 
 - No longer fix the width of the search/filter viewlet in python. This will
