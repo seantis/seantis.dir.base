@@ -8,15 +8,15 @@ seantis.dir.council, once it's finished this will be gone */
 }
 
 /* make the circles in the collective geo maps more visible */
-#geoshapemap circle, #geoshapemap polyline, #geoshapemap path {
+#form-widgets-wkt-map circle, #form-widgets-wkt-map polyline, #form-widgets-wkt-map path {
     stroke: #0e52ea;
     stroke-width: 2px;
     fill: white;
     fill-opacity: 0.5;
 }
 
-#geoshapemap polyline {
-    fill: none;   
+#form-widgets-wkt-map polyline {
+    fill: none;
 }
 
 /* checkboxes of categories should each have their own line */
@@ -42,5 +42,5 @@ not put next to each other.. */
 #formfield-form-widgets-IDirectoryCategorized-cat2 .token-input-list,
 #formfield-form-widgets-IDirectoryCategorized-cat3 .token-input-list,
 #formfield-form-widgets-IDirectoryCategorized-cat4 .token-input-list {
-    width: 100%;   
+    width: 100%;
 }
