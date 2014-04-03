@@ -35,4 +35,12 @@
         handler=".upgrades.upgrade_to_2013050802"
         profile="seantis.dir.base:default" />
 
+    <gs:upgradeStep
+        title="Reimport cssregistry"
+        description=""
+        source="2013050802"
+        destination="2014040301"
+        handler=".upgrades.upgrade_to_2014040301"
+        profile="seantis.dir.base:default" />
+
 </configure>
