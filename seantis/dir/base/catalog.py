@@ -99,7 +99,7 @@ class DirectoryCatalog(grok.Adapter):
         # problem at worst)
         #
         # add a wildcard at the end for fuzzyness
-        text = '"{}"*'.format(text)
+        text = '"{}*"'.format(text)
 
         return sorted(self.query(SearchableText=text), key=self.sortkey())
 
