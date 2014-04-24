@@ -1,12 +1,14 @@
 if (!seantis) seantis = {};
 
- $(window).on('maploadend', function(e, widget){
+ $(window).on('maploadend', function(e, widget) {
 
     var placemarks = (function(map) {
         var result = [];
-        for(var i=0; i<map.layers.length; i++) {
+        for (var i = 0; i < map.layers.length; i++) {
             if (typeof map.layers[i].attributes === 'undefined') continue;
-            if (typeof map.layers[i].attributes.is_placemark === 'undefined') continue;
+            if (typeof map.layers[i].attributes.is_placemark === 'undefined') {
+                continue;
+            }
 
             result.push(map.layers[i]);
         }
@@ -14,7 +16,7 @@ if (!seantis) seantis = {};
     })(widget.map);
 
     var force_topmost = function(layer) {
-        var parent = document.getElementById(layer.id+'_vroot');
+        var parent = document.getElementById(layer.id + '_vroot');
         if (!parent) return;
 
         // append the container holding the marker to the container holding
@@ -31,7 +33,7 @@ if (!seantis) seantis = {};
     };
 
     var pulsate = function(layer, start) {
-        var parent = document.getElementById(layer.id+'_vroot');
+        var parent = document.getElementById(layer.id + '_vroot');
         if (!parent) return;
 
         if (typeof parent.stop_animation !== 'undefined') {
@@ -43,11 +45,11 @@ if (!seantis) seantis = {};
 
         var elements = parent.childNodes;
         var stops = [];
-        for(var i=0; i<elements.length; i++) {
+        for (var i = 0; i < elements.length; i++) {
             stops[i] = pulseate_element(elements[i]);
         }
         parent.stop_animation = function() {
-            for (var i=0; i<stops.length; i++) {
+            for (var i = 0; i < stops.length; i++) {
                 stops[i]();
             }
         };
@@ -70,11 +72,11 @@ if (!seantis) seantis = {};
         var strokewidth = get_attr(element, 'stroke-width');
 
         var on = function(offset) {
-            set_attr(element, "height", height+offset);
-            set_attr(element, "width", width+offset);
-            set_attr(element, "x", x-offset/2);
-            set_attr(element, "y", y-offset);
-            set_attr(element, "stroke-width", strokewidth+offset);
+            set_attr(element, 'height', height + offset);
+            set_attr(element, 'width', width + offset);
+            set_attr(element, 'x', x - offset / 2);
+            set_attr(element, 'y', y - offset);
+            set_attr(element, 'stroke-width', strokewidth + offset);
         };
 
         var count = 0;
@@ -99,7 +101,7 @@ if (!seantis) seantis = {};
 
     var get_target = function(layer) {
         var id = layer.attributes.target;
-        return $('#'+ id + ', .' + id);
+        return $('#' + id + ', .' + id);
     };
 
     /* setup hover events for targets (results pointing at placemarks) */
@@ -119,7 +121,7 @@ if (!seantis) seantis = {};
         return false;
     };
 
-    for(var i=0; i<placemarks.length; i++) {
+    for (var i = 0; i < placemarks.length; i++) {
         placemarks[i].attributes.target.hover(
             on_mouse_over_target,
             on_mouse_out_target
@@ -135,7 +137,7 @@ if (!seantis) seantis = {};
             featurehighlighted: function(e) {
                 var layer = e.feature.layer;
                 layer.attributes.target.toggleClass('groupSelection', true);
-                
+
                 var marker = document.getElementById(layer.id + '_root');
                 marker.style.cursor = 'pointer';
             },
@@ -182,16 +184,30 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
             })
         }),
         strategies: [new OpenLayers.Strategy.Fixed()],
-        projection: new OpenLayers.Projection("EPSG:4326")
+        projection: new OpenLayers.Projection('EPSG:4326')
     });
 
     layer.attributes = {
         'is_placemark': true,
         'target_id': id,
-        'target': $('#'+ id + ', .' + id),
+        'target': $('#' + id + ', .' + id),
         'letter': letter,
         'url': url
     };
+
+    var zoom_to = function(layer) {
+        var zoom = layer.map.getZoom();
+        layer.map.zoomToExtent(layer.getDataExtent());
+        layer.map.zoomTo(zoom);
+    };
+
+    if (zoom) {
+        layer.events.on({
+            'loadend': function() {
+                zoom_to(layer);
+            }
+        });
+    }
 
     layer.attributes.target.data('layer', layer);
 
