@@ -1,7 +1,7 @@
 import logging
 log = logging.getLogger('seantis.dir.base')
 
-from copy import copy
+from copy import copy, deepcopy
 from collections import namedtuple
 from five import grok
 
@@ -114,23 +114,7 @@ class LetterMapMarker(grok.Adapter):
 
 
 class KMLDocument(BaseKMLDocument):
-
-    @property
-    def marker_url(self):
-        letter = self.request.get('letter', None) or None
-        marker = IMapMarker(self.context)
-        return u'string:' + marker.url(letter)
-
-    @property
-    def features(self):
-        """ Manipulates the features of the klm-document to include the marker
-        defined by the query (e.g. @@kml-document?letter=A). """
-
-        features = super(KMLDocument, self).features
-        if features:
-            features[0].styles['marker_image'] = self.marker_url
-
-        return features
+    pass
 
 
 class KMLFolderDocument(BaseKMLFolderDocument):
@@ -138,6 +122,19 @@ class KMLFolderDocument(BaseKMLFolderDocument):
 
 
 class Placemark(BasePlacemark):
+
+    def __init__(self, context, request):
+        super(Placemark, self).__init__(context, request)
+
+        # styles are stored as annotation!
+        # see collective/geo/contentlocations/geostylemanager.py
+        self.styles = deepcopy(self.styles)
+
+        # Manipulates the marker image as defined by the query
+        # e.g. @@kml-document?letter=A
+        letter = self.request.get('letter', None) or None
+        marker = IMapMarker(self.context)
+        self.styles['marker_image'] = u'string:' + marker.url(letter)
 
     def getDisplayValue(self, prop):
         """ Categories need to be flattened and joined sanely. The default

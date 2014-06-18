@@ -5,7 +5,8 @@ Changelog
 1.7.5 (unreleased)
 ------------------
 
-Nothing yet.
+- Don't store marker images for items persistently. Fixes #15.
+  [msom]
 
 1.7.4 (2014-04-24)
 ------------------
