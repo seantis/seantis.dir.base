@@ -2,7 +2,7 @@
 Changelog
 =========
 
-1.7.5 (unreleased)
+1.7.5 (2014-06-18)
 ------------------
 
 - Don't store marker images for items persistently. Fixes #15.
