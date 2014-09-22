@@ -5,7 +5,9 @@ Changelog
 1.7.6 (unreleased)
 ------------------
 
-Nothing yet.
+- Disable 'orphans' in batching, it doesn't work as expected. See
+  https://github.com/seantis/seantis.dir.facility/issues/2
+  [href]
 
 1.7.5 (2014-06-18)
 ------------------

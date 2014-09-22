@@ -315,7 +315,7 @@ class View(core.View, DirectoryCatalogMixin):
         start = int(self.request.get('b_start') or 0)
         items = self.items() if callable(self.items) else self.items
 
-        return Batch(items, self.itemsperpage, start, orphan=1)
+        return Batch(items, self.itemsperpage, start)
 
 
 class JsonFilterView(core.View, DirectoryCatalogMixin):
