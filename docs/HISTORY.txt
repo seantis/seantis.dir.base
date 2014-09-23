@@ -2,7 +2,7 @@
 Changelog
 =========
 
-1.7.6 (unreleased)
+1.7.6 (2014-09-23)
 ------------------
 
 - Disable 'orphans' in batching, it doesn't work as expected. See
