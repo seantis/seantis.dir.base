@@ -2,7 +2,7 @@
 Changelog
 =========
 
-1.7.7 (unreleased)
+1.7.7 (2014-10-20)
 ------------------
 
 - Remove deprecated.js for openlayers. Requires collective.geo.openlayers 3.1.
