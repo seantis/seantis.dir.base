@@ -5,7 +5,8 @@ Changelog
 1.7.8 (unreleased)
 ------------------
 
-Nothing yet.
+- Adds the ability to filter the directory's kml-document by category.
+  [href]
 
 1.7.7 (2014-10-20)
 ------------------

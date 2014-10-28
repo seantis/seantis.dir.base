@@ -42,12 +42,11 @@ except ImportError:
 # no fastkml variant for this one
 from collective.geo.kml.browser.kmldocument import Placemark as BasePlacemark
 
-from seantis.dir.base import _
 from seantis.dir.base import utils
 from seantis.dir.base import session
 from seantis.dir.base import const
+from seantis.dir.base import catalog
 from seantis.dir.base.utils import get_current_language
-from seantis.dir.base.utils import remove_count
 from seantis.dir.base.interfaces import (
     IDirectoryPage,
     IDirectoryRoot,
@@ -118,7 +117,19 @@ class KMLDocument(BaseKMLDocument):
 
 
 class KMLFolderDocument(BaseKMLFolderDocument):
-    pass
+
+    @property
+    def features(self):
+        terms = utils.get_filter_terms(self.context, self.request)
+
+        for feature in super(KMLFolderDocument, self).features:
+            if not terms:
+                yield feature
+            else:
+                item = IDirectoryCategorized(feature.context)
+
+                if catalog.is_exact_match(item, terms):
+                    yield feature
 
 
 class Placemark(BasePlacemark):
@@ -482,25 +493,7 @@ class View(grok.View):
         return behavior in fti.behaviors
 
     def get_filter_terms(self):
-        """Unpacks the filter terms from a request."""
-        terms = {}
-        request = self.request
-
-        # "Any" is also defined in search.pt
-        empty = (u'', utils.translate(
-            self.context, self.request, _(u'Any')
-        ))
-
-        filterable = lambda k: k.startswith('cat') \
-            and request[k].decode('utf-8') not in empty
-
-        category_keys = (k for k in request.keys() if filterable(k))
-
-        for key in category_keys:
-            text = request[key].decode('utf-8')
-            terms[key] = remove_count(text)
-
-        return terms
+        return utils.get_filter_terms(self.context, self.request)
 
     @property
     def is_itemview(self):

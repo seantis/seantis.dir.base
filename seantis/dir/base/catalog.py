@@ -23,7 +23,12 @@ def is_exact_match(item, term):
 
     categories = defaultdict(list)
 
-    for category, label, value in item.categories:
+    if callable(item.categories):
+        item_categories = item.categories()
+    else:
+        item_categories = item.categories
+
+    for category, label, value in item_categories:
         # category values should be lists
         if isinstance(value, basestring):
             categories[category].append((value.strip(), ))

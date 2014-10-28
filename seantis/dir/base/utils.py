@@ -11,6 +11,9 @@ from zope import i18n
 
 import pyuca
 
+from seantis.dir.base import _
+
+
 allkeys = path.join('/'.join(path.split(pyuca.__file__)[:-1]), 'allkeys.txt')
 collator = pyuca.Collator(allkeys)
 
@@ -74,6 +77,35 @@ def get_current_language(context, request):
         (context, request), name=u'plone_portal_state'
     )
     return portal_state.language()
+
+
+def get_filter_terms(context, request):
+    """Unpacks the filter terms from a request.
+
+    For example:
+        url?cat1=One&cat2=Two
+
+    Will result in:
+        {
+            'cat1': 'One',
+            'cat2': 'Two'
+        }
+    """
+    terms = {}
+
+    # "Any" is also defined in search.pt
+    empty = (u'', translate(context, request, _(u'Any')))
+
+    filterable = lambda k: k.startswith('cat') \
+        and request[k].decode('utf-8') not in empty
+
+    category_keys = (k for k in request.keys() if filterable(k))
+
+    for key in category_keys:
+        text = request[key].decode('utf-8')
+        terms[key] = remove_count(text)
+
+    return terms
 
 
 def add_count(text, count):
