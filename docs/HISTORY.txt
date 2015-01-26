@@ -2,7 +2,7 @@
 Changelog
 =========
 
-1.8.0 (unreleased)
+1.8.0 (2015-01-26)
 ------------------
 
 - Loosens the permissions required for import/export to add/edit respectively.
