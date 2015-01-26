@@ -118,6 +118,12 @@ class IDirectoryBase(IDirectoryRoot):
         default=True
     )
 
+    enable_map = Bool(
+        title=_(u'Enable the map'),
+        required=True,
+        default=True
+    )
+
     allow_custom_categories = Bool(
         title=_(u'Allow custom categories'),
         description=_(

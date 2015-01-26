@@ -473,7 +473,13 @@ class View(grok.View):
         """ The map is shown if the item type uses the collective.geo
         behaviour. The directory itself does not have coordinates.
 
+        Additionally, the map can be hidden on a per-directory basis, if
+        enable_map is set to False.
+
         """
+
+        if not self.context.enable_map:
+            return False
 
         # blimey, those brits and their spelling
         behavior = 'collective.geo.behaviour.interfaces.ICoordinates'
@@ -555,7 +561,7 @@ class View(grok.View):
                 if hasattr(item, 'getObject'):
                     item = item.getObject()
 
-                if not item.id in self.lettermap and self.has_mapdata(item):
+                if item.id not in self.lettermap and self.has_mapdata(item):
 
                     layer = DirectoryMapLayer(context=item)
 

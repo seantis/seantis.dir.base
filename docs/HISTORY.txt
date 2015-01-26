@@ -5,6 +5,10 @@ Changelog
 1.8.0 (unreleased)
 ------------------
 
+- Adds an option to enable/disable the map on a per-directory basis.
+  Closes #21.
+  [href]
+
 - Remove category descriptions feature which was only ever used in the no
   longer maintained seantis.dir.council. Closes #20.
   [href]
