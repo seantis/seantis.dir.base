@@ -1,4 +1,4 @@
-from zope.interface import Interface, Invalid, alsoProvides, Attribute
+from zope.interface import Interface, alsoProvides, Attribute
 from zope.schema import (
     Text,
     TextLine,
@@ -10,15 +10,6 @@ from plone.directives import form
 from collective.dexteritytextindexer import searchable
 
 from seantis.dir.base import _
-from seantis.dir.base.descriptions import valid_category_description
-
-
-def description_constraint(value):
-
-    if not valid_category_description(value):
-        raise Invalid(u'Invalid description format')
-
-    return True
 
 
 class IDirectoryPage(Interface):
@@ -67,13 +58,6 @@ class IDirectoryBase(IDirectoryRoot):
         value_type=TextLine(),
     )
 
-    cat1_descriptions = Text(
-        title=_(u'Descriptions for Category 1'),
-        required=False,
-        default=u'',
-        constraint=description_constraint
-    )
-
     cat2 = TextLine(
         title=_(u'2nd Category Name'),
         required=False,
@@ -88,13 +72,6 @@ class IDirectoryBase(IDirectoryRoot):
             u'category items, in addition to values found in other items.'
         ),
         value_type=TextLine(),
-    )
-
-    cat2_descriptions = Text(
-        title=_(u'Descriptions for Category 2'),
-        required=False,
-        default=u'',
-        constraint=description_constraint
     )
 
     cat3 = TextLine(
@@ -113,13 +90,6 @@ class IDirectoryBase(IDirectoryRoot):
         value_type=TextLine(),
     )
 
-    cat3_descriptions = Text(
-        title=_(u'Descriptions for Category 3'),
-        required=False,
-        default=u'',
-        constraint=description_constraint
-    )
-
     cat4 = TextLine(
         title=_(u'4th Category Name'),
         required=False,
@@ -134,13 +104,6 @@ class IDirectoryBase(IDirectoryRoot):
             u'category items, in addition to values found in other items.'
         ),
         value_type=TextLine(),
-    )
-
-    cat4_descriptions = Text(
-        title=_(u'Descriptions for Category 4'),
-        required=False,
-        default=u'',
-        constraint=description_constraint
     )
 
     enable_filter = Bool(

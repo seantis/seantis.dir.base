@@ -2,10 +2,13 @@
 Changelog
 =========
 
-1.7.9 (unreleased)
+1.8.0 (unreleased)
 ------------------
 
-Nothing yet.
+- Remove category descriptions feature which was only ever used in the no
+  longer maintained seantis.dir.council. Closes #20.
+  [href]
+
 
 1.7.8 (2014-10-29)
 ------------------

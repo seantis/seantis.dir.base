@@ -12,7 +12,6 @@ from seantis.dir.base import core
 from seantis.dir.base import utils
 from seantis.dir.base import session
 from seantis.dir.base import const
-from seantis.dir.base.descriptions import parse_category_description
 from seantis.dir.base.const import CATEGORIES, ITEMSPERPAGE
 
 from seantis.dir.base.interfaces import (
@@ -73,20 +72,6 @@ class Directory(Container):
         titles = [getattr(self, c) for c in categories]
 
         return dict(zip(categories, titles))
-
-    def descriptions(self):
-        """Return a dictionary with the key being the category attribute name
-        and the value being the descriptions from seantis.dir.base.descriptions
-        for each category.
-
-        """
-        descriptions = {}
-
-        for category in self.used_categories():
-            d = getattr(self, '%s_descriptions' % category)
-            descriptions[category] = parse_category_description(d)
-
-        return descriptions
 
     def html_description(self):
         """Returns the description with newlines replaced by <br/> tags"""

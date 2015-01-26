@@ -1,12 +1,3 @@
-/* category descriptions is an unfinished feature and only visible for
-seantis.dir.council, once it's finished this will be gone */
-#formfield-form-widgets-cat1_descriptions,
-#formfield-form-widgets-cat2_descriptions,
-#formfield-form-widgets-cat3_descriptions,
-#formfield-form-widgets-cat4_descriptions {
-    display: none;
-}
-
 /* make the circles in the collective geo maps more visible */
 #form-widgets-wkt-map circle, #form-widgets-wkt-map polyline, #form-widgets-wkt-map path {
     stroke: #0e52ea;
