@@ -48,7 +48,7 @@
  </action>
  <action title="Import" action_id="import" category="object" condition_expr=""
     url_expr="string:${object_url}/import" visible="True">
-  <permission value="Modify portal content"/>
+  <permission value="Add portal content"/>
   </action>
   <action title="Export" action_id="export" category="object" condition_expr=""
     url_expr="string:${object_url}/export" visible="True">

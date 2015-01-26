@@ -42,7 +42,7 @@ class Import(form.Form):
     fields = field.Fields(IImportDirectorySchema)
 
     grok.context(IDirectoryBase)
-    grok.require('cmf.ManagePortal')
+    grok.require('cmf.AddPortalContent')
     grok.name('import')
 
     ignoreContext = True

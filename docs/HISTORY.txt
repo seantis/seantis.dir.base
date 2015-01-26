@@ -5,6 +5,9 @@ Changelog
 1.8.0 (unreleased)
 ------------------
 
+- Loosens the permissions required for import/export to add/edit respectively.
+  Closes #6.
+
 - Adds an option to enable/disable the map on a per-directory basis.
   Closes #21.
   [href]

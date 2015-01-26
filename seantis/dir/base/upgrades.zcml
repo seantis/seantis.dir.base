@@ -43,4 +43,12 @@
         handler=".upgrades.upgrade_to_2014040301"
         profile="seantis.dir.base:default" />
 
+    <gs:upgradeStep
+        title="Update types"
+        description=""
+        source="2014040301"
+        destination="2015012601"
+        handler=".upgrades.upgrade_to_2015012601"
+        profile="seantis.dir.base:default" />
+
 </configure>

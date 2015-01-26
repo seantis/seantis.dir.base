@@ -28,7 +28,7 @@ class XlsExportsView(grok.View):
     """Shows a list of possible exports."""
 
     grok.context(IDirectoryBase)
-    grok.require('cmf.ManagePortal')
+    grok.require('cmf.ModifyPortalContent')
     grok.name('exports')
 
     _template = grok.PageTemplateFile('templates/exports.pt')
@@ -128,7 +128,7 @@ class XlsExportView(core.View):
     """Exports a directory as xml"""
 
     grok.context(IDirectoryBase)
-    grok.require('cmf.ManagePortal')
+    grok.require('cmf.ModifyPortalContent')
     grok.name('export')
 
     def render(self, **kwargs):

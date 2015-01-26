@@ -139,6 +139,16 @@ def upgrade_to_2013050802(context):
         'profile-seantis.dir.base:default', 'cssregistry'
     )
 
+
 def upgrade_to_2014040301(context):
     """ Update css """
     getToolByName(context, 'portal_css').cookResources()
+
+
+def upgrade_to_2015012601(context):
+    """ Update type registry """
+
+    setup = getToolByName(context, 'portal_setup')
+    setup.runImportStepFromProfile(
+        'profile-seantis.dir.base:default', 'typeinfo'
+    )
