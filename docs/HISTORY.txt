@@ -5,7 +5,8 @@ Changelog
 1.8.1 (unrelease)
 ------------------
 
-Nothing yet
+- Support List Filter Terms. Implements #20.
+  [msom]
 
 1.8.0 (2015-01-26)
 ------------------
