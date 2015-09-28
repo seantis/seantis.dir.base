@@ -7,6 +7,9 @@ Changelog
 
 Nothing yet
 
+- Handle undefined geostyles gracefully. Closes #24.
+  [msom]
+
 1.8.0 (2015-01-26)
 ------------------
 
