@@ -35,8 +35,8 @@ Coverage
 Latest PyPI Release
 -------------------
 
-.. image:: https://pypip.in/v/seantis.dir.base/badge.png
-    :target: https://img.shields.io/pypi/v/seantis.dir.base.svg
+.. image:: https://img.shields.io/pypi/v/seantis.dir.base.svg
+    :target: https://crate.io/packages/seantis.dir.base
     :alt: Latest PyPI version
 
 Installation
