@@ -4,5 +4,7 @@ omit =
     buildout-cache/eggs/*
     parts/*
     eggs/*
+    */collective.betterbrowser/*
     */test*
     */distutils/__init__.py
+    */upgrades.py
