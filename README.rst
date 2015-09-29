@@ -23,11 +23,20 @@ Build Status
 .. image:: https://secure.travis-ci.org/seantis/seantis.dir.base.png
    :target: https://travis-ci.org/seantis/seantis.dir.base
 
+
+Coverage
+--------
+
+.. image:: https://coveralls.io/repos/seantis/seantis.dir.base/badge.png?branch=master
+  :target: https://coveralls.io/r/seantis/seantis.dir.base?branch=master
+  :alt: Project Coverage
+
+
 Latest PyPI Release
 -------------------
 
 .. image:: https://pypip.in/v/seantis.dir.base/badge.png
-    :target: https://crate.io/packages/seantis.dir.base
+    :target: https://img.shields.io/pypi/v/seantis.dir.base.svg
     :alt: Latest PyPI version
 
 Installation
@@ -52,7 +61,7 @@ Installation
 
     [instance]
     ...
-    environment-vars = 
+    environment-vars =
         ...
         zope_i18n_compile_mo_files true
 
