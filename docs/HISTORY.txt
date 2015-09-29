@@ -2,13 +2,10 @@
 Changelog
 =========
 
-1.8.1 (unrelease)
+1.8.1 (2015-09-29)
 ------------------
 
 - Support List Filter Terms. Implements #20.
-  [msom]
-
-- Handle undefined geostyles gracefully. Closes #24.
   [msom]
 
 - Handle undefined geostyles gracefully. Closes #24.
@@ -27,7 +24,6 @@ Changelog
 - Remove category descriptions feature which was only ever used in the no
   longer maintained seantis.dir.council. Closes #20.
   [href]
-
 
 1.7.8 (2014-10-29)
 ------------------
