@@ -5,7 +5,11 @@ Changelog
 1.8.1 (unrelease)
 ------------------
 
-Nothing yet
+- Support List Filter Terms. Implements #20.
+  [msom]
+
+- Handle undefined geostyles gracefully. Closes #24.
+  [msom]
 
 - Handle undefined geostyles gracefully. Closes #24.
   [msom]
