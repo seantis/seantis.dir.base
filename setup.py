@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.8.2'
+version = '1.9'
 
 tests_require = [
     'collective.testcaselayer',
@@ -57,7 +57,8 @@ setup(name='seantis.dir.base',
           'collective.geo.openlayers>=3.1',
           'collective.geo.kml>=3.1',
           'collective.geo.behaviour>=1.0',
-          'seantis.plonetools>=0.9'
+          'seantis.plonetools>=0.9',
+          'urllib',
       ],
       tests_require=tests_require,
       extras_require=dict(

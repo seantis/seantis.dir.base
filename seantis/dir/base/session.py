@@ -10,7 +10,7 @@ def get_session(context, key):
 
     session = session_manager.getSessionData()
 
-    if not key in session.keys():
+    if key not in session.keys():
         return None
 
     return session[key]
@@ -45,7 +45,7 @@ def get_last_filter(directory):
     terms = get_session(directory, sid) or {}
 
     for cat in CATEGORIES:
-        if not cat in terms:
+        if cat not in terms:
             terms[cat] = u'!empty'
 
     return terms

@@ -2,10 +2,11 @@
 Changelog
 =========
 
-1.8.2 (unreleased)
-------------------
+1.9 (unreleased)
+----------------
 
-Nothing yet.
+- Change layout of search bar for visual redesign.
+  [msom]
 
 1.8.1 (2015-09-29)
 ------------------

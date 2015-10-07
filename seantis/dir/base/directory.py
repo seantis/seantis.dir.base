@@ -1,12 +1,13 @@
 import json
 
 from five import grok
-from zope.interface import Interface
-from zope.component import getAdapter
-from zope.schema.interfaces import IContextSourceBinder
+from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.dexterity.content import Container
 from Products.CMFPlone.PloneBatch import Batch
-from plone.app.layout.viewlets.interfaces import IBelowContentTitle
+from urllib import quote_plus
+from zope.component import getAdapter
+from zope.interface import Interface
+from zope.schema.interfaces import IContextSourceBinder
 
 from seantis.dir.base import core
 from seantis.dir.base import utils
@@ -144,6 +145,28 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
     def remove_count(self, text):
         return utils.remove_count(text)
 
+    def filter_url(self, category, value=None):
+        url = u'{}?filter=filter'.format(self.search_url)
+
+        any_filter_set = False
+        for cat, val in session.get_last_filter(self.directory).iteritems():
+            if cat == category or val == '!empty':
+                continue
+
+            any_filter_set = True
+            url = url + u'&{}={} ()'.format(
+                cat, quote_plus(val.encode('utf-8'))
+            )
+
+        if any_filter_set or value:
+            if not value:
+                value = '!empty'
+            return url + u'&{}={} ()'.format(
+                category, quote_plus(value.encode('utf-8'))
+            )
+        else:
+            return self.reset_url
+
     def update(self, **kwargs):
         if not self.available():
             return
@@ -156,42 +179,10 @@ class DirectorySearchViewlet(grok.Viewlet, DirectoryCatalogMixin):
             items = self.catalog.items
 
         self.items = items() if callable(items) else items
-
-        # for the first category, count all items, for the others
-        # count the ones in the current filter (might also be all)
-        self.all_values = catalog.grouped_possible_values_counted()
-
-        self.values = dict(cat1=self.all_values['cat1'])
-        self.values.update(catalog.grouped_possible_values_counted(
-            self.items, categories=['cat2', 'cat3', 'cat4']
-        ))
-
+        self.filters = catalog.possible_values_sorted_as_sets(self.items)
         self.labels = self.directory.labels()
         self.select = session.get_last_filter(self.directory)
         self.searchtext = session.get_last_search(self.directory)
-
-    def category_cache(self, cat):
-        """Returns the given categories as json for the client side cache."""
-
-        return json.dumps(self.all_values[cat])
-
-    @property
-    def show_filter_reset(self):
-        show_reset = bool([v for v in self.select.values() if v != '!empty'])
-
-        if not show_reset and not self.context.enable_search:
-            show_reset = self.show_search_reset
-
-        return show_reset
-
-    @property
-    def show_search_reset(self):
-        show_reset = bool(self.searchtext)
-
-        if not show_reset and not self.context.enable_filter:
-            show_reset = self.show_filter_reset
-
-        return show_reset
 
     def render(self, **kwargs):
         if self.available():
@@ -353,7 +344,7 @@ class JsonSearch(core.View, DirectoryCatalogMixin):
     def render(self, **kwargs):
         category = 'cat%i' % int(self.request['cat'])
 
-        if not category in CATEGORIES:
+        if category not in CATEGORIES:
             return json.dumps([])
 
         possible = self.catalog.grouped_possible_values(self.catalog.items())

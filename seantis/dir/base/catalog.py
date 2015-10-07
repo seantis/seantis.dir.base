@@ -50,7 +50,7 @@ def is_exact_match(item, term):
 
         for t in term_values:
             for category_values in categories[key]:
-                if not t in category_values:
+                if t not in category_values:
                     return False  # any non-matching => not exact match
 
     return True
@@ -122,7 +122,7 @@ class DirectoryCatalog(grok.Adapter):
         values = dict([(c, list()) for c in categories])
         for item in items:
             for key, label, value in item.categories:
-                if not key in categories:
+                if key not in categories:
                     continue
 
                 if not value:
@@ -134,6 +134,18 @@ class DirectoryCatalog(grok.Adapter):
                     map(values[key].append, utils.flatten(value))
 
         return values
+
+    def possible_values_sorted_as_sets(self, items=None, categories=None):
+        """Returns a dictionary with the keys being the categories of the
+        directory, filled with a set of all possible values for each category.
+
+        """
+        values = self.possible_values()
+
+        return dict([
+            (k, sorted(set(values[k]), key=utils.unicode_collate_sortkey()))
+            for k in values.keys() if len(values[k])
+        ])
 
     def grouped_possible_values(self, items=None, categories=None):
         """Same as possible_values, but with the categories of the dictionary

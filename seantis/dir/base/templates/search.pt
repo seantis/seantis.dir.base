@@ -1,71 +1,40 @@
 <div xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="seantis.dir.base" id="directorySearch" tal:condition="python: context.enable_search or context.enable_filter">
-    
+
     <tal:comment replace="nothing">
         indicate to scripts that the view is filtered
     </tal:comment>
     <div style="display: none;" tal:condition="python: hasattr(view, 'filtered') and view.filtered or False" id="seantis-dir-base-filtered"></div>
 
     <div id="directorySearchForm" class="directorySearchForm" tal:attributes="data-search-url viewlet/search_url">
-        <tal:block condition="context/enable_filter">
-            <form tal:attributes="action viewlet/search_url" method="POST" class="seantis-directory-filter">
-                <div class="directorySearchFormSelection" tal:repeat="category python: viewlet.labels.keys()">
-                    <div tal:attributes="class python: 'visualMarginRight ' + category">
-                        <label tal:attributes="for category" tal:content="python: viewlet.labels[category]"/>
-                        <select class="seantis-directory-category" tal:attributes="name category; id category; data-cache python: viewlet.category_cache(category)">
-                            
-                            <!-- Preselected values (also defined in core.py) -->
-                            <tal:block condition="python: viewlet.select[category] == '!empty'">
-                                <option selected i18n:translate="">Any</option>
-                            </tal:block>
-                            <tal:block condition="python: viewlet.select[category] != '!empty'">
-                                <option i18n:translate="">Any</option>
-                            </tal:block>
-                            
-                            <!-- All values -->
-                            <tal:block repeat="value python: viewlet.values[category]">
-                                <tal:block condition="python: viewlet.select[category] == viewlet.remove_count(value).strip()">
-                                    <option selected tal:content="value"></option>
-                                </tal:block>
-                                <tal:block condition="python: viewlet.select[category] != viewlet.remove_count(value).strip()">
-                                    <option tal:content="value"></option>
-                                </tal:block>
-                            </tal:block>
 
-                        </select>
-                    </div>
-                </div>
-                <div class="directorySearchFormButtons">
-                    <div>
-                    <span>
-                        <input type="submit" class="context" name="filter" i18n:attributes="value Filter" />
-                    </span><span>
-                        <input type="submit" name="reset" tal:condition="viewlet/show_filter_reset" i18n:translate="" value="Reset" i18n:attributes="value" />
-                    </span>
-                    </div>
-                </div>
+        <div tal:condition="context/enable_search" class="seantis-directory-search-box">
+            <form tal:attributes="action viewlet/search_url" method="GET">
+                <input type="text" id="searchtext" name="searchtext" tal:attributes="value viewlet/searchtext" />
+                <input style="display: none;" type="submit" class="context" name="search" i18n:attributes="value Search" />
             </form>
-        </tal:block>
-        
-        <tal:block condition="context/enable_search">
-            <form tal:attributes="action viewlet/search_url" method="POST" class="seantis-directory-search">
-                <div class="directorySearchFormSelection">
-                    <div class="visualMarginRight">
-                        <label i18n:translate="">Fulltext search</label>
-                        <input type="text" id="searchtext" name="searchtext" tal:attributes="value viewlet/searchtext" />
-                    </div>
-                </div>
-                <div class="directorySearchFormButtons">
-                    <div>
-                    <span>
-                        <input type="submit" class="context" name="search" i18n:attributes="value Search" />
-                    </span><span>
-                        <input type="submit" name="reset" tal:condition="viewlet/show_search_reset" i18n:translate="" value="Reset" i18n:attributes="value" />
-                    </span>
-                    </div>
-                </div>
-            </form>
-        </tal:block>
+        </div>
 
-        <div class="visualClear"></div>
+        <tal:block tal:condition="context/enable_filter" tal:define="filters viewlet/filters">
+            <div tal:repeat="category filters" class="seantis-directory-filter-box">
+                <tal:block tal:define="label python: viewlet.labels[category];
+                                       values python: filters[category];
+                                       selected python: viewlet.select[category] != '!empty'">
+                    <span tal:condition="python: not selected" tal:content="label"/>
+                    <span tal:condition="selected" class="selected"
+                          tal:content="python: u'{}: {}'.format(label, viewlet.select[category])" />
+                    <ul>
+                        <li tal:condition="selected">
+                            <a tal:attributes="href python: viewlet.filter_url(category)" i18n:translate="">Any</a>
+                        </li>
+                        <tal:block repeat="value values">
+                            <li>
+                                <a tal:attributes="href python: viewlet.filter_url(category, value)" tal:content="value" />
+                            </li>
+                        </tal:block>
+                    </ul>
+                </tal:block>
+            </div>
+        </tal:block>
+        <div class="visualClear" />
     </div>
 </div>

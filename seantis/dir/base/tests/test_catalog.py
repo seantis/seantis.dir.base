@@ -34,8 +34,6 @@ class TestCatalog(IntegrationTestCase):
         items = self.add_item_bulk(directory, values)
         self.assertEqual(len(items), len(values))
 
-        #self.assertEqual(sorted(catalog.items(directory)), sorted(items))
-
         # Add the same items to another dictionary to ensure that only
         # one directory is filtered at a time
         other_dir = self.add_directory('Some other directory')
@@ -167,6 +165,23 @@ class TestCatalog(IntegrationTestCase):
         self.assertTrue('cat2' in possible)
         self.assertFalse('cat3' in possible)
         self.assertFalse('cat4' in possible)
+
+    def test_possible_values_sorted_as_sets(self):
+        directory = self.toy_data()
+        catalog = get_catalog(directory)
+
+        possible = catalog.possible_values_sorted_as_sets()
+        self.assertEqual(sorted(possible.keys()), ['cat1', 'cat2', 'cat3'])
+        self.assertEqual(sorted(possible['cat1']), [
+            'Cartoons', 'For Adults', 'For Kids', 'Nothing'
+        ])
+        self.assertEqual(sorted(possible['cat2']), [
+            'Cartoons', 'For Kids', 'Toys'
+        ])
+        self.assertEqual(sorted(possible['cat3']), [
+            'Donald Duck', 'Lego', 'Lego Robotics', 'Mickey Mouse',
+            'The Walking Dead', 'Unstructured Data'
+        ])
 
     def test_grouped_possible_values(self):
 
