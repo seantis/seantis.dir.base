@@ -57,8 +57,7 @@ setup(name='seantis.dir.base',
           'collective.geo.openlayers>=3.1',
           'collective.geo.kml>=3.1',
           'collective.geo.behaviour>=1.0',
-          'seantis.plonetools>=0.9',
-          'urllib',
+          'seantis.plonetools>=0.9'
       ],
       tests_require=tests_require,
       extras_require=dict(
