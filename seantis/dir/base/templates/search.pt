@@ -9,8 +9,10 @@
 
         <div tal:condition="context/enable_search" class="seantis-directory-search-box">
             <form tal:attributes="action viewlet/search_url" method="GET">
-                <input type="text" id="searchtext" name="searchtext" tal:attributes="value viewlet/searchtext" />
-                <input style="display: none;" type="submit" class="context" name="search" i18n:attributes="value Search" />
+                <div class="LSBox">
+                    <input type="text" id="searchtext" name="searchtext" tal:attributes="value viewlet/searchtext" />
+                    <input style="display: none;" type="submit" class="context" name="search" i18n:attributes="value Search" />
+                </div>
             </form>
         </div>
 
