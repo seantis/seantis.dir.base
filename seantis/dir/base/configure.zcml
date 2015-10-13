@@ -1,10 +1,12 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:theme="http://namespaces.zope.org/plonetheme.onegov"
     i18n_domain="seantis.dir.base">
 
     <i18n:registerTranslations directory="locales" />
@@ -41,6 +43,12 @@
         name="seantis.dir.base.images"
         directory="images"/>
 
+
+    <configure zcml:condition="installed plonetheme.onegov">
+        <include package="plonetheme.onegov" />
+        <theme:add_scss path="scss/directory.scss" />
+    </configure>
+
     <!-- Override default kml-document -->
     <browser:page
       for="seantis.dir.base.interfaces.IDirectoryBase"
@@ -69,7 +77,7 @@
 
     <!-- Remove default portlets from directories (may be added later) -->
     <subscriber for="seantis.dir.base.interfaces.IDirectoryBase
-                     zope.lifecycleevent.interfaces.IObjectAddedEvent"                 
+                     zope.lifecycleevent.interfaces.IObjectAddedEvent"
                 handler=".subscribers.block_portlets_on_creation"
     />
 

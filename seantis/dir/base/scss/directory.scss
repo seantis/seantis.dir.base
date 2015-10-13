@@ -1,0 +1,382 @@
+/* @group seantis.dir.* directories */
+
+
+#directorySearch {
+  border-bottom: 1px solid $lightgray2;
+  border-top: 1px solid $lightgray2;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  padding-top: 13px;
+
+  .seantis-directory-search-box,
+  .seantis-directory-filter-box {
+    float: left;
+    line-height: 2em;
+    margin-right: 30px;
+  }
+
+  .seantis-directory-search-box {
+    .LSBox {
+      line-height: 1.4em;
+      position: relative;
+
+      &:before {
+        right: .6em;
+      }
+    }
+  }
+
+  .seantis-directory-filter-box {
+    span {
+      color: $link-color;
+      cursor: pointer;
+      vertical-align: middle;
+
+      &:after {
+        @include base_icon("\e80c");
+        padding-left: 10px;
+      }
+
+      &.selected {
+        color: $lightgray3;
+      }
+    }
+
+
+    ul {
+      @include ul('plain');
+      @include boxshadow(0 .25em .5em -.25em $darkgray);
+
+      background-color: $page-background;
+      border: 1px solid $breadcrumbs-border;
+      display: none;
+      margin-left: -16px;
+      margin-top: 8px;
+      padding: 8px 0;
+      position: absolute;
+      z-index: 100;
+
+      li {
+        margin: 0;
+        min-width: 10em;
+
+        a {
+          cursor: pointer;
+          display: inline-block;
+          padding: 3px 20px;
+        }
+
+        &.selected a {
+          color: $text-color;
+
+          &:hover {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+
+  }
+
+  @media screen and (max-width: $screen-tablet-landscape) {
+    .seantis-directory-search-box,
+    .seantis-directory-filter-box {
+      clear: both;
+      float: none;
+      padding: .5em 0;
+      width: 100%;
+    }
+
+    .seantis-directory-search-box {
+      input {
+        width: 100%;
+      }
+
+      .LSBox {
+        &:before {
+          right: 0;
+          top: .4em;
+        }
+      }
+    }
+
+    .seantis-directory-filter-box {
+      ul {
+        @include boxshadow(none);
+        border: 0;
+        position: static;
+      }
+    }
+  }
+}
+
+/* @group token input (categories) */
+@for $i from 1 through 4 {
+  #formfield-form-widgets-IDirectoryCategorized-cat#{$i} {
+    width: 100%;
+  }
+}
+/* @end */
+
+/* @group all directory views */
+.seantis-directory-all {
+
+     /* directory result columns */
+  #directoryResultList,
+  #directoryResultMap {
+    @include boxsizing(border-box);
+    float: left;
+    width: 50%;
+  }
+
+  @media screen and (max-width: $screen-tablet-landscape) {
+    #directoryResultList,
+    #directoryResultMap {
+      float: none;
+      width: 100%;
+    }
+  }
+
+  /*
+  hide kml download in the events directory,
+  until we can change the output of it to use the icon font
+  */
+  ul li#document-action-kml_download {
+    display: none;
+  }
+
+  /* collective geo map */
+  #directoryResultMap, #default-cgmap {
+    height: $map-height;
+  }
+}
+
+/* @group all directory result views */
+.seantis-directory-results {
+  /* intro styles */
+  #landingPageText {
+    h2 {
+      padding-left: 1.6em;
+    }
+
+    div {
+      padding-bottom: 1em;
+      padding-left: 2em;
+    }
+
+    #landingPageImage {
+      float: left;
+      margin-bottom: 1em;
+      margin-right: 1em;
+    }
+  }
+
+  /* directory results */
+  #directoryResultList .directoryInfoText {
+    padding-left: 2em;
+  }
+
+  /* map markers */
+  .directoryResult {
+    position: relative;
+  }
+
+  .directoryMarker {
+    position: absolute;
+  }
+}
+/* @end */
+
+/* @group all directory item views */
+.seantis-directory-item #content {
+  #directoryResultList .directoryInfoText {
+    padding-left: 0;
+  }
+
+  ul {
+    margin-bottom: 1em;
+    margin-left: 1em;
+  }
+
+  .no-bullets {
+    list-style: none;
+    margin-left: 0;
+  }
+}
+/* @end */
+
+/* @group roadworks directory */
+.portaltype-seantis-dir-roadworks-directory,
+.portaltype-seantis-dir-roadworks-item {
+  #directoryInfo {
+    margin-top: 1em;
+  }
+
+  .directoryResult {
+    margin-bottom: 1.5em;
+  }
+}
+/* @end */
+
+/* @group contacts directory */
+.portaltype-seantis-dir-contacts-directory,
+.portaltype-seantis-dir-contacts-item {
+  #directoryInfo {
+    margin-top: 1em;
+  }
+
+  .directoryResult {
+    margin-bottom: 1.5em;
+    padding: 0;
+  }
+
+  .directoryTypes {
+    @include tag();
+    display: inline-block;
+    float: none;
+  }
+
+  .directoryDates ul {
+    padding-left: 0;
+  }
+
+  #directoryInfoPage ul {
+    padding-left: 0;
+  }
+
+  .directoryDates ul li,
+  #directoryInfoPage ul li {
+    margin-bottom: 0;
+  }
+}
+/* @end */
+
+/* @group council directory & item */
+.portaltype-seantis-dir-council-item,
+.portaltype-seantis-dir-council-directory {
+
+  /* council tags */
+  .council-tags h3 {
+    border-bottom: 1px solid $lightgray2;
+    color: $text-color-light;
+    font-size: $font-size;
+    font-weight: normal;
+    margin-bottom: .5em;
+  }
+
+  .council-tag-value {
+    font-weight: bold;
+  }
+
+  .council-tag-pointer {
+    display: none;
+  }
+
+}
+
+/* @group council directory */
+.portaltype-seantis-dir-council-directory {
+  /* result list columns */
+  .council-tags {
+    float: right;
+    width: 40%;
+  }
+
+  @media screen and (max-width: $screen-tablet-landscape) {
+    .council-tags {
+      float: none;
+      width: 100%;
+    }
+  }
+
+  /* results list display */
+  .directoryResult {
+    clear: both;
+    padding-left: 1em;
+    padding-top: 1.5em;
+  }
+
+  #directoryResultList .directoryInfoText {
+    padding-left: 0;
+  }
+
+  /* emphasize the council members' names */
+  .directoryInfoText > a {
+    display: block;
+    font-weight: bold;
+    margin-bottom: .5em;
+  }
+
+  /* create some space between address and tags */
+  .item-address {
+    margin-bottom: .5em;
+  }
+
+  .directory-tags a {
+    @include tag();
+    font-size: 90%;
+  }
+
+  /* position the image differently */
+  #landingPageImage {
+    margin: 0 0 1em 1em;
+  }
+}
+/* @end */
+
+/* @group council item */
+.portaltype-seantis-dir-council-item {
+
+  /* item view columns */
+  .directoryInfoImage,
+  .council-address {
+    float: left;
+  }
+
+  .council-tags {
+    float: right;
+    margin-top: -1.5em;
+    width: 40%;
+  }
+
+  @media screen and (max-width: $screen-tablet-landscape) {
+    .directoryInfoImage,
+    .council-address,
+    .council-tags {
+      float: none;
+    }
+  }
+
+  .directoryInfoImage {
+    margin-right: 2em;
+  }
+
+  .council-address {
+    max-width: 50%;
+
+    /* the address should look normal */
+    ul {
+      list-style: none;
+      padding-left: 0;
+
+      li {
+        margin-bottom: 0;
+      }
+    }
+
+  }
+
+
+  .council-information {
+    margin-top: 1em;
+  }
+
+  .full-resolution-portrait {
+    margin-top: 1em;
+  }
+
+}
+
+/* @end */
+
+/* @end */

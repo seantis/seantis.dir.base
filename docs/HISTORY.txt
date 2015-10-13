@@ -8,6 +8,9 @@ Changelog
 - Change layout of search bar for visual redesign.
   [msom]
 
+- Move styles from plonetheme.onegov to this package.
+  [msom]
+
 1.8.1 (2015-09-29)
 ------------------
 
