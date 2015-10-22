@@ -172,7 +172,7 @@ if (!seantis) seantis = {};
 
 });
 
-seantis.maplayer = function(id, url, title, letter, zoom) {
+seantis.maplayer = function(id, url, title, letter, zoom, fit) {
     var kmlurl = url + '@@kml-document?letter=' + letter;
 
     var layer = new OpenLayers.Layer.Vector(title, {
@@ -196,15 +196,48 @@ seantis.maplayer = function(id, url, title, letter, zoom) {
     };
 
     var zoom_to = function(layer) {
+        // Zooms and centers the map to the given layer (placemark).
         var zoom = layer.map.getZoom();
         layer.map.zoomToExtent(layer.getDataExtent());
         layer.map.zoomTo(zoom);
     };
 
+    var zoom_to_fit = function(map) {
+        // Zooms and centers the map the all placemarks.
+        // Since there is no event which signals that all data has been loaded,
+        // we need to do this on the last loadend event of all placemarks.
+        var newBound = new OpenLayers.Bounds();
+        var allLoaded = true;
+        for (var i = 0; i < map.layers.length; i++) {
+            if ((typeof map.layers[i].attributes === 'undefined') ||
+                (typeof map.layers[i].attributes.is_placemark === 'undefined')) {
+                continue;
+            }
+            if (map.layers[i].features.length < 1) {
+              allLoaded = false;
+              break;
+            }
+            newBound.extend(
+                map.layers[i].features[0].geometry.getBounds().getCenterLonLat()
+            );
+        }
+        if (allLoaded) {
+            var zoom = layer.map.getZoom();
+            map.zoomToExtent(newBound);
+            if (map.zoom > zoom) {
+                map.zoomTo(zoom);
+            }
+        }
+    };
+
     if (zoom) {
         layer.events.on({
             'loadend': function() {
-                zoom_to(layer);
+                if (fit) {
+                    zoom_to_fit(layer.map);
+                } else {
+                    zoom_to(layer);
+                }
             }
         });
     }
