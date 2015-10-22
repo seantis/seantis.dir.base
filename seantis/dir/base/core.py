@@ -72,6 +72,10 @@ class DirectoryMapLayer(MapLayer):
     # True if the map should be zoomed to the marker on load
     zoom = False
 
+    # True if the map should be zoomed to fit all markers on load instead
+    # of a single marker
+    fit = False
+
     @memoizedproperty
     def jsfactory(self):
         title = self.context.Title().replace("'", "\\'")
@@ -85,7 +89,8 @@ class DirectoryMapLayer(MapLayer):
         js = """
         function() {
             return seantis.maplayer(
-                '%(id)s', '%(url)s', '%(title)s', '%(letter)s', %(zoom)s
+                '%(id)s', '%(url)s', '%(title)s', '%(letter)s', %(zoom)s,
+                %(fit)s
             );
         }
         """
@@ -95,7 +100,8 @@ class DirectoryMapLayer(MapLayer):
             url=context_url,
             title=title,
             letter=self.letter or u'',
-            zoom=self.zoom and 'true' or 'false')
+            zoom=self.zoom and 'true' or 'false',
+            fit=self.fit and 'true' or 'false')
 
 letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -564,6 +570,8 @@ class View(grok.View):
                 if item.id not in self.lettermap and self.has_mapdata(item):
 
                     layer = DirectoryMapLayer(context=item)
+                    layer.zoom = True
+                    layer.fit = True
 
                     if index <= maxindex:
                         layer.letter = self.lettermap[item.id] = letters[index]

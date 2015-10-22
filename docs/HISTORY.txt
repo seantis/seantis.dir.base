@@ -5,6 +5,9 @@ Changelog
 1.9 (unreleased)
 ----------------
 
+- Center and zoom map on directory items in list. Implements #27.
+  [msom]
+
 - Change layout of search bar for visual redesign.
   [msom]
 
