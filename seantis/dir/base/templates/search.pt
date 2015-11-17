@@ -3,15 +3,13 @@
     <tal:comment replace="nothing">
         indicate to scripts that the view is filtered
     </tal:comment>
-    <div style="display: none;" tal:condition="python: hasattr(view, 'filtered') and view.filtered or False" id="seantis-dir-base-filtered"></div>
-
     <div id="directorySearchForm" class="directorySearchForm" tal:attributes="data-search-url viewlet/search_url">
 
         <div tal:condition="context/enable_search" class="seantis-directory-search-box">
             <form tal:attributes="action viewlet/search_url" method="GET">
                 <div class="LSBox">
                     <input type="text" id="searchtext" name="searchtext" tal:attributes="value viewlet/searchtext" />
-                    <input style="display: none;" type="submit" class="context" name="search" i18n:attributes="value Search" />
+                    <input type="hidden" name="search" value="search" />
                 </div>
             </form>
         </div>
@@ -21,9 +19,10 @@
                 <tal:block tal:define="label python: viewlet.labels[category];
                                        values python: filters[category];
                                        selected python: viewlet.select[category] != '!empty'">
-                    <span tal:condition="python: not selected" tal:content="label"/>
+                    <span tal:condition="python: not selected" tal:content="label" class="empty"/>
                     <span tal:condition="selected" class="selected"
                           tal:content="python: u'{}: {}'.format(label, viewlet.select[category])" />
+                    <a tal:condition="selected" tal:attributes="href python: viewlet.filter_url(category)" class="reset"/>
                     <ul>
                         <li tal:condition="selected">
                             <a tal:attributes="href python: viewlet.filter_url(category)" i18n:translate="">Any</a>
