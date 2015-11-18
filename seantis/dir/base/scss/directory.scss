@@ -17,11 +17,26 @@
 
   .seantis-directory-search-box {
     .LSBox {
+      display: inline-block;
       line-height: 1.4em;
       position: relative;
 
       &:before {
         right: .6em;
+      }
+    }
+
+    a.reset {
+      font-size: 1.4em;
+      vertical-align: middle;
+
+      &:after {
+        @include base_icon("\34");
+        padding-left: 10px;
+        vertical-align: middle;
+      }
+      &:hover {
+        text-decoration: none;
       }
     }
   }
@@ -107,6 +122,9 @@
       }
 
       .LSBox {
+        margin-right: 1em;
+        width: 85%;
+
         &:before {
           right: 0;
           top: .4em;

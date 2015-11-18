@@ -11,6 +11,7 @@
                     <input type="text" id="searchtext" name="searchtext" tal:attributes="value viewlet/searchtext" />
                     <input type="hidden" name="search" value="search" />
                 </div>
+                <a tal:condition="viewlet/searchtext" tal:attributes="href python: context.absolute_url() + '?reset=true'" class="reset"/>
             </form>
         </div>
 
