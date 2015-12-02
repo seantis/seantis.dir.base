@@ -215,6 +215,12 @@
   .directoryMarker {
     position: absolute;
   }
+
+  @media screen and (max-width: $screen-tablet-landscape) {
+    #landingPageImage {
+      display: none;
+    }
+  }
 }
 /* @end */
 
