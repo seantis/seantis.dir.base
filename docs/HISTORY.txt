@@ -2,7 +2,7 @@
 Changelog
 =========
 
-1.9 (unreleased)
+1.9 (2015-12-02)
 ----------------
 
 - Center and zoom map on directory items in list. Implements #27.
