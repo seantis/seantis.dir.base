@@ -5,7 +5,8 @@ Changelog
 1.9.1 (unreleased)
 ------------------
 
-Nothing yet.
+- Include missing SCSS file in distribution.
+  [msom]
 
 1.9 (2015-12-02)
 ----------------

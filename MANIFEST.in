@@ -1,5 +1,6 @@
 graft */*/*/js
 graft */*/*/css
+graft */*/*/scss
 graft */*/*/images
 graft */*/*/locales
 graft */*/*/profiles
