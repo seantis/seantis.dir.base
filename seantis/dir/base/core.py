@@ -6,7 +6,7 @@ from collections import namedtuple
 from five import grok
 
 from zope.interface import Interface, implements
-from zope.component import getUtility
+from zope.component import getUtility, queryAdapter
 from zope.component.interfaces import ComponentLookupError
 from zope.schema import Choice
 
@@ -55,7 +55,8 @@ from seantis.dir.base.interfaces import (
     IDirectory,
     IDirectoryCategorized,
     IDirectorySpecific,
-    IMapMarker
+    IMapMarker,
+    IKmlExtendedDataProvider
 )
 
 
@@ -179,6 +180,12 @@ class Placemark(BasePlacemark):
                     category, self.getDisplayValue(category), display_name
                 )
             )
+
+        adapter = queryAdapter(self.context, IKmlExtendedDataProvider)
+        if adapter:
+            for name, value, display_name in adapter.extended_data():
+                elements.append(Element(name, value, display_name))
+
         return elements
 
 

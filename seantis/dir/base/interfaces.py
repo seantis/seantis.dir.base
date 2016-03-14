@@ -336,3 +336,16 @@ class IExportProvider(Interface):
         If an url is provided this function is NOT CALLED
 
         """
+
+
+class IKmlExtendedDataProvider(Interface):
+    """ Interface for providing additional KML-ExtendedData.
+
+    """
+
+    def extended_data(self):
+        """ Returns a list of tuples containing the name, the value and the
+        display name to be added as extended data for the KML document of
+        and directory item.
+
+        """

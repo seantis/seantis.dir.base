@@ -2,10 +2,11 @@
 Changelog
 =========
 
-1.9.2 (unreleased)
-------------------
+1.10 (unreleased)
+-----------------
 
-Nothing yet.
+- Allow adapters to add custom extended data fields to KML documents.
+  [msom]
 
 1.9.1 (2015-12-04)
 ------------------
