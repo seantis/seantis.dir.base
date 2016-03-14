@@ -2,7 +2,7 @@
 Changelog
 =========
 
-1.10 (unreleased)
+1.10 (2016-03-15)
 -----------------
 
 - Allow adapters to add custom extended data fields to KML documents.
