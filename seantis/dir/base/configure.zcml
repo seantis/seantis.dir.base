@@ -73,6 +73,14 @@
       provides="collective.geo.kml.interfaces.IFeature"
       />
 
+    <!-- Override default osm-layer -->
+    <browser:page
+        name="osm-layer"
+        for="seantis.dir.base.interfaces.IDirectoryBase"
+        template="templates/osm_layer.pt"
+        permission="zope.Public"
+        />
+
     <browser:resource name="directory-map.js" file="js/directory-map.js"/>
 
     <!-- Remove default portlets from directories (may be added later) -->
